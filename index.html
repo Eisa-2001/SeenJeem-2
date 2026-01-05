@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>سين جيم — نسخة نهائية (ملف واحد)</title>
+  <title>سين جيم — FINAL (No Repeat + Report + Import)</title>
   <style>
     :root{
-      --bg:#070a12; --panel:#0f1630; --panel2:#121b3a; --text:#e9eeff; --muted:#a9b4e6;
+      --bg:#070a12; --panel:#0f1630; --text:#e9eeff; --muted:#a9b4e6;
       --line:rgba(255,255,255,.12); --a1:#67e8f9; --a2:#a78bfa;
-      --good:#22c55e; --bad:#ef4444;
+      --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
     }
     *{box-sizing:border-box}
     body{
@@ -36,6 +36,8 @@
     button:hover{background:rgba(255,255,255,.07)}
     button.primary{border:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#0b1020}
     button.danger{border-color:rgba(239,68,68,.45)}
+    button.good{border-color:rgba(34,197,94,.45)}
+    button.warn{border-color:rgba(245,158,11,.55)}
     .container{max-width:1100px;margin:0 auto;padding:16px}
     .page{display:none}
     .page.active{display:block}
@@ -56,11 +58,14 @@
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .toggle{display:flex;gap:10px;align-items:center;margin-top:10px}
     input[type="checkbox"]{width:18px;height:18px}
+    hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
+
     .scorebar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
     .scorebox{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
     .scorebox .name{font-weight:900}
     .scorebox .score{font-size:18px;font-weight:1000;background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
     .timer{font-variant-numeric:tabular-nums;font-weight:900}
+
     .board{display:grid;gap:10px;grid-template-columns:repeat(6,minmax(0,1fr))}
     @media(max-width:980px){.board{grid-template-columns:repeat(3,minmax(0,1fr))}}
     .col{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03)}
@@ -74,7 +79,6 @@
     .catCard{padding:12px;cursor:pointer}
     .catCard.on{background:rgba(103,232,249,.10);border-color:rgba(103,232,249,.35)}
     .catCard.off{background:rgba(255,255,255,.03)}
-    hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:50;padding:16px}
     .modal.show{display:flex}
@@ -82,7 +86,7 @@
     .modalTop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}
     .modalTop .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .modalBody{padding:14px}
-    .qtext{font-size:18px;font-weight:900;line-height:1.5;margin:0 0 10px}
+    .qtext{font-size:18px;font-weight:900;line-height:1.6;margin:0 0 10px}
     .ans{display:none;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px dashed rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
     .ans.show{display:block}
     .ans .lbl{font-size:12px;color:var(--muted);margin-bottom:6px}
@@ -94,6 +98,10 @@
     .subpanel.show{display:block}
     .teamBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     .teamBtns button{flex:1;min-width:160px}
+    textarea{
+      width:100%;min-height:140px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(0,0,0,.25);color:var(--text);padding:12px
+    }
   </style>
 </head>
 
@@ -103,8 +111,8 @@
     <div class="brand">
       <div class="logo"></div>
       <div>
-        <h1>سين جيم — نسخة نهائية</h1>
-        <div class="sub">اختيار 3–6 تصنيفات • لوحة 6×6 • منع تكرار اختياري</div>
+        <h1>سين جيم — FINAL</h1>
+        <div class="sub">بدون تكرار داخل اللعبة + بلاغ عن سؤال غلط + استيراد بنك أسئلة</div>
       </div>
     </div>
     <div class="btns">
@@ -124,7 +132,7 @@
       <div class="card">
         <div class="titleRow">
           <h2>إعدادات الفرق</h2>
-          <div class="small">تنحفظ تلقائيًا</div>
+          <div class="small">تتخزن تلقائيًا</div>
         </div>
         <div class="field">
           <label>اسم الفريق الأول</label>
@@ -138,14 +146,17 @@
           <button id="resetScores" class="danger">تصفير النقاط</button>
           <span class="pill">نقاط: 200 / 400 / 600</span>
         </div>
-        <div class="small" style="margin-top:10px">اختيار الفريق يكون بعد الضغط «صح» ✅</div>
+        <div class="small" style="margin-top:10px">
+          ✅ مثل ما اتفقنا: تضغط «صح»، وبعدها تختار أي فريق جاوب.
+        </div>
       </div>
 
       <div class="card">
         <div class="titleRow">
           <h2>إعدادات اللعبة</h2>
-          <div class="small">مؤقّت + منع تكرار</div>
+          <div class="small">مؤقت + منع تكرار + بنك أسئلة</div>
         </div>
+
         <div class="field">
           <label>مدة المؤقّت (ثواني) لكل سؤال</label>
           <input id="timerSec" type="number" min="5" step="1" placeholder="مثال: 30">
@@ -156,13 +167,30 @@
           <label for="noRepeatAcross">منع تكرار الأسئلة عبر الألعاب (اختياري)</label>
         </div>
 
-        <div class="row" style="margin-top:12px">
+        <hr class="sep">
+
+        <div class="row">
           <button id="newBoard" class="primary">إنشاء لوحة جديدة</button>
           <span class="pill" id="bankStats">—</span>
         </div>
 
-        <hr class="sep">
-        <div class="small">تقدر تزيد الأسئلة بسهولة من داخل الكود: BANK (في الأسفل).</div>
+        <div class="row" style="margin-top:10px">
+          <button id="openIO" class="warn">استيراد/تصدير بنك الأسئلة</button>
+          <button id="clearReports" class="danger">مسح “المبلّغ عنها”</button>
+        </div>
+
+        <div id="ioPanel" class="subpanel">
+          <div class="small">الصق JSON للبنك (أو انسخه للتصدير)</div>
+          <textarea id="ioText" placeholder='[{"cat":"أنمي: Naruto","tier":"hard","q":"...","a":"...","img":""}]'></textarea>
+          <div class="row" style="margin-top:10px">
+            <button id="exportBank">تصدير البنك الحالي</button>
+            <button id="importBank" class="primary">استيراد وتطبيق</button>
+          </div>
+          <div class="small" style="margin-top:8px">
+            صيغة السؤال: cat + tier(easy/medium/hard) + q + a (+ img اختياري).  
+            النقاط تُحدد تلقائيًا حسب tier (200/400/600) لضبط المستوى.
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -172,12 +200,12 @@
     <div class="card">
       <div class="titleRow">
         <h2>اختيار التصنيفات (3 إلى 6)</h2>
-        <div class="small">إذا اخترت أقل من 6، يتم إكمال الباقي عشوائيًا</div>
+        <div class="small">لو اخترت أقل من 6، يكمل الباقي عشوائيًا</div>
       </div>
 
       <div class="row" style="margin-bottom:10px">
         <span class="pill" id="selCount">0 مختار</span>
-        <span class="pill">اضغط على التصنيف للتحديد</span>
+        <span class="pill">ممنوع تكرار داخل اللوحة 100%</span>
       </div>
 
       <div id="catsGrid" class="catsGrid"></div>
@@ -217,7 +245,10 @@
         <span class="pill" id="mCat"></span>
         <span class="pill" id="mPts"></span>
       </div>
-      <button id="mClose">إغلاق</button>
+      <div class="row">
+        <button id="mReport" class="warn">🚩 بلاغ: سؤال غلط/سيء</button>
+        <button id="mClose">إغلاق</button>
+      </div>
     </div>
     <div class="modalBody">
       <p class="qtext" id="mQ"></p>
@@ -229,15 +260,15 @@
 
       <div class="actions">
         <button id="mShow" class="primary">إظهار الإجابة</button>
-        <button id="mCorrect" style="border-color:rgba(34,197,94,.45)">صح ✅</button>
+        <button id="mCorrect" class="good">صح ✅</button>
         <button id="mWrong" class="danger">غلط ❌</button>
       </div>
 
       <div id="panelWho" class="subpanel">
         <div style="font-weight:900">من الفريق اللي جاوب صح؟</div>
         <div class="teamBtns">
-          <button id="awardT1"></button>
-          <button id="awardT2"></button>
+          <button id="awardT1" class="good"></button>
+          <button id="awardT2" class="good"></button>
           <button id="awardNone" class="danger">لا أحد</button>
         </div>
       </div>
@@ -252,7 +283,7 @@
       </div>
 
       <div class="small" style="margin-top:10px">
-        تذكير: أنت طلبت اختيار الفريق بعد «صح»، وهذا اللي يصير.
+        200 وسط • 400 صعب • 600 شبه مستحيل — مضبوط عن طريق tier داخل بنك الأسئلة.
       </div>
     </div>
   </div>
@@ -260,80 +291,28 @@
 
 <script>
 /* ===========================
-   1) بنك الأسئلة (مبدئي)
-   تقدر تزيده، أو تستبدله لاحقًا ببنكك.
-   شكل السؤال:
-   {cat:"...", pts:200|400|600, q:"السؤال", a:"الجواب", img:"data-uri (اختياري)"}
+   FINAL: محرك قوي ضد التكرار
+   + بلاغ + استيراد/تصدير
 =========================== */
-const BANK = [
-  // أمثلة قوية ومباشرة (بدون “اشرح” أو “سبب”)
-  {cat:"عواصم العرب", pts:200, q:"ما عاصمة الإمارات؟", a:"أبوظبي"},
-  {cat:"عواصم العرب", pts:400, q:"ما عاصمة عُمان؟", a:"مسقط"},
-  {cat:"عواصم العرب", pts:600, q:"ما عاصمة جزر القمر؟", a:"موروني"},
 
-  {cat:"عواصم أوروبا", pts:200, q:"ما عاصمة فرنسا؟", a:"باريس"},
-  {cat:"عواصم أوروبا", pts:400, q:"ما عاصمة النرويج؟", a:"أوسلو"},
-  {cat:"عواصم أوروبا", pts:600, q:"ما عاصمة مولدوفا؟", a:"كيشيناو"},
-
-  {cat:"اختصارات تقنية", pts:200, q:"ما معنى اختصار RAM؟", a:"ذاكرة الوصول العشوائي"},
-  {cat:"اختصارات تقنية", pts:400, q:"ما معنى اختصار VPN؟", a:"شبكة خاصة افتراضية"},
-  {cat:"اختصارات تقنية", pts:600, q:"ما معنى اختصار BGP؟", a:"Border Gateway Protocol"},
-
-  {cat:"كرة قدم: كأس العالم", pts:200, q:"من فاز بكأس العالم 2022؟", a:"الأرجنتين"},
-  {cat:"كرة قدم: كأس العالم", pts:400, q:"في أي دولة أقيم كأس العالم 2022؟", a:"قطر"},
-  {cat:"كرة قدم: كأس العالم", pts:600, q:"من سجل هاتريك في نهائي 2022؟", a:"كيليان مبابي"},
-
-  {cat:"أنمي: Naruto", pts:200, q:"ما اسم عائلة ناروتو؟", a:"أوزوماكي"},
-  {cat:"أنمي: Naruto", pts:400, q:"ما اسم عائلة ميناتو؟", a:"ناميكازي"},
-  {cat:"أنمي: Naruto", pts:600, q:"ما اسم عائلة شيكامارو؟", a:"نارا"},
-
-  {cat:"أنمي: Attack on Titan", pts:200, q:"ما اسم عائلة ليفاي؟", a:"أكرمان"},
-  {cat:"أنمي: Attack on Titan", pts:400, q:"ما اسم عائلة إيروين؟", a:"سميث"},
-  {cat:"أنمي: Attack on Titan", pts:600, q:"ما اسم عائلة آني؟", a:"ليون هارت"},
-
-  {cat:"أفلام", pts:200, q:"من مخرج فيلم Inception؟", a:"Christopher Nolan"},
-  {cat:"أفلام", pts:400, q:"من مخرج فيلم Dune (2021)؟", a:"Denis Villeneuve"},
-  {cat:"أفلام", pts:600, q:"من مخرج فيلم Parasite؟", a:"Bong Joon-ho"},
-
-  {cat:"مسلسلات", pts:200, q:"من بطل مسلسل The Mentalist؟", a:"Patrick Jane"},
-  {cat:"مسلسلات", pts:400, q:"من بطل مسلسل Peaky Blinders؟", a:"Tommy Shelby"},
-  {cat:"مسلسلات", pts:600, q:"من بطل مسلسل House؟", a:"Gregory House"},
-
-  {cat:"أدب", pts:200, q:"ما اسم علم قياس الشعر العربي؟", a:"العَروض"},
-  {cat:"أدب", pts:400, q:"من واضع علم العَروض؟", a:"الخليل بن أحمد الفراهيدي"},
-  {cat:"أدب", pts:600, q:"ما اسم بداية القصيدة؟", a:"المطلع"},
-
-  {cat:"سبيستون", pts:200, q:"ما اسم القناة التي اشتهرت بدبلجة الأنمي للعربية في التسعينات؟", a:"سبيستون"},
-  {cat:"سبيستون", pts:400, q:"ما اسم برنامج مسابقات الأطفال الشهير على سبيستون؟", a:"أبطال الكرة (كمثال)"},
-  {cat:"سبيستون", pts:600, q:"اذكر اسم شخصية رئيسية في مسلسل كرتون قديم (اختيار واحد صحيح):", a:"(مثال) عدنان"},
-
-  // زيد هنا أسئلتك (الأفضل: على شكل قوائم كثيرة، وبنفس أسلوب مباشر)
-];
-
-// توليد ID ثابت لتقليل التكرار عبر الألعاب
-function makeId(o){
-  return btoa(unescape(encodeURIComponent(`${o.cat}|${o.pts}|${o.q}|${o.img||""}`))).slice(0,18);
-}
-for (const q of BANK){ q.id = q.id || makeId(q); }
-
-/* ===========================
-   2) تخزين (LocalStorage)
-=========================== */
+// ====== مفاتيح التخزين
 const K = {
-  settings:"sj_settings_v1",
-  scores:"sj_scores_v1",
-  selection:"sj_selection_v1",
-  board:"sj_board_v1",
-  usedGlobal:"sj_used_global_v1",
-  usedCells:"sj_used_cells_v1"
+  settings:"sj_final_settings_v9",
+  scores:"sj_final_scores_v9",
+  selection:"sj_final_selection_v9",
+  board:"sj_final_board_v9",
+  usedGlobal:"sj_final_used_global_v9",
+  usedCells:"sj_final_used_cells_v9",
+  reported:"sj_final_reported_v9",
+  bankUser:"sj_final_bank_user_v9"
 };
 
+function $(id){ return document.getElementById(id); }
 function loadJSON(key, fallback){
   try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
   catch(e){ return fallback; }
 }
 function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
-function $(id){ return document.getElementById(id); }
 
 function getSettings(){
   return loadJSON(K.settings, {team1:"الفريق الأول", team2:"الفريق الثاني", timer:30, noRepeat:false});
@@ -341,32 +320,107 @@ function getSettings(){
 function setSettings(s){ saveJSON(K.settings, s); }
 function getScores(){ return loadJSON(K.scores, {t1:0,t2:0}); }
 function setScores(sc){ saveJSON(K.scores, sc); renderScore(); }
+
 function clearAll(){
   Object.values(K).forEach(k=>localStorage.removeItem(k));
   location.reload();
 }
 
-/* ===========================
-   3) تصنيف الأسئلة
-=========================== */
-const byCat = new Map();
-for (const q of BANK){
-  if (!byCat.has(q.cat)) byCat.set(q.cat, []);
-  byCat.get(q.cat).push(q);
-}
-// ترتيب: حسب pts ثم نص السؤال
-for (const [cat, arr] of byCat.entries()){
-  arr.sort((a,b)=> (a.pts-b.pts) || a.q.localeCompare(b.q));
+// ====== بنك مثال (صغير) + البنك المستورد (الكبير)
+const DEFAULT_BANK = [
+  // صيغة موحدة: tier يحدد الصعوبة (easy/medium/hard)
+  {cat:"أنمي: Naruto", tier:"easy",  q:"ما اسم عائلة ناروتو؟", a:"أوزوماكي"},
+  {cat:"أنمي: Naruto", tier:"medium",q:"ما اسم عائلة ميناتو؟", a:"ناميكازي"},
+  {cat:"أنمي: Naruto", tier:"hard",  q:"ما اسم لقب كاكاشي الشهير؟", a:"النينجا الناسخ"},
+
+  {cat:"أنمي: Attack on Titan", tier:"easy",  q:"ما اسم عائلة ليفاي؟", a:"أكرمان"},
+  {cat:"أنمي: Attack on Titan", tier:"medium",q:"ما اسم فيلق الجيش الذي ينتمي له إيروين؟", a:"فيلق الاستطلاع"},
+  {cat:"أنمي: Attack on Titan", tier:"hard",  q:"ما اسم العاصمة داخل الأسوار (حسب الأنمي)؟", a:"ميتراس"},
+
+  {cat:"كرة قدم: كأس العالم", tier:"easy",  q:"من فاز بكأس العالم 2022؟", a:"الأرجنتين"},
+  {cat:"كرة قدم: كأس العالم", tier:"medium",q:"في أي دولة أقيم كأس العالم 2022؟", a:"قطر"},
+  {cat:"كرة قدم: كأس العالم", tier:"hard",  q:"من سجل هاتريك في نهائي 2022؟", a:"كيليان مبابي"},
+
+  {cat:"عواصم العرب", tier:"easy",  q:"ما عاصمة الإمارات؟", a:"أبوظبي"},
+  {cat:"عواصم العرب", tier:"medium",q:"ما عاصمة عُمان؟", a:"مسقط"},
+  {cat:"عواصم العرب", tier:"hard",  q:"ما عاصمة جزر القمر؟", a:"موروني"},
+
+  {cat:"أدب", tier:"easy",  q:"ما اسم علم قياس الشعر العربي؟", a:"العَروض"},
+  {cat:"أدب", tier:"medium",q:"من واضع علم العَروض؟", a:"الخليل بن أحمد الفراهيدي"},
+  {cat:"أدب", tier:"hard",  q:"ما اسم بداية القصيدة؟", a:"المطلع"},
+];
+
+// ====== تحميل بنك المستخدم إن وُجد
+function loadBank(){
+  const user = loadJSON(K.bankUser, null);
+  const raw = Array.isArray(user) && user.length ? user : DEFAULT_BANK;
+
+  // تنظيف + توحيد + IDs + تحويل tier -> pts
+  const reported = new Set(loadJSON(K.reported, []));
+  const seen = new Set();
+  const out = [];
+
+  for (const it of raw){
+    if (!it || !it.cat || !it.q || !it.a) continue;
+    const tier = (it.tier||"medium").toLowerCase();
+    const pts = tier==="easy" ? 200 : tier==="hard" ? 600 : 400;
+
+    const cat = String(it.cat).trim();
+    const q = String(it.q).trim();
+    const a = String(it.a).trim();
+    const img = it.img ? String(it.img) : "";
+
+    const id = makeId({cat, q, a, img, tier});
+    if (reported.has(id)) continue;            // استبعاد المبلّغ عنها
+    if (seen.has(id)) continue;                // منع تكرار في البنك نفسه
+    seen.add(id);
+
+    out.push({id, cat, q, a, img, tier, pts});
+  }
+  return out;
 }
 
+function makeId(o){
+  // ID ثابت قوي (من نفس السؤال)
+  const s = `${o.cat}|${o.tier||""}|${o.q}|${o.a}|${o.img||""}`;
+  let h=0;
+  for (let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; }
+  return "q" + h.toString(16).padStart(8,"0");
+}
+
+let BANK = loadBank();
+
+// ====== تصنيف حسب الفئة + tiers
+function buildIndex(){
+  const byCat = new Map();
+  for (const q of BANK){
+    if (!byCat.has(q.cat)) byCat.set(q.cat, {easy:[], medium:[], hard:[]});
+    byCat.get(q.cat)[q.tier].push(q);
+  }
+  // ترتيب ثابت داخل كل tier (عشوائي خفيف حسب id)
+  for (const [cat, grp] of byCat.entries()){
+    for (const t of ["easy","medium","hard"]){
+      grp[t].sort((a,b)=>a.id.localeCompare(b.id));
+    }
+  }
+  return byCat;
+}
+
+let INDEX = buildIndex();
+
+// ====== صفحات
 function showPage(name){
   ["Setup","Select","Game"].forEach(p=>$("page"+p).classList.remove("active"));
   $("page"+name).classList.add("active");
 }
 
-/* ===========================
-   4) واجهة الإعدادات
-=========================== */
+// ====== إحصائيات
+function refreshStats(){
+  const cats = Array.from(INDEX.keys());
+  $("bankStats").textContent = `${cats.length} تصنيف • ${BANK.length} سؤال`;
+}
+
+// ====== الإعدادات
 function initSetup(){
   const s = getSettings();
   $("team1Name").value = s.team1;
@@ -394,45 +448,74 @@ function initSetup(){
   $("resetScores").onclick = ()=> setScores({t1:0,t2:0});
   $("newBoard").onclick = ()=> showPage("Select");
 
-  $("bankStats").textContent = `${byCat.size} تصنيف • ${BANK.length} سؤال`;
+  $("openIO").onclick = ()=> $("ioPanel").classList.toggle("show");
+
+  $("exportBank").onclick = ()=>{
+    $("ioText").value = JSON.stringify(loadJSON(K.bankUser, DEFAULT_BANK), null, 2);
+    $("ioText").focus(); $("ioText").select();
+  };
+
+  $("importBank").onclick = ()=>{
+    try{
+      const arr = JSON.parse($("ioText").value);
+      if (!Array.isArray(arr) || arr.length<10) return alert("البنك غير صالح أو صغير جدًا.");
+      saveJSON(K.bankUser, arr);
+      // rebuild
+      BANK = loadBank();
+      INDEX = buildIndex();
+      refreshStats();
+      renderCats();
+      alert("تم استيراد البنك بنجاح ✅");
+    }catch(e){
+      alert("JSON غير صحيح.");
+    }
+  };
+
+  $("clearReports").onclick = ()=>{
+    if (!confirm("أكيد تمسح كل الأسئلة المبلّغ عنها؟")) return;
+    localStorage.removeItem(K.reported);
+    BANK = loadBank();
+    INDEX = buildIndex();
+    refreshStats();
+    renderCats();
+    alert("تم ✅");
+  };
+
+  refreshStats();
 }
 
-/* ===========================
-   5) اختيار التصنيفات
-=========================== */
-let selected = new Set(loadJSON(K.selection, []));
-
+// ====== اختيار التصنيفات
 function allCats(){
-  const cats = Array.from(byCat.keys());
+  const cats = Array.from(INDEX.keys());
   cats.sort((a,b)=>a.localeCompare(b));
   return cats;
 }
+let selected = new Set(loadJSON(K.selection, []));
 
 function renderCats(){
   const grid = $("catsGrid");
   grid.innerHTML = "";
   for (const cat of allCats()){
-    const items = byCat.get(cat) || [];
-    const c200 = items.filter(x=>x.pts===200).length;
-    const c400 = items.filter(x=>x.pts===400).length;
-    const c600 = items.filter(x=>x.pts===600).length;
+    const grp = INDEX.get(cat);
+    const n = grp.easy.length + grp.medium.length + grp.hard.length;
 
     const div = document.createElement("div");
     div.className = "card catCard " + (selected.has(cat) ? "on":"off");
     div.innerHTML = `
       <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
         <div style="font-weight:1000">${cat}</div>
-        <div class="pill">${items.length} سؤال</div>
+        <div class="pill">${n} سؤال</div>
       </div>
-      <div class="small" style="margin-top:6px">200: ${c200} • 400: ${c400} • 600: ${c600}</div>
+      <div class="small" style="margin-top:6px">200: ${grp.easy.length} • 400: ${grp.medium.length} • 600: ${grp.hard.length}</div>
     `;
     div.onclick = ()=>{
       if (selected.has(cat)) selected.delete(cat);
-      else {
-        if (selected.size >= 6) return alert("مسموح 6 تصنيفات فقط");
+      else{
+        if (selected.size>=6) return alert("مسموح 6 تصنيفات فقط");
         selected.add(cat);
       }
       saveJSON(K.selection, Array.from(selected));
+      $("selCount").textContent = `${selected.size} مختار`;
       renderCats();
     };
     grid.appendChild(div);
@@ -443,7 +526,7 @@ function renderCats(){
 function randomCats(){
   const pool = allCats();
   selected = new Set();
-  while (selected.size < 6 && pool.length){
+  while(selected.size<6 && pool.length){
     selected.add(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
   }
   saveJSON(K.selection, Array.from(selected));
@@ -455,14 +538,7 @@ function clearCats(){
   renderCats();
 }
 
-/* ===========================
-   6) بناء اللوحة (6 أسئلة لكل تصنيف)
-   200/200/400/400/600/600
-   بدون تكرار داخل اللوحة
-   + اختياري منع تكرار عبر الألعاب
-=========================== */
-const POINTS = [200,200,400,400,600,600];
-
+// ====== منع التكرار عبر الألعاب (اختياري)
 function usedGlobalSet(){
   const s = getSettings();
   if (!s.noRepeat) return new Set();
@@ -473,19 +549,32 @@ function saveUsedGlobal(set){
   if (!s.noRepeat) return;
   saveJSON(K.usedGlobal, Array.from(set));
 }
-function sample(arr,k){
-  const a = arr.slice(); const out=[];
-  while(out.length<k && a.length){
-    out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);
+
+// ====== اختيار بدون تكرار 100% داخل اللوحة
+function pickUnique(list, k, usedIds){
+  // list: array, usedIds: Set
+  const pool = list.filter(x=>!usedIds.has(x.id));
+  // لو ما يكفي، رجع من القائمة الأصلية بس لسه بدون تكرار داخل اللوحة
+  const source = pool.length>=k ? pool : list.filter(x=>!usedIds.has(x.id));
+  const out = [];
+  const tmp = source.slice();
+  while(out.length<k && tmp.length){
+    const i = Math.floor(Math.random()*tmp.length);
+    const q = tmp.splice(i,1)[0];
+    if (!usedIds.has(q.id)){
+      usedIds.add(q.id);
+      out.push(q);
+    }
   }
   return out;
 }
+
+const POINTS = [200,200,400,400,600,600];
 
 function buildBoard(){
   if (selected.size < 3) return alert("اختر 3 تصنيفات على الأقل");
   let cats = Array.from(selected);
 
-  // أكمل إلى 6 عشوائيًا إذا أقل
   if (cats.length < 6){
     const pool = allCats().filter(c=>!selected.has(c));
     while(cats.length < 6 && pool.length){
@@ -495,45 +584,40 @@ function buildBoard(){
   cats = cats.slice(0,6);
 
   const usedG = usedGlobalSet();
+  const usedInBoard = new Set(); // يمنع تكرار داخل اللوحة نهائيًا
+  // أضف usedG إذا تبي منع عبر الألعاب
+  for (const id of usedG) usedInBoard.add(id);
+
   const board = {cats:[], cells:{}};
 
   for (const cat of cats){
-    const all = byCat.get(cat) || [];
-    // الأفضل: اختر من غير المستخدم عالميًا
-    let pool = all.filter(q=>!usedG.has(q.id));
-    if (pool.length < 6) pool = all; // لو خلص، رجع للكل
+    const grp = INDEX.get(cat);
+    // 2 easy, 2 medium, 2 hard — هذا اللي يثبت “المستوى”
+    const picked = []
+      .concat(pickUnique(grp.easy,   2, usedInBoard))
+      .concat(pickUnique(grp.medium, 2, usedInBoard))
+      .concat(pickUnique(grp.hard,   2, usedInBoard));
 
-    // تقسيم حسب الصعوبة (حسب pts) لكن مع منع التكرار
-    const low = pool.filter(x=>x.pts===200);
-    const mid = pool.filter(x=>x.pts===400);
-    const high = pool.filter(x=>x.pts===600);
-
-    let picked = [];
-    picked = picked.concat(sample(low,2));
-    picked = picked.concat(sample(mid,2));
-    picked = picked.concat(sample(high,2));
-
-    // لو نقص، كمل من أي مكان
-    const ids = new Set(picked.map(x=>x.id));
-    while(picked.length<6 && pool.length){
-      const q = pool[Math.floor(Math.random()*pool.length)];
-      if (!ids.has(q.id)){ picked.push(q); ids.add(q.id); }
-      else break;
+    if (picked.length < 6){
+      // لو التصنيف ناقص tier معين: كمل من أي tier بس بدون تكرار
+      const all = grp.easy.concat(grp.medium, grp.hard);
+      picked.push(...pickUnique(all, 6-picked.length, usedInBoard));
     }
 
     board.cats.push(cat);
     for (let r=0;r<6;r++){
-      board.cells[`${cat}|${r}`] = picked[r] || pool[r%pool.length];
+      board.cells[`${cat}|${r}`] = picked[r];
     }
   }
 
   saveJSON(K.board, board);
-  saveJSON(K.usedCells, {}); // لوحة جديدة = reset
+  saveJSON(K.usedCells, {}); // لوحة جديدة
   $("boardMeta").textContent = `آخر تحديث: ${new Date().toLocaleString('ar')}`;
   renderBoard();
   showPage("Game");
 }
 
+// ====== عرض اللوحة
 function renderBoard(){
   const boardEl = $("board");
   boardEl.innerHTML = "";
@@ -543,7 +627,7 @@ function renderBoard(){
     return;
   }
   const usedCells = loadJSON(K.usedCells, {});
-  board.cats.forEach(cat=>{
+  for (const cat of board.cats){
     const col = document.createElement("div");
     col.className = "col";
     const head = document.createElement("div");
@@ -568,12 +652,10 @@ function renderBoard(){
     });
 
     boardEl.appendChild(col);
-  });
+  }
 }
 
-/* ===========================
-   7) المودال + المؤقّت + احتساب النقاط
-=========================== */
+// ====== المؤقت + المودال + النقاط
 let current=null;
 let timerInt=null;
 let timerLeft=0;
@@ -625,10 +707,12 @@ function openQuestion(cat, pts, row, q){
 }
 
 function markUsed(){
+  // خلية
   const usedCells = loadJSON(K.usedCells, {});
   usedCells[`${current.cat}|${current.row}`] = true;
   saveJSON(K.usedCells, usedCells);
 
+  // سؤال عالمي (اختياري)
   const s = getSettings();
   if (s.noRepeat){
     const usedG = usedGlobalSet();
@@ -661,35 +745,6 @@ function renderScore(){
   $("stealT2").textContent = s.team2;
 }
 
-/* ===========================
-   8) ربط الأزرار
-=========================== */
-$("goSetup").onclick = ()=>showPage("Setup");
-$("goSelect").onclick = ()=>{ showPage("Select"); renderCats(); };
-$("goGame").onclick = ()=>{ showPage("Game"); renderBoard(); };
-$("wipe").onclick = ()=>{ if(confirm("أكيد تبغي تمسح كل شي؟")) clearAll(); };
-
-$("confirmCats").onclick = buildBoard;
-$("randomCats").onclick = randomCats;
-$("clearCats").onclick = clearCats;
-
-$("mClose").onclick = closeModal;
-$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
-
-$("mShow").onclick = ()=> $("mAnsBox").classList.add("show");
-
-$("mCorrect").onclick = ()=>{
-  $("mAnsBox").classList.add("show");
-  $("panelSteal").classList.remove("show");
-  $("panelWho").classList.add("show"); // اختيار الفريق بعد "صح"
-};
-
-$("mWrong").onclick = ()=>{
-  $("mAnsBox").classList.add("show");
-  $("panelWho").classList.remove("show");
-  $("panelSteal").classList.add("show"); // سرقة
-};
-
 function award(team){
   const sc = getScores();
   if (team==="t1") sc.t1 += current.pts;
@@ -703,6 +758,54 @@ function noAward(){
   closeModal();
 }
 
+// ====== بلاغ سؤال غلط/سيء
+function reportCurrent(){
+  if (!current) return;
+  if (!confirm("تبغي تسوي بلاغ؟ هذا السؤال بينشال من البنك على جهازك.")) return;
+  const arr = loadJSON(K.reported, []);
+  if (!arr.includes(current.q.id)) arr.push(current.q.id);
+  saveJSON(K.reported, arr);
+
+  // تحديث البنك والفهرس
+  BANK = loadBank();
+  INDEX = buildIndex();
+  refreshStats();
+  renderCats();
+
+  // اعتبره مستخدم داخل اللعبة واغلق
+  markUsed();
+  closeModal();
+  alert("تم ✅ انشال السؤال.");
+}
+
+// ====== ربط الأزرار
+$("goSetup").onclick = ()=>showPage("Setup");
+$("goSelect").onclick = ()=>{ showPage("Select"); renderCats(); };
+$("goGame").onclick = ()=>{ showPage("Game"); renderBoard(); };
+$("wipe").onclick = ()=>{ if(confirm("أكيد تبغي تمسح كل شي؟")) clearAll(); };
+
+$("confirmCats").onclick = buildBoard;
+$("randomCats").onclick = randomCats;
+$("clearCats").onclick = clearCats;
+
+$("mClose").onclick = closeModal;
+$("mReport").onclick = reportCurrent;
+$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
+
+$("mShow").onclick = ()=> $("mAnsBox").classList.add("show");
+
+// مثل ما اتفقنا: اختيار الفريق بعد "صح"
+$("mCorrect").onclick = ()=>{
+  $("mAnsBox").classList.add("show");
+  $("panelSteal").classList.remove("show");
+  $("panelWho").classList.add("show");
+};
+$("mWrong").onclick = ()=>{
+  $("mAnsBox").classList.add("show");
+  $("panelWho").classList.remove("show");
+  $("panelSteal").classList.add("show");
+};
+
 $("awardT1").onclick = ()=>award("t1");
 $("awardT2").onclick = ()=>award("t2");
 $("awardNone").onclick = ()=>noAward();
@@ -711,9 +814,7 @@ $("stealT1").onclick = ()=>award("t1");
 $("stealT2").onclick = ()=>award("t2");
 $("stealNone").onclick = ()=>noAward();
 
-/* ===========================
-   9) تشغيل أولي
-=========================== */
+// ====== تشغيل أولي
 initSetup();
 renderScore();
 renderCats();
