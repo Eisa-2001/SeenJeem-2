@@ -1,443 +1,726 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>سين جيم — ستوديو V7</title>
-<style>
-  :root{--bg0:#060914;--bg1:#0b1430;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.04);--stroke:rgba(255,255,255,.10);--stroke2:rgba(255,255,255,.16);--text:#f2f6ff;--muted:#b7c3e6;--accent:#67e8f9;--accent2:#a78bfa;--ok:#34d399;--bad:#fb7185;--shadow:0 20px 60px rgba(0,0,0,.45);--radius:18px}
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Kufi Arabic",Arial;background:
-    radial-gradient(1000px 600px at 10% 10%, rgba(103,232,249,.18), transparent 60%),
-    radial-gradient(1000px 600px at 90% 20%, rgba(167,139,250,.18), transparent 60%),
-    linear-gradient(180deg,var(--bg1),var(--bg0))}
-  header{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(6,9,20,.88),rgba(6,9,20,.55));border-bottom:1px solid var(--stroke)}
-  .bar{max-width:1200px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:10px}
-  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,rgba(103,232,249,.85),rgba(167,139,250,.85));box-shadow:0 12px 30px rgba(103,232,249,.18)}
-  .title{font-weight:1000;font-size:18px} .subtitle{color:var(--muted);font-size:12px;margin-top:2px}
-  .wrap{max-width:1200px;margin:0 auto;padding:16px 16px 40px}
-  .btn{border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.04));color:var(--text);padding:10px 12px;border-radius:14px;cursor:pointer;transition:transform .08s ease,border-color .2s ease,filter .2s ease;user-select:none}
-  .btn:hover{border-color:var(--stroke2);filter:brightness(1.06)} .btn:active{transform:translateY(1px) scale(.99)}
-  .btnPrimary{border-color:rgba(103,232,249,.40);background:linear-gradient(180deg,rgba(103,232,249,.16),rgba(103,232,249,.08))}
-  .btnDanger{border-color:rgba(251,113,133,.40);background:linear-gradient(180deg,rgba(251,113,133,.14),rgba(251,113,133,.07))}
-  .btnOk{border-color:rgba(52,211,153,.45);background:linear-gradient(180deg,rgba(52,211,153,.16),rgba(52,211,153,.08))}
-  .btnGhost{background:transparent}
-  .pill{padding:7px 10px;border-radius:999px;border:1px solid var(--stroke);color:var(--muted);font-size:12px;background:rgba(0,0,0,.12)}
-  .hint{color:var(--muted);font-size:13px}
-  .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
-  .grid{display:grid;gap:14px} @media(min-width:980px){.grid{grid-template-columns:1.4fr .8fr}}
-  .cardHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-  .h1{font-weight:1000;font-size:18px}
-  .screen{display:none} .screen.show{display:block}
-  .teams{display:grid;gap:12px} .team{border-radius:16px;border:1px solid var(--stroke);background:rgba(0,0,0,.14);padding:12px}
-  .teamTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .teamName{display:flex;align-items:center;gap:8px;font-weight:950}
-  .badge{width:12px;height:12px;border-radius:6px;display:inline-block;background:var(--accent);box-shadow:0 0 0 6px rgba(103,232,249,.10)}
-  .badge.b2{background:var(--accent2);box-shadow:0 0 0 6px rgba(167,139,250,.10)}
-  .nameInput{font:inherit;font-weight:950;background:transparent;border:1px dashed rgba(255,255,255,.18);color:var(--text);padding:6px 10px;border-radius:12px;width:180px;max-width:100%}
-  .nameInput:focus{outline:none;border-color:rgba(103,232,249,.55)}
-  .score{font-variant-numeric:tabular-nums;font-size:34px;font-weight:1000}
-  .teamBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px} .miniBtn{padding:8px 10px;border-radius:12px}
-  .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
-  .cat{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--stroke);border-radius:16px;background:rgba(0,0,0,.12);cursor:pointer;transition:border-color .2s ease,transform .08s ease,filter .2s ease;user-select:none}
-  .cat:hover{border-color:var(--stroke2);filter:brightness(1.06)} .cat:active{transform:translateY(1px) scale(.995)}
-  .cat input{width:18px;height:18px} .catTitle{font-weight:900} .catMeta{color:var(--muted);font-size:12px;margin-top:2px}
-  .boardWrap{margin-top:14px;overflow:auto;border-radius:var(--radius);border:1px solid var(--stroke);background:rgba(0,0,0,.12)}
-  table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
-  th,td{border-left:1px solid var(--stroke);border-bottom:1px solid var(--stroke);padding:0;text-align:center}
-  th{position:sticky;top:0;z-index:2;background:rgba(0,0,0,.28);padding:12px 10px;font-weight:1000}
-  tr td:first-child, tr th:first-child{border-left:none} tr:last-child td{border-bottom:none}
-  .cellBtn{width:100%;height:66px;border:none;cursor:pointer;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));color:var(--text);font-size:22px;font-weight:1000;transition:transform .08s ease,filter .2s ease,background .2s ease}
-  .cellBtn:hover{filter:brightness(1.10)} .cellBtn:active{transform:translateY(1px) scale(.99)}
-  .cellUsed .cellBtn{cursor:not-allowed;color:rgba(255,255,255,.20);background:rgba(0,0,0,.22)}
-  .scoreRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:10px}
-  .scorePill{display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:16px;border:1px solid var(--stroke);background:rgba(0,0,0,.14)}
-  .scorePill .n{font-weight:1000} .scorePill .v{font-variant-numeric:tabular-nums;font-weight:1000;font-size:18px}
-  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.70);z-index:50}
-  .modal.show{display:flex}
-  .modalCard{width:min(920px,100%);border-radius:22px;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(12,18,40,.98),rgba(6,9,20,.98));box-shadow:var(--shadow);padding:14px}
-  .modalTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .qImg{width:100%;max-height:320px;object-fit:contain;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);display:none;margin-top:12px}
-  .qImg.show{display:block}
-  .qText{font-size:24px;line-height:1.6;margin:12px 0 8px;font-weight:900}
-  .aText{font-size:20px;line-height:1.6;margin:10px 0;color:var(--accent);display:none} .aText.show{display:block}
-  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center} .timer{font-variant-numeric:tabular-nums}
-  .warn{color:var(--muted);font-size:13px;margin-top:8px}
-  .toast{position:fixed;left:14px;bottom:14px;z-index:60;display:none;max-width:min(560px,calc(100% - 28px));padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);background:rgba(12,18,40,.92)}
-  .toast.show{display:block}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>سين جيم — نسخة نهائية (ملف واحد)</title>
+  <style>
+    :root{
+      --bg:#070a12; --panel:#0f1630; --panel2:#121b3a; --text:#e9eeff; --muted:#a9b4e6;
+      --line:rgba(255,255,255,.12); --a1:#67e8f9; --a2:#a78bfa;
+      --good:#22c55e; --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:radial-gradient(900px 700px at 15% 10%, rgba(103,232,249,.12), transparent 60%),
+                 radial-gradient(900px 700px at 85% 10%, rgba(167,139,250,.10), transparent 60%),
+                 var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky;top:0;z-index:10;
+      background:rgba(7,10,18,.72);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2))}
+    h1{margin:0;font-size:15px}
+    .sub{font-size:12px;color:var(--muted)}
+    .btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    button{
+      cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);
+      color:var(--text);padding:10px 12px;border-radius:12px;font-weight:800
+    }
+    button:hover{background:rgba(255,255,255,.07)}
+    button.primary{border:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#0b1020}
+    button.danger{border-color:rgba(239,68,68,.45)}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .page{display:none}
+    .page.active{display:block}
+    .card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:14px}
+    .grid{display:grid;gap:12px}
+    .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media(max-width:840px){.grid.two{grid-template-columns:1fr}}
+    .titleRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+    .titleRow h2{margin:0;font-size:15px}
+    .small{font-size:12px;color:var(--muted)}
+    .field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+    label{font-size:12px;color:var(--muted)}
+    input[type="text"], input[type="number"]{
+      padding:12px;border-radius:12px;border:1px solid var(--line);
+      background:rgba(0,0,0,.25);color:var(--text)
+    }
+    .pill{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .toggle{display:flex;gap:10px;align-items:center;margin-top:10px}
+    input[type="checkbox"]{width:18px;height:18px}
+    .scorebar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .scorebox{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+    .scorebox .name{font-weight:900}
+    .scorebox .score{font-size:18px;font-weight:1000;background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .timer{font-variant-numeric:tabular-nums;font-weight:900}
+    .board{display:grid;gap:10px;grid-template-columns:repeat(6,minmax(0,1fr))}
+    @media(max-width:980px){.board{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .col{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03)}
+    .colHead{padding:10px 8px;text-align:center;font-weight:1000;background:rgba(255,255,255,.05);border-bottom:1px solid var(--line);min-height:52px;display:flex;align-items:center;justify-content:center}
+    .cell button{width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:16px 8px;font-size:18px}
+    .cell button.used{opacity:.35;text-decoration:line-through}
+    .cell:last-child button{border-bottom:0}
+    .p200{color:#bfefff}.p400{color:#d7c8ff}.p600{color:#ffd0b2}
+
+    .catsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+    .catCard{padding:12px;cursor:pointer}
+    .catCard.on{background:rgba(103,232,249,.10);border-color:rgba(103,232,249,.35)}
+    .catCard.off{background:rgba(255,255,255,.03)}
+    hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
+
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:50;padding:16px}
+    .modal.show{display:flex}
+    .modalCard{width:min(920px,100%);background:rgba(12,16,30,.92);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+    .modalTop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .modalTop .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .modalBody{padding:14px}
+    .qtext{font-size:18px;font-weight:900;line-height:1.5;margin:0 0 10px}
+    .ans{display:none;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px dashed rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
+    .ans.show{display:block}
+    .ans .lbl{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .ans .aval{font-size:18px;font-weight:1000}
+    .qimg{width:100%;max-height:360px;object-fit:contain;border-radius:16px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .actions button{flex:1;min-width:160px}
+    .subpanel{display:none;margin-top:12px;padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+    .subpanel.show{display:block}
+    .teamBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .teamBtns button{flex:1;min-width:160px}
+  </style>
 </head>
+
 <body>
 <header>
-  <div class="bar">
+  <div class="topbar">
     <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
+      <div class="logo"></div>
       <div>
-        <div class="title">سين جيم — ستوديو V7</div>
-        <div class="subtitle">200 = وسط • 400 = صعبة • 600 = شبه مستحيلة (على كل التصنيفات)</div>
+        <h1>سين جيم — نسخة نهائية</h1>
+        <div class="sub">اختيار 3–6 تصنيفات • لوحة 6×6 • منع تكرار اختياري</div>
       </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-      <button class="btn" id="btnImport">📦 استيراد بنك</button>
-      <input id="fileInput" type="file" accept="application/json" style="display:none"/>
-      <button class="btn" id="btnExport">⬇️ تصدير البنك</button>
-      <button class="btn btnDanger" id="btnClear">🧹 مسح كل البيانات</button>
+    <div class="btns">
+      <button id="goSetup">الإعدادات</button>
+      <button id="goSelect">اختيار التصنيفات</button>
+      <button id="goGame" class="primary">اللعبة</button>
+      <button id="wipe" class="danger">🧹 مسح كل البيانات</button>
     </div>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="screen show" id="screenSetup">
-    <div class="grid">
-      <section class="card">
-        <div class="cardHead">
-          <div>
-            <div class="h1">إعداد اللعبة</div>
-            <div class="hint">اختر من <b>3</b> إلى <b>6</b> تصنيفات، بعدين «ابدأ».</div>
-          </div>
-          <div class="pill">البنك: <span id="bankCount"></span> — تصنيفات: <span id="catCount"></span></div>
-        </div>
-        <div class="cats" id="cats"></div>
-        <div class="actions">
-          <button class="btn btnPrimary" id="btnStart">ابدأ اللعبة</button>
-          <span class="pill" id="selHint"></span>
-        </div>
-      </section>
+<div class="container">
 
-      <aside class="card">
-        <div class="cardHead">
-          <div>
-            <div class="h1">الفرق</div>
-            <div class="hint">غيّر أسماء الفرق هنا، وتظهر نفس الأسماء والنتيجة داخل اللعبة.</div>
-          </div>
-          <div class="pill">الوقت: <span id="clock">60</span>s</div>
+  <!-- Setup -->
+  <div id="pageSetup" class="page active">
+    <div class="grid two">
+      <div class="card">
+        <div class="titleRow">
+          <h2>إعدادات الفرق</h2>
+          <div class="small">تنحفظ تلقائيًا</div>
         </div>
+        <div class="field">
+          <label>اسم الفريق الأول</label>
+          <input id="team1Name" type="text" placeholder="الفريق الأول">
+        </div>
+        <div class="field">
+          <label>اسم الفريق الثاني</label>
+          <input id="team2Name" type="text" placeholder="الفريق الثاني">
+        </div>
+        <div class="row">
+          <button id="resetScores" class="danger">تصفير النقاط</button>
+          <span class="pill">نقاط: 200 / 400 / 600</span>
+        </div>
+        <div class="small" style="margin-top:10px">اختيار الفريق يكون بعد الضغط «صح» ✅</div>
+      </div>
 
-        <div class="teams">
-          <div class="team">
-            <div class="teamTop">
-              <div class="teamName"><span class="badge"></span><input class="nameInput" id="team1Name" value="الفريق 1"/></div>
-              <div class="score" id="s1">0</div>
-            </div>
-            <div class="teamBtns">
-              <button class="btn miniBtn" id="t1Minus">-200</button>
-              <button class="btn miniBtn" id="t1Plus">+200</button>
-              <button class="btn btnDanger miniBtn" id="t1Reset">تصفير</button>
-            </div>
-          </div>
-
-          <div class="team">
-            <div class="teamTop">
-              <div class="teamName"><span class="badge b2"></span><input class="nameInput" id="team2Name" value="الفريق 2"/></div>
-              <div class="score" id="s2">0</div>
-            </div>
-            <div class="teamBtns">
-              <button class="btn miniBtn" id="t2Minus">-200</button>
-              <button class="btn miniBtn" id="t2Plus">+200</button>
-              <button class="btn btnDanger miniBtn" id="t2Reset">تصفير</button>
-            </div>
-          </div>
+      <div class="card">
+        <div class="titleRow">
+          <h2>إعدادات اللعبة</h2>
+          <div class="small">مؤقّت + منع تكرار</div>
+        </div>
+        <div class="field">
+          <label>مدة المؤقّت (ثواني) لكل سؤال</label>
+          <input id="timerSec" type="number" min="5" step="1" placeholder="مثال: 30">
         </div>
 
-        <div class="hint" style="margin-top:12px;line-height:1.6">
-          ✅ «صح» → بعدها تختار الفريق.  ❌ «خطأ» = ما في نقاط.
+        <div class="toggle">
+          <input id="noRepeatAcross" type="checkbox">
+          <label for="noRepeatAcross">منع تكرار الأسئلة عبر الألعاب (اختياري)</label>
         </div>
-      </aside>
+
+        <div class="row" style="margin-top:12px">
+          <button id="newBoard" class="primary">إنشاء لوحة جديدة</button>
+          <span class="pill" id="bankStats">—</span>
+        </div>
+
+        <hr class="sep">
+        <div class="small">تقدر تزيد الأسئلة بسهولة من داخل الكود: BANK (في الأسفل).</div>
+      </div>
     </div>
   </div>
 
-  <div class="screen" id="screenGame">
+  <!-- Select -->
+  <div id="pageSelect" class="page">
     <div class="card">
-      <div class="cardHead">
-        <div>
-          <div class="h1">لوحة اللعبة</div>
-          <div class="hint">اختر سؤال من الجدول.</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn" id="btnBack">⬅️ رجوع للإعدادات</button>
-          <button class="btn btnPrimary" id="btnNew">🔁 لعبة جديدة</button>
-          <div class="pill">الوقت: <span id="clock2">60</span>s</div>
-        </div>
+      <div class="titleRow">
+        <h2>اختيار التصنيفات (3 إلى 6)</h2>
+        <div class="small">إذا اخترت أقل من 6، يتم إكمال الباقي عشوائيًا</div>
       </div>
 
-      <div class="scoreRow">
-        <div class="scorePill"><span class="badge"></span><span class="n" id="gName1">الفريق 1</span> <span class="pill">النقاط</span> <span class="v" id="gScore1">0</span></div>
-        <div class="scorePill"><span class="badge b2"></span><span class="n" id="gName2">الفريق 2</span> <span class="pill">النقاط</span> <span class="v" id="gScore2">0</span></div>
+      <div class="row" style="margin-bottom:10px">
+        <span class="pill" id="selCount">0 مختار</span>
+        <span class="pill">اضغط على التصنيف للتحديد</span>
       </div>
 
-      <div class="boardWrap"><table id="board"></table></div>
+      <div id="catsGrid" class="catsGrid"></div>
+
+      <hr class="sep">
+      <div class="row">
+        <button id="confirmCats" class="primary">تأكيد + إنشاء اللوحة</button>
+        <button id="randomCats">اختيار عشوائي</button>
+        <button id="clearCats" class="danger">مسح الاختيار</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div id="pageGame" class="page">
+    <div class="scorebar">
+      <div class="scorebox"><span class="name" id="t1N">الفريق الأول</span> <span class="score" id="t1S">0</span></div>
+      <div class="scorebox"><span class="timer" id="timer">00:00</span> <span class="pill" id="timerState">جاهز</span></div>
+      <div class="scorebox"><span class="name" id="t2N">الفريق الثاني</span> <span class="score" id="t2S">0</span></div>
+    </div>
+
+    <div class="card">
+      <div class="titleRow">
+        <h2>لوحة اللعبة</h2>
+        <div class="small" id="boardMeta">—</div>
+      </div>
+      <div id="board" class="board"></div>
     </div>
   </div>
 </div>
 
-<div class="modal" id="qModal">
+<!-- Modal -->
+<div id="modal" class="modal">
   <div class="modalCard">
     <div class="modalTop">
-      <div class="pill" id="qMeta">—</div>
-      <button class="btn btnGhost" id="btnClose">✖</button>
+      <div class="meta">
+        <span class="pill" id="mCat"></span>
+        <span class="pill" id="mPts"></span>
+      </div>
+      <button id="mClose">إغلاق</button>
     </div>
-    <img id="qImg" class="qImg" alt="صورة السؤال"/>
-    <div class="qText" id="qText"></div>
-    <div class="aText" id="aText"></div>
-    <div class="actions">
-      <button class="btn" id="btnShow">👁️ إظهار الإجابة</button>
-      <span class="pill timer">⏱️ <span id="timer">60</span>s</span>
-      <button class="btn btnOk" id="btnCorrect">✅ صح</button>
-      <button class="btn btnDanger" id="btnWrong">❌ خطأ</button>
+    <div class="modalBody">
+      <p class="qtext" id="mQ"></p>
+      <img id="mImg" class="qimg" style="display:none">
+      <div id="mAnsBox" class="ans">
+        <div class="lbl">الإجابة</div>
+        <div class="aval" id="mA"></div>
+      </div>
+
+      <div class="actions">
+        <button id="mShow" class="primary">إظهار الإجابة</button>
+        <button id="mCorrect" style="border-color:rgba(34,197,94,.45)">صح ✅</button>
+        <button id="mWrong" class="danger">غلط ❌</button>
+      </div>
+
+      <div id="panelWho" class="subpanel">
+        <div style="font-weight:900">من الفريق اللي جاوب صح؟</div>
+        <div class="teamBtns">
+          <button id="awardT1"></button>
+          <button id="awardT2"></button>
+          <button id="awardNone" class="danger">لا أحد</button>
+        </div>
+      </div>
+
+      <div id="panelSteal" class="subpanel">
+        <div style="font-weight:900">سرقة؟ (إذا فريق ثاني جاوب صح)</div>
+        <div class="teamBtns">
+          <button id="stealT1"></button>
+          <button id="stealT2"></button>
+          <button id="stealNone" class="danger">لا سرقة</button>
+        </div>
+      </div>
+
+      <div class="small" style="margin-top:10px">
+        تذكير: أنت طلبت اختيار الفريق بعد «صح»، وهذا اللي يصير.
+      </div>
     </div>
-    <div class="warn" id="warn"></div>
   </div>
 </div>
-
-<div class="modal" id="tModal">
-  <div class="modalCard" style="width:min(560px,100%)">
-    <div class="modalTop">
-      <div class="pill">منو الفريق اللي جاوب صح؟</div>
-      <button class="btn btnGhost" id="btnTeamClose">✖</button>
-    </div>
-    <div class="actions" style="margin-top:14px">
-      <button class="btn btnOk" id="team1Pick">الفريق 1</button>
-      <button class="btn btnOk" id="team2Pick">الفريق 2</button>
-      <button class="btn" id="teamCancel">إلغاء</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-const DEFAULT_BANK = [{"cat": "Attack on Titan", "pts": 200, "q": "ما اسم المنطقة التي بدأت منها الأحداث بعد سقوط الجدار؟", "a": "شيغانشينا"}, {"cat": "Attack on Titan", "pts": 200, "q": "ما اسم قائد فيلق الاستطلاع المعروف بـ «أجنحة الحرية»؟", "a": "إروين سميث"}, {"cat": "Attack on Titan", "pts": 400, "q": "ما اسم العملاق الذي يمكنه «التصلّب» لإنشاء هياكل؟", "a": "العملاق الأنثى"}, {"cat": "Attack on Titan", "pts": 400, "q": "ما اسم قدرة «العملاق» التي يمتلكها راينر براون؟", "a": "العملاق المدرّع"}, {"cat": "Attack on Titan", "pts": 600, "q": "ما اسم العائلة النبيلة داخل الأسوار المرتبطة بدم «المؤسس»؟", "a": "عائلة ريس"}, {"cat": "Attack on Titan", "pts": 600, "q": "ما اسم المكان/النقطة التي تُسمّى في القصة «المسارات»؟ (مصطلح واحد)", "a": "Paths"}, {"cat": "Naruto", "pts": 200, "q": "ما اسم الامتحان الذي يترقّى بعده النينجا إلى تشونين؟", "a": "امتحان التشونين"}, {"cat": "Naruto", "pts": 200, "q": "ما اسم وحش الذيل داخل ناروتو؟", "a": "الكيوبي (كوراما)"}, {"cat": "Naruto", "pts": 400, "q": "ما اسم تقنية ساسكي ذات البرق التي تعادل الراسينغان؟", "a": "تشيدوري"}, {"cat": "Naruto", "pts": 400, "q": "ما اسم العشيرة المالكة للشارينغان؟", "a": "الأوتشيها"}, {"cat": "Naruto", "pts": 600, "q": "ما اسم نمط العيون الذي يُسمّى باليابانية «Rinnegan» بالعربي؟", "a": "الرينغان"}, {"cat": "Naruto", "pts": 600, "q": "ما اسم المنظمة التي كان يقودها باين؟", "a": "الأكاتسوكي"}, {"cat": "One Piece", "pts": 200, "q": "ما اسم الهاكي الذي يرفع الإحساس والتنبؤ؟", "a": "هاكي الملاحظة"}, {"cat": "One Piece", "pts": 200, "q": "ما اسم السيف الذي ورثه زورو من كويـنا؟", "a": "وادو إيتشيمونجي"}, {"cat": "One Piece", "pts": 400, "q": "ما اسم السجن التابع للحكومة العالمية؟", "a": "إمبل داون"}, {"cat": "One Piece", "pts": 400, "q": "ما اسم نوع الفاكهة الذي يعطي قدرات جسدية خارقة؟", "a": "زوآن"}, {"cat": "One Piece", "pts": 600, "q": "ما اسم الهاكي الذي يُعرف بـ Conqueror’s Haki؟", "a": "الهاكي الملكي"}, {"cat": "One Piece", "pts": 600, "q": "ما اسم أعلى سلطة في الحكومة العالمية (مجموعة من 5)؟", "a": "الخماسي الكبار (Gorosei)"}, {"cat": "Bleach", "pts": 200, "q": "ما اسم السلاح الذي يستخدمه الشينيغامي؟", "a": "زانباكتو"}, {"cat": "Bleach", "pts": 200, "q": "ما اسم عالم الأرواح في القصة؟", "a": "مجتمع الأرواح"}, {"cat": "Bleach", "pts": 400, "q": "ما اسم التحول الأول للزانباكتو؟", "a": "شيكاي"}, {"cat": "Bleach", "pts": 400, "q": "ما اسم التحول الثاني الأقوى للزانباكتو؟", "a": "بانكاي"}, {"cat": "Bleach", "pts": 600, "q": "ما اسم عالم الهولو؟", "a": "هوكو موندو"}, {"cat": "Bleach", "pts": 600, "q": "ما اسم الفرقة الملكية الحامية للملك الروحي؟", "a": "الفرقة صفر"}, {"cat": "سبيستون", "pts": 200, "q": "في «سالي»، ما اسم الآنسة مديرة المدرسة؟", "a": "الآنسة منشن"}, {"cat": "سبيستون", "pts": 200, "q": "في «عهد الأصدقاء»، ما اسم صديق روميو المقرب؟", "a": "ألفريدو"}, {"cat": "سبيستون", "pts": 400, "q": "في «هايدي»، ما اسم المدينة التي تنتقل إليها هايدي لاحقًا؟", "a": "فرانكفورت"}, {"cat": "سبيستون", "pts": 400, "q": "في «عهد الأصدقاء»، ما اسم المدينة التي يسافر إليها روميو للعمل؟", "a": "ميلانو"}, {"cat": "سبيستون", "pts": 600, "q": "في «سالي»، ما اسم والد سالي (الاسم فقط)؟", "a": "الكابتن كرو"}, {"cat": "سبيستون", "pts": 600, "q": "في «عهد الأصدقاء»، ما اسم الرجل الذي يشتري الأطفال للعمل (الاسم)؟", "a": "روسي"}, {"cat": "ألعاب", "pts": 200, "q": "ما اسم الاستوديو المطوّر لسلسلة The Witcher (ألعاب)؟", "a": "CD Projekt Red"}, {"cat": "ألعاب", "pts": 200, "q": "ما اسم الشركة المطوّرة للعبة Minecraft؟", "a": "Mojang"}, {"cat": "ألعاب", "pts": 400, "q": "ما اسم محرك الألعاب من Epic المستخدم في ألعاب كثيرة؟", "a": "Unreal Engine"}, {"cat": "ألعاب", "pts": 400, "q": "في أي لعبة ظهرت شخصية Kratos أول مرة؟", "a": "God of War"}, {"cat": "ألعاب", "pts": 600, "q": "ما اسم الاستوديو المطوّر لسلسلة Dark Souls؟", "a": "FromSoftware"}, {"cat": "ألعاب", "pts": 600, "q": "ما اسم أول لعبة أطلقت نوع Soulslike الحديث قبل Dark Souls؟", "a": "Demon’s Souls"}, {"cat": "أفلام", "pts": 200, "q": "من هو مخرج فيلم Inception؟", "a": "كريستوفر نولان"}, {"cat": "أفلام", "pts": 200, "q": "ما اسم الكوكب الصحراوي في Dune؟", "a": "أراكيس"}, {"cat": "أفلام", "pts": 400, "q": "من هو كاتب رواية The Godfather الأصلية؟", "a": "ماريو بوزو"}, {"cat": "أفلام", "pts": 400, "q": "في فيلم The Dark Knight، ما اسم مدّعي عام غوثام؟", "a": "هارفي دينت"}, {"cat": "أفلام", "pts": 600, "q": "ما اسم شركة الإنتاج التي أسسها نولان وشقيقه وتنتج أفلامه غالبًا؟", "a": "Syncopy"}, {"cat": "أفلام", "pts": 600, "q": "في Interstellar، ما اسم مركبة الهبوط على الكوكب المائي؟", "a": "Lander"}, {"cat": "مسلسلات", "pts": 200, "q": "في Breaking Bad، ما لقب والتر وايت؟", "a": "هايزنبرغ"}, {"cat": "مسلسلات", "pts": 200, "q": "ما اسم المقهى في Friends؟", "a": "Central Perk"}, {"cat": "مسلسلات", "pts": 400, "q": "في Game of Thrones، ما اسم السيف الفاليري الخاص بعائلة ستارك؟", "a": "Ice"}, {"cat": "مسلسلات", "pts": 400, "q": "في Peaky Blinders، ما اسم زعيم العائلة؟", "a": "تومي شيلبي"}, {"cat": "مسلسلات", "pts": 600, "q": "في Breaking Bad، ما اسم الشركة الوهمية التي استخدمها سول لتغطية الأموال؟", "a": "Ice Station Zebra Associates"}, {"cat": "مسلسلات", "pts": 600, "q": "في The Mentalist، ما اسم القاتل المتسلسل الذي كان جين يطارده؟", "a": "Red John"}, {"cat": "كرة قدم", "pts": 200, "q": "أي منتخب فاز بكأس العالم 2022؟", "a": "الأرجنتين"}, {"cat": "كرة قدم", "pts": 200, "q": "كم عدد اللاعبين الأساسيين لكل فريق؟", "a": "11"}, {"cat": "كرة قدم", "pts": 400, "q": "أي نادٍ فاز بدوري أبطال أوروبا 2012؟", "a": "تشيلسي"}, {"cat": "كرة قدم", "pts": 400, "q": "من هو الهداف التاريخي لدوري أبطال أوروبا؟", "a": "كريستيانو رونالدو"}, {"cat": "كرة قدم", "pts": 600, "q": "من هو اللاعب الذي سجل «هاتريك» في نهائي كأس العالم 2022؟", "a": "كيليان مبابي"}, {"cat": "كرة قدم", "pts": 600, "q": "ما اسم الملعب الذي استضاف نهائي كأس العالم 2022؟", "a": "ملعب لوسيل"}, {"cat": "تكنولوجيا", "pts": 200, "q": "ما معنى اختصار RAM؟", "a": "ذاكرة الوصول العشوائي"}, {"cat": "تكنولوجيا", "pts": 200, "q": "ما اسم نظام تشغيل أجهزة ماك؟", "a": "macOS"}, {"cat": "تكنولوجيا", "pts": 400, "q": "ما اسم بروتوكول نقل صفحات الويب؟", "a": "HTTP"}, {"cat": "تكنولوجيا", "pts": 400, "q": "ما اسم نظام الملفات الافتراضي في iOS لحماية الملفات؟ (اختصار)", "a": "APFS"}, {"cat": "تكنولوجيا", "pts": 600, "q": "ما اسم التشفير المستخدم غالبًا في HTTPS ضمن TLS؟ (الخوارزمية الشائعة)", "a": "AES"}, {"cat": "تكنولوجيا", "pts": 600, "q": "ما اسم معيار Wi‑Fi المعروف بـ 802.11ax؟", "a": "Wi‑Fi 6"}, {"cat": "علوم", "pts": 200, "q": "ما الكوكب الأقرب للشمس؟", "a": "عطارد"}, {"cat": "علوم", "pts": 200, "q": "ما رمز الماء الكيميائي؟", "a": "H2O"}, {"cat": "علوم", "pts": 400, "q": "ما اسم الغشاء الذي يحمي الدماغ والحبل الشوكي؟ (اسم عام)", "a": "السحايا"}, {"cat": "علوم", "pts": 400, "q": "ما وحدة قياس شدة التيار الكهربائي؟", "a": "الأمبير"}, {"cat": "علوم", "pts": 600, "q": "ما اسم الطبقة التي تقع فيها طبقة الأوزون؟", "a": "الستراتوسفير"}, {"cat": "علوم", "pts": 600, "q": "ما ثابت سرعة الضوء تقريبًا بالمتر/ثانية؟", "a": "3×10^8"}, {"cat": "إسلامي", "pts": 200, "q": "كم عدد الصلوات المفروضة يوميًا؟", "a": "5"}, {"cat": "إسلامي", "pts": 200, "q": "في أي شهر هجري يكون الحج؟", "a": "ذو الحجة"}, {"cat": "إسلامي", "pts": 400, "q": "ما اسم الزكاة التي تُخرج في نهاية رمضان؟", "a": "زكاة الفطر"}, {"cat": "إسلامي", "pts": 400, "q": "ما اسم السورة التي تُقرأ عادة في صلاة الجمعة غير الفاتحة؟ (الأشهر)", "a": "الجمعة"}, {"cat": "إسلامي", "pts": 600, "q": "ما اسم الصحابي الذي لُقّب بـ «سيف الله المسلول»؟", "a": "خالد بن الوليد"}, {"cat": "إسلامي", "pts": 600, "q": "ما اسم الغزوة التي كانت في السنة الثانية للهجرة وانتهت بنصر المسلمين؟", "a": "غزوة بدر"}, {"cat": "قرآن", "pts": 200, "q": "كم عدد سور القرآن الكريم؟", "a": "114"}, {"cat": "قرآن", "pts": 200, "q": "ما اسم أول سورة في المصحف؟", "a": "الفاتحة"}, {"cat": "قرآن", "pts": 400, "q": "ما أطول سورة في القرآن؟", "a": "البقرة"}, {"cat": "قرآن", "pts": 400, "q": "ما السورة التي تبدأ بـ «تَبَّتْ يَدَا…»؟", "a": "المسد"}, {"cat": "قرآن", "pts": 600, "q": "ما السورة التي لا تبدأ بالبسملة (حسب المصحف)؟", "a": "التوبة"}, {"cat": "قرآن", "pts": 600, "q": "ما السورة التي تُذكر فيها «آية الكرسي»؟", "a": "البقرة"}, {"cat": "أدب", "pts": 200, "q": "من قائل: «على قدر أهل العزم تأتي العزائم»؟", "a": "المتنبي"}, {"cat": "أدب", "pts": 200, "q": "من مؤلف «رجال في الشمس»؟", "a": "غسان كنفاني"}, {"cat": "أدب", "pts": 400, "q": "من مؤلف «رسالة الغفران»؟", "a": "أبو العلاء المعري"}, {"cat": "أدب", "pts": 400, "q": "من مؤلف «موسم الهجرة إلى الشمال»؟", "a": "الطيب صالح"}, {"cat": "أدب", "pts": 600, "q": "ما اسم البحر الشعري لبيت: «قفا نبكِ من ذكرى حبيبٍ ومنزلِ»؟", "a": "الطويل"}, {"cat": "أدب", "pts": 600, "q": "من صاحب كتاب «الأغاني»؟", "a": "أبو الفرج الأصفهاني"}, {"cat": "جغرافيا", "pts": 200, "q": "ما عاصمة الإمارات؟", "a": "أبوظبي"}, {"cat": "جغرافيا", "pts": 200, "q": "ما عاصمة كندا؟", "a": "أوتاوا"}, {"cat": "جغرافيا", "pts": 400, "q": "ما عاصمة أستراليا؟", "a": "كانبرا"}, {"cat": "جغرافيا", "pts": 400, "q": "ما عاصمة جنوب أفريقيا الإدارية (المقر الحكومي)؟", "a": "بريتوريا"}, {"cat": "جغرافيا", "pts": 600, "q": "ما عاصمة كازاخستان (اسمها الحالي)؟", "a": "أستانا"}, {"cat": "جغرافيا", "pts": 600, "q": "ما عاصمة بوليفيا الدستورية؟", "a": "سوكري"}, {"cat": "تاريخ", "pts": 200, "q": "في أي سنة سقطت غرناطة؟", "a": "1492"}, {"cat": "تاريخ", "pts": 200, "q": "من هو الرحالة المغربي الشهير؟", "a": "ابن بطوطة"}, {"cat": "تاريخ", "pts": 400, "q": "في أي عام بدأت الحرب العالمية الثانية؟", "a": "1939"}, {"cat": "تاريخ", "pts": 400, "q": "من هو القائد الذي فتح القسطنطينية 1453؟", "a": "محمد الفاتح"}, {"cat": "تاريخ", "pts": 600, "q": "ما اسم معاهدة 1919 التي أنهت الحرب العالمية الأولى مع ألمانيا؟", "a": "فرساي"}, {"cat": "تاريخ", "pts": 600, "q": "ما اسم السلالة التي حكمت الأندلس في نهايتها بغرناطة؟", "a": "بنو الأحمر"}, {"cat": "ثقافة عامة", "pts": 200, "q": "ما اسم أكبر محيط على الأرض؟", "a": "المحيط الهادئ"}, {"cat": "ثقافة عامة", "pts": 200, "q": "ما العنصر الكيميائي رمزه Au؟", "a": "الذهب"}, {"cat": "ثقافة عامة", "pts": 400, "q": "كم عدد ألوان قوس قزح؟", "a": "7"}, {"cat": "ثقافة عامة", "pts": 400, "q": "ما اسم أكبر عضو في جسم الإنسان؟", "a": "الجلد"}, {"cat": "ثقافة عامة", "pts": 600, "q": "ما اسم الجهاز الذي يقيس شدة الزلازل؟", "a": "السيزموجراف"}, {"cat": "ثقافة عامة", "pts": 600, "q": "ما اسم طبقة الغلاف الجوي الأقرب لسطح الأرض؟", "a": "التروبوسفير"}, {"cat": "شعارات سيارات", "pts": 200, "q": "لأي شركة هذا الشعار؟", "a": "مرسيدس", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3EMercedes%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "شعارات سيارات", "pts": 200, "q": "لأي شركة هذا الشعار؟", "a": "بي إم دبليو", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3EBMW%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "شعارات سيارات", "pts": 400, "q": "لأي شركة هذا الشعار؟", "a": "تويوتا", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3EToyota%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "شعارات سيارات", "pts": 400, "q": "لأي شركة هذا الشعار؟", "a": "تسلا", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3ETesla%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "شعارات سيارات", "pts": 600, "q": "لأي شركة هذا الشعار؟", "a": "فيراري", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fbbf24%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3EFerrari%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "شعارات سيارات", "pts": 600, "q": "لأي شركة هذا الشعار؟", "a": "لامبورغيني", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fbbf24%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22%20stop-opacity%3D%220.9%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2236%22%20fill%3D%22%23111827%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22150%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%2220%22/%3E%0A%20%20%3Ccircle%20cx%3D%22450%22%20cy%3D%22250%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23e5e7eb%22%20stroke-opacity%3D%220.25%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2272%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20font-weight%3D%22800%22%3ELamborghini%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2224%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23e5e7eb%22%20opacity%3D%220.65%22%3E%D8%B4%D8%B9%D8%A7%D8%B1%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 200, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "Inception", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%F0%9F%8C%80%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 200, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "Interstellar", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%E2%8F%B3%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 400, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "Dune", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%F0%9F%AA%B1%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 400, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "The Matrix", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%F0%9F%95%B6%EF%B8%8F%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 600, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "Dracula", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%F0%9F%A7%9B%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}, {"cat": "ملصقات أفلام (أيقونات)", "pts": 600, "q": "من هذا الملصق/الأيقونة: اسم الفيلم؟", "a": "The Lord of the Rings", "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22520%22%20viewBox%3D%220%200%20900%20520%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b1430%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23060914%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2367e8f9%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%2260%22%20width%3D%22760%22%20height%3D%22400%22%20rx%3D%2224%22%20fill%3D%22%23111827%22%20fill-opacity%3D%220.55%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.12%22/%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22190%22%20text-anchor%3D%22middle%22%20font-size%3D%22110%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22url%28%23g%29%22%20font-weight%3D%22900%22%3E%F0%9F%A7%99%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22300%22%20text-anchor%3D%22middle%22%20font-size%3D%2244%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23f2f6ff%22%20font-weight%3D%22800%22%3E%D8%A8%D9%88%D8%B3%D8%AA%D8%B1/%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%20%20%3Ctext%20x%3D%22450%22%20y%3D%22350%22%20text-anchor%3D%22middle%22%20font-size%3D%2222%22%20font-family%3D%22Arial%2C%20system-ui%22%20fill%3D%22%23b7c3e6%22%3E%D8%B3%D8%A4%D8%A7%D9%84%20%D9%8A%D8%B9%D8%AA%D9%85%D8%AF%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%A3%D9%8A%D9%82%D9%88%D9%86%D8%A9%3C/text%3E%0A%3C/svg%3E"}];
+/* ===========================
+   1) بنك الأسئلة (مبدئي)
+   تقدر تزيده، أو تستبدله لاحقًا ببنكك.
+   شكل السؤال:
+   {cat:"...", pts:200|400|600, q:"السؤال", a:"الجواب", img:"data-uri (اختياري)"}
+=========================== */
+const BANK = [
+  // أمثلة قوية ومباشرة (بدون “اشرح” أو “سبب”)
+  {cat:"عواصم العرب", pts:200, q:"ما عاصمة الإمارات؟", a:"أبوظبي"},
+  {cat:"عواصم العرب", pts:400, q:"ما عاصمة عُمان؟", a:"مسقط"},
+  {cat:"عواصم العرب", pts:600, q:"ما عاصمة جزر القمر؟", a:"موروني"},
 
-const K_BANK="seenjeem_bank_v7";
-const K_USED="seenjeem_used_v7";
-const K_SCORE="seenjeem_score_v7";
-const K_NAMES="seenjeem_names_v7";
+  {cat:"عواصم أوروبا", pts:200, q:"ما عاصمة فرنسا؟", a:"باريس"},
+  {cat:"عواصم أوروبا", pts:400, q:"ما عاصمة النرويج؟", a:"أوسلو"},
+  {cat:"عواصم أوروبا", pts:600, q:"ما عاصمة مولدوفا؟", a:"كيشيناو"},
 
-function toast(msg){
-  const el=document.getElementById("toast");
-  el.textContent=msg; el.classList.add("show");
-  clearTimeout(window.__toast);
-  window.__toast=setTimeout(()=>el.classList.remove("show"),2600);
+  {cat:"اختصارات تقنية", pts:200, q:"ما معنى اختصار RAM؟", a:"ذاكرة الوصول العشوائي"},
+  {cat:"اختصارات تقنية", pts:400, q:"ما معنى اختصار VPN؟", a:"شبكة خاصة افتراضية"},
+  {cat:"اختصارات تقنية", pts:600, q:"ما معنى اختصار BGP؟", a:"Border Gateway Protocol"},
+
+  {cat:"كرة قدم: كأس العالم", pts:200, q:"من فاز بكأس العالم 2022؟", a:"الأرجنتين"},
+  {cat:"كرة قدم: كأس العالم", pts:400, q:"في أي دولة أقيم كأس العالم 2022؟", a:"قطر"},
+  {cat:"كرة قدم: كأس العالم", pts:600, q:"من سجل هاتريك في نهائي 2022؟", a:"كيليان مبابي"},
+
+  {cat:"أنمي: Naruto", pts:200, q:"ما اسم عائلة ناروتو؟", a:"أوزوماكي"},
+  {cat:"أنمي: Naruto", pts:400, q:"ما اسم عائلة ميناتو؟", a:"ناميكازي"},
+  {cat:"أنمي: Naruto", pts:600, q:"ما اسم عائلة شيكامارو؟", a:"نارا"},
+
+  {cat:"أنمي: Attack on Titan", pts:200, q:"ما اسم عائلة ليفاي؟", a:"أكرمان"},
+  {cat:"أنمي: Attack on Titan", pts:400, q:"ما اسم عائلة إيروين؟", a:"سميث"},
+  {cat:"أنمي: Attack on Titan", pts:600, q:"ما اسم عائلة آني؟", a:"ليون هارت"},
+
+  {cat:"أفلام", pts:200, q:"من مخرج فيلم Inception؟", a:"Christopher Nolan"},
+  {cat:"أفلام", pts:400, q:"من مخرج فيلم Dune (2021)؟", a:"Denis Villeneuve"},
+  {cat:"أفلام", pts:600, q:"من مخرج فيلم Parasite؟", a:"Bong Joon-ho"},
+
+  {cat:"مسلسلات", pts:200, q:"من بطل مسلسل The Mentalist؟", a:"Patrick Jane"},
+  {cat:"مسلسلات", pts:400, q:"من بطل مسلسل Peaky Blinders؟", a:"Tommy Shelby"},
+  {cat:"مسلسلات", pts:600, q:"من بطل مسلسل House؟", a:"Gregory House"},
+
+  {cat:"أدب", pts:200, q:"ما اسم علم قياس الشعر العربي؟", a:"العَروض"},
+  {cat:"أدب", pts:400, q:"من واضع علم العَروض؟", a:"الخليل بن أحمد الفراهيدي"},
+  {cat:"أدب", pts:600, q:"ما اسم بداية القصيدة؟", a:"المطلع"},
+
+  {cat:"سبيستون", pts:200, q:"ما اسم القناة التي اشتهرت بدبلجة الأنمي للعربية في التسعينات؟", a:"سبيستون"},
+  {cat:"سبيستون", pts:400, q:"ما اسم برنامج مسابقات الأطفال الشهير على سبيستون؟", a:"أبطال الكرة (كمثال)"},
+  {cat:"سبيستون", pts:600, q:"اذكر اسم شخصية رئيسية في مسلسل كرتون قديم (اختيار واحد صحيح):", a:"(مثال) عدنان"},
+
+  // زيد هنا أسئلتك (الأفضل: على شكل قوائم كثيرة، وبنفس أسلوب مباشر)
+];
+
+// توليد ID ثابت لتقليل التكرار عبر الألعاب
+function makeId(o){
+  return btoa(unescape(encodeURIComponent(`${o.cat}|${o.pts}|${o.q}|${o.img||""}`))).slice(0,18);
 }
-function loadBank(){ try{const raw=localStorage.getItem(K_BANK); if(raw) return JSON.parse(raw);}catch(e){}
-  localStorage.setItem(K_BANK, JSON.stringify(DEFAULT_BANK)); return DEFAULT_BANK; }
-function saveBank(b){ localStorage.setItem(K_BANK, JSON.stringify(b)); }
-function loadUsed(){ try{ return new Set(JSON.parse(localStorage.getItem(K_USED)||"[]")); }catch(e){ return new Set(); } }
-function saveUsed(s){ localStorage.setItem(K_USED, JSON.stringify(Array.from(s))); }
-function loadScore(){ try{ return JSON.parse(localStorage.getItem(K_SCORE)||'{"s1":0,"s2":0}'); }catch(e){ return {s1:0,s2:0}; } }
-function saveScore(s){ localStorage.setItem(K_SCORE, JSON.stringify(s)); }
-function loadNames(){ try{ return JSON.parse(localStorage.getItem(K_NAMES)||'{"t1":"الفريق 1","t2":"الفريق 2"}'); }catch(e){ return {t1:"الفريق 1",t2:"الفريق 2"}; } }
-function saveNames(n){ localStorage.setItem(K_NAMES, JSON.stringify(n)); }
-function qKey(q){ const n=(x)=>String(x||"").trim().toLowerCase().replace(/\s+/g," "); return `${n(q.cat)}|${q.pts}|${n(q.q)}|${n(q.img||"")}`; }
+for (const q of BANK){ q.id = q.id || makeId(q); }
 
-let BANK=loadBank();
-let USED=loadUsed();
-let SCORE=loadScore();
-let NAMES=loadNames();
+/* ===========================
+   2) تخزين (LocalStorage)
+=========================== */
+const K = {
+  settings:"sj_settings_v1",
+  scores:"sj_scores_v1",
+  selection:"sj_selection_v1",
+  board:"sj_board_v1",
+  usedGlobal:"sj_used_global_v1",
+  usedCells:"sj_used_cells_v1"
+};
 
-const screenSetup=document.getElementById("screenSetup");
-const screenGame=document.getElementById("screenGame");
-function showSetup(){ screenGame.classList.remove("show"); screenSetup.classList.add("show"); window.scrollTo({top:0,behavior:"smooth"}); }
-function showGame(){ screenSetup.classList.remove("show"); screenGame.classList.add("show"); window.scrollTo({top:0,behavior:"smooth"}); }
-
-document.getElementById("bankCount").textContent=BANK.length;
-function categories(){ return Array.from(new Set(BANK.map(q=>q.cat))).sort((a,b)=>a.localeCompare(b,'ar')); }
-document.getElementById("catCount").textContent=categories().length;
-
-// scores
-const s1El=document.getElementById("s1"), s2El=document.getElementById("s2");
-const gScore1=document.getElementById("gScore1"), gScore2=document.getElementById("gScore2");
-function renderScores(){ 
-  s1El.textContent=SCORE.s1; s2El.textContent=SCORE.s2;
-  gScore1.textContent=SCORE.s1; gScore2.textContent=SCORE.s2;
+function loadJSON(key, fallback){
+  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch(e){ return fallback; }
 }
-renderScores();
+function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function $(id){ return document.getElementById(id); }
 
-// names
-const t1Name=document.getElementById("team1Name"), t2Name=document.getElementById("team2Name");
-const gName1=document.getElementById("gName1"), gName2=document.getElementById("gName2");
-t1Name.value=NAMES.t1 || "الفريق 1"; t2Name.value=NAMES.t2 || "الفريق 2";
-function syncNamesEverywhere(){
-  const n1=t1Name.value.trim()||"الفريق 1";
-  const n2=t2Name.value.trim()||"الفريق 2";
-  document.getElementById("team1Pick").textContent=n1;
-  document.getElementById("team2Pick").textContent=n2;
-  gName1.textContent=n1; gName2.textContent=n2;
+function getSettings(){
+  return loadJSON(K.settings, {team1:"الفريق الأول", team2:"الفريق الثاني", timer:30, noRepeat:false});
 }
-syncNamesEverywhere();
-[t1Name,t2Name].forEach(inp=>inp.addEventListener("input",()=>{ 
-  NAMES={t1:t1Name.value,t2:t2Name.value}; saveNames(NAMES); syncNamesEverywhere();
-}));
+function setSettings(s){ saveJSON(K.settings, s); }
+function getScores(){ return loadJSON(K.scores, {t1:0,t2:0}); }
+function setScores(sc){ saveJSON(K.scores, sc); renderScore(); }
+function clearAll(){
+  Object.values(K).forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}
 
-function clampScore(x){ return Math.max(0,x); }
-document.getElementById("t1Minus").onclick=()=>{ SCORE.s1=clampScore(SCORE.s1-200); saveScore(SCORE); renderScores(); };
-document.getElementById("t1Plus").onclick =()=>{ SCORE.s1+=200; saveScore(SCORE); renderScores(); };
-document.getElementById("t1Reset").onclick=()=>{ SCORE.s1=0; saveScore(SCORE); renderScores(); };
-document.getElementById("t2Minus").onclick=()=>{ SCORE.s2=clampScore(SCORE.s2-200); saveScore(SCORE); renderScores(); };
-document.getElementById("t2Plus").onclick =()=>{ SCORE.s2+=200; saveScore(SCORE); renderScores(); };
-document.getElementById("t2Reset").onclick=()=>{ SCORE.s2=0; saveScore(SCORE); renderScores(); };
+/* ===========================
+   3) تصنيف الأسئلة
+=========================== */
+const byCat = new Map();
+for (const q of BANK){
+  if (!byCat.has(q.cat)) byCat.set(q.cat, []);
+  byCat.get(q.cat).push(q);
+}
+// ترتيب: حسب pts ثم نص السؤال
+for (const [cat, arr] of byCat.entries()){
+  arr.sort((a,b)=> (a.pts-b.pts) || a.q.localeCompare(b.q));
+}
 
-// cats
-const catsEl=document.getElementById("cats");
-let selected=new Set();
-const ptsLevels=[200,200,400,400,600,600];
-function countBy(cat){ return BANK.filter(q=>q.cat===cat).length; }
-function updateSelHint(){ const n=selected.size; const el=document.getElementById("selHint");
-  if(n<3) el.textContent=`اختر ${3-n} تصنيف/تصنيفات إضافية`; 
-  else if(n>6) el.textContent=`شيل ${n-6} تصنيف/تصنيفات`; 
-  else el.textContent=`جاهز ✅ (محدد: ${n})`; }
-function renderCats(){ catsEl.innerHTML="";
-  categories().forEach(cat=>{
-    const lab=document.createElement("label"); lab.className="cat";
-    lab.innerHTML=`<input type="checkbox"/><div><div class="catTitle">${cat}</div><div class="catMeta">${countBy(cat)} سؤال</div></div>`;
-    const cb=lab.querySelector("input"); cb.checked=selected.has(cat);
-    cb.addEventListener("change",()=>{ cb.checked?selected.add(cat):selected.delete(cat); updateSelHint(); });
-    catsEl.appendChild(lab);
+function showPage(name){
+  ["Setup","Select","Game"].forEach(p=>$("page"+p).classList.remove("active"));
+  $("page"+name).classList.add("active");
+}
+
+/* ===========================
+   4) واجهة الإعدادات
+=========================== */
+function initSetup(){
+  const s = getSettings();
+  $("team1Name").value = s.team1;
+  $("team2Name").value = s.team2;
+  $("timerSec").value = s.timer;
+  $("noRepeatAcross").checked = !!s.noRepeat;
+
+  $("team1Name").addEventListener("input", ()=>{
+    const ns = getSettings(); ns.team1 = $("team1Name").value.trim() || "الفريق الأول";
+    setSettings(ns); renderScore();
   });
-  updateSelHint();
-}
-renderCats();
+  $("team2Name").addEventListener("input", ()=>{
+    const ns = getSettings(); ns.team2 = $("team2Name").value.trim() || "الفريق الثاني";
+    setSettings(ns); renderScore();
+  });
+  $("timerSec").addEventListener("input", ()=>{
+    const ns = getSettings(); ns.timer = Math.max(5, parseInt($("timerSec").value||"30",10));
+    setSettings(ns);
+  });
+  $("noRepeatAcross").addEventListener("change", ()=>{
+    const ns = getSettings(); ns.noRepeat = $("noRepeatAcross").checked;
+    setSettings(ns);
+  });
 
-// board
-const boardEl=document.getElementById("board");
-let boardState=null;
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
-function renderBoard(){ 
-  if(!boardState){ boardEl.innerHTML="<tr><th>ابدأ لعبة جديدة لاختيار الأسئلة</th></tr>"; return; }
-  const cats=boardState.cats;
-  let html="<tr>"+cats.map(c=>`<th>${escapeHtml(c)}</th>`).join("")+"</tr>";
-  for(let r=0;r<ptsLevels.length;r++){ html+="<tr>";
-    for(let c=0;c<cats.length;c++){ const cell=boardState.cells[c][r]; const cls=cell.used?"cellUsed":"";
-      html+=`<td class="${cls}"><button class="cellBtn" data-c="${c}" data-r="${r}" ${cell.used?"disabled":""}>${cell.pts}</button></td>`;
-    }
-    html+="</tr>";
+  $("resetScores").onclick = ()=> setScores({t1:0,t2:0});
+  $("newBoard").onclick = ()=> showPage("Select");
+
+  $("bankStats").textContent = `${byCat.size} تصنيف • ${BANK.length} سؤال`;
+}
+
+/* ===========================
+   5) اختيار التصنيفات
+=========================== */
+let selected = new Set(loadJSON(K.selection, []));
+
+function allCats(){
+  const cats = Array.from(byCat.keys());
+  cats.sort((a,b)=>a.localeCompare(b));
+  return cats;
+}
+
+function renderCats(){
+  const grid = $("catsGrid");
+  grid.innerHTML = "";
+  for (const cat of allCats()){
+    const items = byCat.get(cat) || [];
+    const c200 = items.filter(x=>x.pts===200).length;
+    const c400 = items.filter(x=>x.pts===400).length;
+    const c600 = items.filter(x=>x.pts===600).length;
+
+    const div = document.createElement("div");
+    div.className = "card catCard " + (selected.has(cat) ? "on":"off");
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+        <div style="font-weight:1000">${cat}</div>
+        <div class="pill">${items.length} سؤال</div>
+      </div>
+      <div class="small" style="margin-top:6px">200: ${c200} • 400: ${c400} • 600: ${c600}</div>
+    `;
+    div.onclick = ()=>{
+      if (selected.has(cat)) selected.delete(cat);
+      else {
+        if (selected.size >= 6) return alert("مسموح 6 تصنيفات فقط");
+        selected.add(cat);
+      }
+      saveJSON(K.selection, Array.from(selected));
+      renderCats();
+    };
+    grid.appendChild(div);
   }
-  boardEl.innerHTML=html;
+  $("selCount").textContent = `${selected.size} مختار`;
 }
-function pickQuestion(cat, pts){ 
-  const pool=BANK.filter(q=>q.cat===cat && q.pts===pts);
-  const avail=pool.filter(q=>!USED.has(qKey(q)));
-  if(pool.length===0) return {q:null, exhausted:false};
-  if(avail.length===0) return {q:pool[Math.floor(Math.random()*pool.length)], exhausted:true};
-  return {q:avail[Math.floor(Math.random()*avail.length)], exhausted:false};
-}
-function newGame(){ 
-  const cats=Array.from(selected);
-  boardState={cats, cells: cats.map(cat=>ptsLevels.map(pts=>({cat,pts,used:false}))) };
-  renderBoard(); showGame(); syncNamesEverywhere(); renderScores();
-  toast("بدأت اللعبة ✅");
-}
-boardEl.addEventListener("click",(e)=>{ 
-  const btn=e.target.closest(".cellBtn"); 
-  if(!btn || !boardState) return;
-  openCell(parseInt(btn.dataset.c,10), parseInt(btn.dataset.r,10));
-});
 
-// modals
-const qModal=document.getElementById("qModal");
-const tModal=document.getElementById("tModal");
-const qMeta=document.getElementById("qMeta");
-const qText=document.getElementById("qText");
-const qImg=document.getElementById("qImg");
-const aText=document.getElementById("aText");
-const warn=document.getElementById("warn");
-const timerEl=document.getElementById("timer");
-const clockEl=document.getElementById("clock");
-const clock2El=document.getElementById("clock2");
+function randomCats(){
+  const pool = allCats();
+  selected = new Set();
+  while (selected.size < 6 && pool.length){
+    selected.add(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+  }
+  saveJSON(K.selection, Array.from(selected));
+  renderCats();
+}
+function clearCats(){
+  selected = new Set();
+  saveJSON(K.selection, []);
+  renderCats();
+}
 
-let active=null; let timer=null, remaining=60;
-function setClock(v){ clockEl.textContent=v; clock2El.textContent=v; }
-function startTimer(){ stopTimer(); remaining=60; timerEl.textContent=remaining; setClock(remaining);
-  timer=setInterval(()=>{ 
-    remaining--; timerEl.textContent=remaining; setClock(remaining);
-    if(remaining<=0){ stopTimer(); toast("انتهى الوقت ⏱️"); }
+/* ===========================
+   6) بناء اللوحة (6 أسئلة لكل تصنيف)
+   200/200/400/400/600/600
+   بدون تكرار داخل اللوحة
+   + اختياري منع تكرار عبر الألعاب
+=========================== */
+const POINTS = [200,200,400,400,600,600];
+
+function usedGlobalSet(){
+  const s = getSettings();
+  if (!s.noRepeat) return new Set();
+  return new Set(loadJSON(K.usedGlobal, []));
+}
+function saveUsedGlobal(set){
+  const s = getSettings();
+  if (!s.noRepeat) return;
+  saveJSON(K.usedGlobal, Array.from(set));
+}
+function sample(arr,k){
+  const a = arr.slice(); const out=[];
+  while(out.length<k && a.length){
+    out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);
+  }
+  return out;
+}
+
+function buildBoard(){
+  if (selected.size < 3) return alert("اختر 3 تصنيفات على الأقل");
+  let cats = Array.from(selected);
+
+  // أكمل إلى 6 عشوائيًا إذا أقل
+  if (cats.length < 6){
+    const pool = allCats().filter(c=>!selected.has(c));
+    while(cats.length < 6 && pool.length){
+      cats.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+    }
+  }
+  cats = cats.slice(0,6);
+
+  const usedG = usedGlobalSet();
+  const board = {cats:[], cells:{}};
+
+  for (const cat of cats){
+    const all = byCat.get(cat) || [];
+    // الأفضل: اختر من غير المستخدم عالميًا
+    let pool = all.filter(q=>!usedG.has(q.id));
+    if (pool.length < 6) pool = all; // لو خلص، رجع للكل
+
+    // تقسيم حسب الصعوبة (حسب pts) لكن مع منع التكرار
+    const low = pool.filter(x=>x.pts===200);
+    const mid = pool.filter(x=>x.pts===400);
+    const high = pool.filter(x=>x.pts===600);
+
+    let picked = [];
+    picked = picked.concat(sample(low,2));
+    picked = picked.concat(sample(mid,2));
+    picked = picked.concat(sample(high,2));
+
+    // لو نقص، كمل من أي مكان
+    const ids = new Set(picked.map(x=>x.id));
+    while(picked.length<6 && pool.length){
+      const q = pool[Math.floor(Math.random()*pool.length)];
+      if (!ids.has(q.id)){ picked.push(q); ids.add(q.id); }
+      else break;
+    }
+
+    board.cats.push(cat);
+    for (let r=0;r<6;r++){
+      board.cells[`${cat}|${r}`] = picked[r] || pool[r%pool.length];
+    }
+  }
+
+  saveJSON(K.board, board);
+  saveJSON(K.usedCells, {}); // لوحة جديدة = reset
+  $("boardMeta").textContent = `آخر تحديث: ${new Date().toLocaleString('ar')}`;
+  renderBoard();
+  showPage("Game");
+}
+
+function renderBoard(){
+  const boardEl = $("board");
+  boardEl.innerHTML = "";
+  const board = loadJSON(K.board, null);
+  if (!board){
+    boardEl.innerHTML = `<div class="small">مافي لوحة بعد — روح "اختيار التصنيفات"</div>`;
+    return;
+  }
+  const usedCells = loadJSON(K.usedCells, {});
+  board.cats.forEach(cat=>{
+    const col = document.createElement("div");
+    col.className = "col";
+    const head = document.createElement("div");
+    head.className = "colHead";
+    head.textContent = cat;
+    col.appendChild(head);
+
+    POINTS.forEach((pts,r)=>{
+      const key = `${cat}|${r}`;
+      const q = board.cells[key];
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const b = document.createElement("button");
+      b.textContent = pts;
+      b.className = (pts===200?"p200":pts===400?"p400":"p600") + (usedCells[key]?" used":"");
+      b.onclick = ()=>{
+        if (usedCells[key]) return;
+        openQuestion(cat, pts, r, q);
+      };
+      cell.appendChild(b);
+      col.appendChild(cell);
+    });
+
+    boardEl.appendChild(col);
+  });
+}
+
+/* ===========================
+   7) المودال + المؤقّت + احتساب النقاط
+=========================== */
+let current=null;
+let timerInt=null;
+let timerLeft=0;
+
+function tickTimer(){
+  const m = String(Math.floor(timerLeft/60)).padStart(2,"0");
+  const s = String(timerLeft%60).padStart(2,"0");
+  $("timer").textContent = `${m}:${s}`;
+}
+function startTimer(sec){
+  clearInterval(timerInt);
+  timerLeft = sec;
+  $("timerState").textContent = "يشتغل";
+  tickTimer();
+  timerInt = setInterval(()=>{
+    timerLeft--;
+    tickTimer();
+    if (timerLeft<=0){
+      clearInterval(timerInt);
+      $("timerState").textContent = "انتهى";
+    }
   },1000);
 }
-function stopTimer(){ if(timer) clearInterval(timer); timer=null; }
-
-function openCell(c,r){ 
-  const cell=boardState.cells[c][r]; if(cell.used) return;
-  const picked=pickQuestion(cell.cat, cell.pts); if(!picked.q){ toast("ما في أسئلة لهالنقاط."); return; }
-  active={c,r,cell,q:picked.q};
-  qMeta.textContent=`${cell.cat} — ${cell.pts}`; 
-  qText.textContent=picked.q.q;
-  aText.textContent="الإجابة: "+picked.q.a; aText.classList.remove("show");
-  if(picked.q.img){ qImg.src=picked.q.img; qImg.classList.add("show"); } else { qImg.classList.remove("show"); qImg.removeAttribute("src"); }
-  warn.textContent=picked.exhausted ? "تنبيه: أسئلة هالمستوى خلصت (قد يعيد سؤال إذا كررت اختيار نفس المستوى كثير)." : "";
-  qModal.classList.add("show"); startTimer();
+function stopTimer(){
+  clearInterval(timerInt);
+  $("timerState").textContent = "جاهز";
 }
-function closeQ(){ qModal.classList.remove("show"); stopTimer(); active=null; }
-document.getElementById("btnClose").onclick=closeQ;
-qModal.addEventListener("click",(e)=>{ if(e.target===qModal) closeQ(); });
-document.getElementById("btnShow").onclick=()=>aText.classList.toggle("show");
 
-function markUsed(){ 
-  const cell=boardState.cells[active.c][active.r]; 
-  cell.used=true; 
-  USED.add(qKey(active.q)); 
-  saveUsed(USED); 
-  renderBoard(); 
+function openQuestion(cat, pts, row, q){
+  current = {cat, pts, row, q};
+  $("mCat").textContent = cat;
+  $("mPts").textContent = `${pts} نقطة`;
+  $("mQ").textContent = q.q;
+  $("mA").textContent = q.a;
+
+  $("mAnsBox").classList.remove("show");
+  $("panelWho").classList.remove("show");
+  $("panelSteal").classList.remove("show");
+
+  if (q.img){
+    $("mImg").src = q.img;
+    $("mImg").style.display = "block";
+  } else {
+    $("mImg").style.display = "none";
+  }
+
+  $("modal").classList.add("show");
+  startTimer(getSettings().timer || 30);
 }
-document.getElementById("btnCorrect").onclick=()=>{ if(!active) return; syncNamesEverywhere(); tModal.classList.add("show"); };
-document.getElementById("btnWrong").onclick=()=>{ if(!active) return; markUsed(); closeQ(); };
-function closeT(){ tModal.classList.remove("show"); }
-document.getElementById("btnTeamClose").onclick=closeT;
-tModal.addEventListener("click",(e)=>{ if(e.target===tModal) closeT(); });
 
-function award(team){ 
-  if(!active) return; 
-  const pts=active.cell.pts;
-  if(team===1) SCORE.s1+=pts; else SCORE.s2+=pts;
-  saveScore(SCORE); renderScores(); markUsed(); closeT(); closeQ();
+function markUsed(){
+  const usedCells = loadJSON(K.usedCells, {});
+  usedCells[`${current.cat}|${current.row}`] = true;
+  saveJSON(K.usedCells, usedCells);
+
+  const s = getSettings();
+  if (s.noRepeat){
+    const usedG = usedGlobalSet();
+    usedG.add(current.q.id);
+    saveUsedGlobal(usedG);
+  }
+  renderBoard();
 }
-document.getElementById("team1Pick").onclick=()=>award(1);
-document.getElementById("team2Pick").onclick=()=>award(2);
-document.getElementById("teamCancel").onclick=closeT;
 
-document.getElementById("btnBack").onclick=()=>showSetup();
-document.getElementById("btnNew").onclick=()=>{ 
-  if(selected.size<3 || selected.size>6){ toast("رجع للإعدادات واختر 3-6 تصنيفات."); showSetup(); return; } 
-  newGame(); 
+function closeModal(){
+  stopTimer();
+  $("modal").classList.remove("show");
+  $("mAnsBox").classList.remove("show");
+  $("panelWho").classList.remove("show");
+  $("panelSteal").classList.remove("show");
+  current=null;
+}
+
+function renderScore(){
+  const s = getSettings();
+  const sc = getScores();
+  $("t1N").textContent = s.team1;
+  $("t2N").textContent = s.team2;
+  $("t1S").textContent = sc.t1;
+  $("t2S").textContent = sc.t2;
+
+  $("awardT1").textContent = s.team1;
+  $("awardT2").textContent = s.team2;
+  $("stealT1").textContent = s.team1;
+  $("stealT2").textContent = s.team2;
+}
+
+/* ===========================
+   8) ربط الأزرار
+=========================== */
+$("goSetup").onclick = ()=>showPage("Setup");
+$("goSelect").onclick = ()=>{ showPage("Select"); renderCats(); };
+$("goGame").onclick = ()=>{ showPage("Game"); renderBoard(); };
+$("wipe").onclick = ()=>{ if(confirm("أكيد تبغي تمسح كل شي؟")) clearAll(); };
+
+$("confirmCats").onclick = buildBoard;
+$("randomCats").onclick = randomCats;
+$("clearCats").onclick = clearCats;
+
+$("mClose").onclick = closeModal;
+$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
+
+$("mShow").onclick = ()=> $("mAnsBox").classList.add("show");
+
+$("mCorrect").onclick = ()=>{
+  $("mAnsBox").classList.add("show");
+  $("panelSteal").classList.remove("show");
+  $("panelWho").classList.add("show"); // اختيار الفريق بعد "صح"
 };
-document.getElementById("btnStart").onclick=()=>{ 
-  const n=selected.size; 
-  if(n<3 || n>6){ toast("لازم تختار 3 إلى 6 تصنيفات."); return; } 
-  newGame(); 
+
+$("mWrong").onclick = ()=>{
+  $("mAnsBox").classList.add("show");
+  $("panelWho").classList.remove("show");
+  $("panelSteal").classList.add("show"); // سرقة
 };
 
-// import/export/clear
-document.getElementById("btnImport").onclick=()=>document.getElementById("fileInput").click();
-document.getElementById("fileInput").addEventListener("change", async (e)=>{ 
-  const f=e.target.files && e.target.files[0]; if(!f) return;
-  try{ 
-    const data=JSON.parse(await f.text()); 
-    if(!Array.isArray(data)) throw new Error("لازم Array");
-    const cleaned=data
-      .filter(x=>x && typeof x.cat==="string" && typeof x.q==="string" && typeof x.a==="string" && Number.isFinite(x.pts))
-      .map(x=>({cat:x.cat,pts:Number(x.pts),q:x.q,a:x.a,img: typeof x.img==="string" ? x.img : undefined}));
-    if(cleaned.length<20) throw new Error("الملف صغير.");
-    saveBank(cleaned); BANK=cleaned;
-    document.getElementById("bankCount").textContent=BANK.length;
-    document.getElementById("catCount").textContent=categories().length;
-    selected=new Set(); boardState=null; renderCats(); renderBoard(); showSetup();
-    toast("تم الاستيراد ✅");
-  }catch(err){ toast("فشل الاستيراد: "+err.message); } finally{ e.target.value=""; }
-});
+function award(team){
+  const sc = getScores();
+  if (team==="t1") sc.t1 += current.pts;
+  if (team==="t2") sc.t2 += current.pts;
+  setScores(sc);
+  markUsed();
+  closeModal();
+}
+function noAward(){
+  markUsed();
+  closeModal();
+}
 
-document.getElementById("btnExport").onclick=()=>{
-  const blob=new Blob([JSON.stringify(BANK,null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="seenjeem_bank_export.json";
-  document.body.appendChild(a); a.click(); a.remove();
-};
+$("awardT1").onclick = ()=>award("t1");
+$("awardT2").onclick = ()=>award("t2");
+$("awardNone").onclick = ()=>noAward();
 
-document.getElementById("btnClear").onclick=()=>{ 
-  if(!confirm("أكيد تبي تمسح كل البيانات (بما فيها الأسماء والنقاط والبنك)؟")) return;
-  localStorage.removeItem(K_BANK); localStorage.removeItem(K_USED); localStorage.removeItem(K_SCORE); localStorage.removeItem(K_NAMES);
-  location.reload();
-};
+$("stealT1").onclick = ()=>award("t1");
+$("stealT2").onclick = ()=>award("t2");
+$("stealNone").onclick = ()=>noAward();
 
+/* ===========================
+   9) تشغيل أولي
+=========================== */
+initSetup();
+renderScore();
+renderCats();
 renderBoard();
+timerLeft = getSettings().timer || 30;
+tickTimer();
 </script>
+
 </body>
 </html>
