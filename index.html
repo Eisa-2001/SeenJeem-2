@@ -1,2126 +1,774 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>سين جيم — FINAL (No Repeat + Report + Import)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SeenJeem - نسخة قديمة ستايل</title>
   <style>
     :root{
-      --bg:#070a12; --panel:#0f1630; --text:#e9eeff; --muted:#a9b4e6;
-      --line:rgba(255,255,255,.12); --a1:#67e8f9; --a2:#a78bfa;
-      --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+      --bg:#0f1115;
+      --card:#171a22;
+      --card2:#1f2330;
+      --text:#f3f4f6;
+      --muted:#aab0c0;
+      --accent:#ff7a45;
+      --accent2:#ffb703;
+      --good:#2dd4bf;
+      --bad:#fb7185;
+      --line:#2a2f3d;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:radial-gradient(900px 700px at 15% 10%, rgba(103,232,249,.12), transparent 60%),
-                 radial-gradient(900px 700px at 85% 10%, rgba(167,139,250,.10), transparent 60%),
-                 var(--bg);
-      color:var(--text);
-    }
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial}
+    body{margin:0;background:linear-gradient(180deg,#0c0e13, #0f1115 30%, #0f1115);color:var(--text)}
     header{
-      position:sticky;top:0;z-index:10;
-      background:rgba(7,10,18,.72);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:5;
+      background:rgba(15,17,21,.92);backdrop-filter: blur(10px);
       border-bottom:1px solid var(--line);
     }
-    .topbar{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2))}
-    h1{margin:0;font-size:15px}
-    .sub{font-size:12px;color:var(--muted)}
-    .btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    button{
-      cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);
-      color:var(--text);padding:10px 12px;border-radius:12px;font-weight:800
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .spacer{flex:1}
+    .title{font-weight:800;letter-spacing:.2px}
+    .pill{
+      padding:10px 12px;border:1px solid var(--line);
+      background:var(--card);color:var(--text);
+      border-radius:14px;cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center;
+      user-select:none
     }
-    button:hover{background:rgba(255,255,255,.07)}
-    button.primary{border:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#0b1020}
-    button.danger{border-color:rgba(239,68,68,.45)}
-    button.good{border-color:rgba(34,197,94,.45)}
-    button.warn{border-color:rgba(245,158,11,.55)}
-    .container{max-width:1100px;margin:0 auto;padding:16px}
-    .page{display:none}
-    .page.active{display:block}
-    .card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:14px}
-    .grid{display:grid;gap:12px}
-    .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-    @media(max-width:840px){.grid.two{grid-template-columns:1fr}}
-    .titleRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
-    .titleRow h2{margin:0;font-size:15px}
-    .small{font-size:12px;color:var(--muted)}
-    .field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-    label{font-size:12px;color:var(--muted)}
-    input[type="text"], input[type="number"]{
-      padding:12px;border-radius:12px;border:1px solid var(--line);
-      background:rgba(0,0,0,.25);color:var(--text)
+    .pill:hover{border-color:#3a4157}
+    .pill.primary{background:linear-gradient(135deg,var(--accent),#ff4d6d);border:none}
+    .pill.ghost{background:transparent}
+    .pill.small{padding:8px 10px;border-radius:12px;font-size:14px}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap:12px;
     }
-    .pill{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .toggle{display:flex;gap:10px;align-items:center;margin-top:10px}
-    input[type="checkbox"]{width:18px;height:18px}
-    hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
+    @media (max-width: 950px){ .grid{grid-template-columns: repeat(3,1fr);} }
+    @media (max-width: 700px){ .grid{grid-template-columns: repeat(2,1fr);} }
+    @media (max-width: 420px){ .grid{grid-template-columns: 1fr;} }
 
-    .scorebar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .scorebox{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
-    .scorebox .name{font-weight:900}
-    .scorebox .score{font-size:18px;font-weight:1000;background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .timer{font-variant-numeric:tabular-nums;font-weight:900}
+    .card{
+      background:linear-gradient(180deg,var(--card), #141823);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      cursor:pointer;
+      min-height:120px;
+      display:flex;flex-direction:column;
+      transition:transform .12s ease, border-color .12s ease;
+    }
+    .card:hover{transform:translateY(-2px);border-color:#3a4157}
+    .thumb{
+      height:86px;
+      background:radial-gradient(circle at 30% 20%, #2d3346, #141823);
+      display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-weight:700;
+    }
+    .card .info{padding:12px}
+    .card .name{font-weight:800}
+    .card .meta{color:var(--muted);font-size:13px;margin-top:4px}
 
-    .board{display:grid;gap:10px;grid-template-columns:repeat(6,minmax(0,1fr))}
-    @media(max-width:980px){.board{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    .col{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03)}
-    .colHead{padding:10px 8px;text-align:center;font-weight:1000;background:rgba(255,255,255,.05);border-bottom:1px solid var(--line);min-height:52px;display:flex;align-items:center;justify-content:center}
-    .cell button{width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:16px 8px;font-size:18px}
-    .cell button.used{opacity:.35;text-decoration:line-through}
-    .cell:last-child button{border-bottom:0}
-    .p200{color:#bfefff}.p400{color:#d7c8ff}.p600{color:#ffd0b2}
+    .section{margin-top:18px}
+    .bar{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      margin:18px 0 10px;
+    }
+    .chip{
+      padding:8px 10px;border-radius:999px;
+      background:var(--card2);border:1px solid var(--line);
+      color:var(--muted);font-size:13px
+    }
 
-    .catsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-    .catCard{padding:12px;cursor:pointer}
-    .catCard.on{background:rgba(103,232,249,.10);border-color:rgba(103,232,249,.35)}
-    .catCard.off{background:rgba(255,255,255,.03)}
+    .scoreboard{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;
+    }
+    .team{
+      flex:1;min-width:190px;
+      background:linear-gradient(180deg,var(--card), #141823);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .team h3{margin:0;font-size:15px;color:var(--muted);font-weight:700}
+    .team .nameRow{display:flex;gap:8px;align-items:center}
+    .team input{
+      width:100%;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid var(--line);background:#0f131d;color:var(--text);
+      outline:none
+    }
+    .team .score{
+      font-size:28px;font-weight:900;letter-spacing:.5px
+    }
+    .team .btns{display:flex;gap:8px;flex-wrap:wrap}
+    .team .btns button{
+      flex:1;
+      padding:10px 10px;border-radius:14px;
+      border:1px solid var(--line);background:var(--card2);color:var(--text);
+      cursor:pointer
+    }
+    .team .btns button:hover{border-color:#3a4157}
+    .team .btns button.plus{border-color:rgba(45,212,191,.4)}
+    .team .btns button.minus{border-color:rgba(251,113,133,.35)}
+    .muted{color:var(--muted)}
 
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:50;padding:16px}
-    .modal.show{display:flex}
-    .modalCard{width:min(920px,100%);background:rgba(12,16,30,.92);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-    .modalTop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}
-    .modalTop .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .modalBody{padding:14px}
-    .qtext{font-size:18px;font-weight:900;line-height:1.6;margin:0 0 10px}
-    .ans{display:none;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px dashed rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
-    .ans.show{display:block}
-    .ans .lbl{font-size:12px;color:var(--muted);margin-bottom:6px}
-    .ans .aval{font-size:18px;font-weight:1000}
-    .qimg{width:100%;max-height:360px;object-fit:contain;border-radius:16px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .actions button{flex:1;min-width:160px}
-    .subpanel{display:none;margin-top:12px;padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
-    .subpanel.show{display:block}
-    .teamBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-    .teamBtns button{flex:1;min-width:160px}
+    /* Question grid */
+    .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width: 850px){ .qgrid{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width: 470px){ .qgrid{grid-template-columns:1fr;} }
+    .qbtn{
+      background:linear-gradient(180deg,var(--card), #141823);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      min-height:64px;
+    }
+    .qbtn:hover{border-color:#3a4157}
+    .qbtn.used{opacity:.45;cursor:not-allowed}
+    .qbtn .pts{
+      font-weight:900;
+      color:var(--accent2);
+      background:rgba(255,183,3,.10);
+      border:1px solid rgba(255,183,3,.25);
+      padding:6px 10px;border-radius:999px;
+      min-width:74px;text-align:center
+    }
+    .qbtn .label{font-weight:800}
+    .qbtn .sub{color:var(--muted);font-size:13px;margin-top:2px}
+
+    /* Modal */
+    .modalBack{
+      position:fixed;inset:0;background:rgba(0,0,0,.65);
+      display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:20
+    }
+    .modal{
+      width:min(920px, 100%);
+      background:linear-gradient(180deg,#171a22,#10131b);
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap
+    }
+    .modalHead .tag{
+      background:rgba(255,122,69,.14);
+      border:1px solid rgba(255,122,69,.3);
+      padding:6px 10px;border-radius:999px;
+      font-weight:800;font-size:13px
+    }
+    .modalHead .close{
+      margin-right:auto;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid var(--line);background:transparent;color:var(--text);
+      cursor:pointer
+    }
+    .modalBody{padding:16px}
+    .qText{font-size:22px;font-weight:900;line-height:1.5;margin:0 0 14px}
+    .imgWrap{margin:10px 0 14px;display:none}
+    .imgWrap img{width:100%;max-height:360px;object-fit:contain;border-radius:16px;border:1px solid var(--line);background:#0b0e14}
+    .answerBox{
+      display:none;
+      background:rgba(45,212,191,.10);
+      border:1px solid rgba(45,212,191,.35);
+      border-radius:18px;
+      padding:12px 14px;
+      font-size:18px;font-weight:800
+    }
+    .modalActions{
+      display:flex;gap:10px;flex-wrap:wrap;
+      padding:14px;
+      border-top:1px solid var(--line);
+      background:rgba(10,12,18,.55)
+    }
+    .modalActions button{
+      padding:12px 14px;border-radius:16px;
+      border:1px solid var(--line);
+      background:var(--card2);color:var(--text);
+      cursor:pointer;font-weight:800
+    }
+    .modalActions button.primary{background:linear-gradient(135deg,var(--accent),#ff4d6d);border:none}
+    .modalActions button.good{border-color:rgba(45,212,191,.45)}
+    .modalActions button.bad{border-color:rgba(251,113,133,.4)}
+    .pickTeamRow{display:none;gap:10px;flex-wrap:wrap}
+    .pickTeamRow button{flex:1;min-width:140px}
+    .toast{
+      position:fixed;bottom:16px;right:16px;
+      background:rgba(23,26,34,.96);
+      border:1px solid var(--line);
+      padding:10px 12px;border-radius:14px;
+      color:var(--text);display:none;z-index:50
+    }
+    .hr{height:1px;background:var(--line);margin:14px 0}
     textarea{
-      width:100%;min-height:140px;border-radius:14px;border:1px solid var(--line);
-      background:rgba(0,0,0,.25);color:var(--text);padding:12px
+      width:100%;min-height:140px;padding:12px;border-radius:16px;
+      border:1px solid var(--line);background:#0f131d;color:var(--text);
+      outline:none;resize:vertical
     }
   </style>
 </head>
 
 <body>
 <header>
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo"></div>
-      <div>
-        <h1>سين جيم — FINAL</h1>
-        <div class="sub">بدون تكرار داخل اللعبة + بلاغ عن سؤال غلط + استيراد بنك أسئلة</div>
-      </div>
-    </div>
-    <div class="btns">
-      <button id="goSetup">الإعدادات</button>
-      <button id="goSelect">اختيار التصنيفات</button>
-      <button id="goGame" class="primary">اللعبة</button>
-      <button id="wipe" class="danger">🧹 مسح كل البيانات</button>
+  <div class="wrap">
+    <div class="row">
+      <div class="title">SeenJeem — نسخة قديمة (تصنيف ➜ سؤال)</div>
+      <div class="spacer"></div>
+      <button class="pill ghost" id="btnHome">الرئيسية</button>
+      <button class="pill ghost" id="btnSettings">الإعدادات</button>
+      <button class="pill" id="btnReset">إعادة تعيين الأسئلة</button>
     </div>
   </div>
 </header>
 
-<div class="container">
+<main class="wrap">
 
-  <!-- Setup -->
-  <div id="pageSetup" class="page active">
-    <div class="grid two">
-      <div class="card">
-        <div class="titleRow">
-          <h2>إعدادات الفرق</h2>
-          <div class="small">تتخزن تلقائيًا</div>
-        </div>
-        <div class="field">
-          <label>اسم الفريق الأول</label>
-          <input id="team1Name" type="text" placeholder="الفريق الأول">
-        </div>
-        <div class="field">
-          <label>اسم الفريق الثاني</label>
-          <input id="team2Name" type="text" placeholder="الفريق الثاني">
-        </div>
-        <div class="row">
-          <button id="resetScores" class="danger">تصفير النقاط</button>
-          <span class="pill">نقاط: 200 / 400 / 600</span>
-        </div>
-        <div class="small" style="margin-top:10px">
-          ✅ مثل ما اتفقنا: تضغط «صح»، وبعدها تختار أي فريق جاوب.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="titleRow">
-          <h2>إعدادات اللعبة</h2>
-          <div class="small">مؤقت + منع تكرار + بنك أسئلة</div>
-        </div>
-
-        <div class="field">
-          <label>مدة المؤقّت (ثواني) لكل سؤال</label>
-          <input id="timerSec" type="number" min="5" step="1" placeholder="مثال: 30">
-        </div>
-
-        <div class="toggle">
-          <input id="noRepeatAcross" type="checkbox">
-          <label for="noRepeatAcross">منع تكرار الأسئلة عبر الألعاب (اختياري)</label>
-        </div>
-
-        <hr class="sep">
-
-        <div class="row">
-          <button id="newBoard" class="primary">إنشاء لوحة جديدة</button>
-          <span class="pill" id="bankStats">—</span>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-          <button id="openIO" class="warn">استيراد/تصدير بنك الأسئلة</button>
-          <button id="clearReports" class="danger">مسح “المبلّغ عنها”</button>
-        </div>
-
-        <div id="ioPanel" class="subpanel">
-          <div class="small">الصق JSON للبنك (أو انسخه للتصدير)</div>
-          <textarea id="ioText" placeholder='[{"cat":"أنمي: Naruto","tier":"hard","q":"...","a":"...","img":""}]'></textarea>
-          <div class="row" style="margin-top:10px">
-            <button id="exportBank">تصدير البنك الحالي</button>
-            <button id="importBank" class="primary">استيراد وتطبيق</button>
-          </div>
-          <div class="small" style="margin-top:8px">
-            صيغة السؤال: cat + tier(easy/medium/hard) + q + a (+ img اختياري).  
-            النقاط تُحدد تلقائيًا حسب tier (200/400/600) لضبط المستوى.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Select -->
-  <div id="pageSelect" class="page">
-    <div class="card">
-      <div class="titleRow">
-        <h2>اختيار التصنيفات (3 إلى 6)</h2>
-        <div class="small">لو اخترت أقل من 6، يكمل الباقي عشوائيًا</div>
-      </div>
-
-      <div class="row" style="margin-bottom:10px">
-        <span class="pill" id="selCount">0 مختار</span>
-        <span class="pill">ممنوع تكرار داخل اللوحة 100%</span>
-      </div>
-
-      <div id="catsGrid" class="catsGrid"></div>
-
-      <hr class="sep">
-      <div class="row">
-        <button id="confirmCats" class="primary">تأكيد + إنشاء اللوحة</button>
-        <button id="randomCats">اختيار عشوائي</button>
-        <button id="clearCats" class="danger">مسح الاختيار</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Game -->
-  <div id="pageGame" class="page">
-    <div class="scorebar">
-      <div class="scorebox"><span class="name" id="t1N">الفريق الأول</span> <span class="score" id="t1S">0</span></div>
-      <div class="scorebox"><span class="timer" id="timer">00:00</span> <span class="pill" id="timerState">جاهز</span></div>
-      <div class="scorebox"><span class="name" id="t2N">الفريق الثاني</span> <span class="score" id="t2S">0</span></div>
+  <!-- SCORE -->
+  <section class="section" id="scoreSection">
+    <div class="bar">
+      <span class="chip">النتيجة تظهر من البداية ✅</span>
+      <span class="chip">السؤال ما يعيد نفسه ✅</span>
+      <span class="chip">تحديد الفريق بعد "إجابة صحيحة" ✅</span>
     </div>
 
-    <div class="card">
-      <div class="titleRow">
-        <h2>لوحة اللعبة</h2>
-        <div class="small" id="boardMeta">—</div>
-      </div>
-      <div id="board" class="board"></div>
-    </div>
-  </div>
-</div>
+    <div class="scoreboard" id="scoreboard"></div>
+  </section>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-  <div class="modalCard">
-    <div class="modalTop">
-      <div class="meta">
-        <span class="pill" id="mCat"></span>
-        <span class="pill" id="mPts"></span>
-      </div>
-      <div class="row">
-        <button id="mReport" class="warn">🚩 بلاغ: سؤال غلط/سيء</button>
-        <button id="mClose">إغلاق</button>
-      </div>
+  <!-- HOME / CATEGORIES -->
+  <section class="section" id="homeSection">
+    <div class="bar">
+      <span class="chip" id="catsCount">—</span>
+      <span class="chip" id="qsCount">—</span>
+    </div>
+    <div class="grid" id="catsGrid"></div>
+  </section>
+
+  <!-- CATEGORY / QUESTIONS -->
+  <section class="section" id="catSection" style="display:none">
+    <div class="bar">
+      <button class="pill ghost" id="btnBack">رجوع</button>
+      <div class="spacer"></div>
+      <span class="chip" id="catTitleChip">—</span>
+      <span class="chip" id="catProgressChip">—</span>
+    </div>
+    <div class="qgrid" id="qGrid"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="section" id="settingsSection" style="display:none">
+    <div class="bar">
+      <span class="chip">تعديل أسماء الفرق + استيراد بنك أسئلة</span>
+    </div>
+
+    <div class="hr"></div>
+
+    <h3 style="margin:0 0 10px">استيراد / تصدير بنك الأسئلة</h3>
+    <p class="muted" style="margin:0 0 10px">
+      إذا تبي تغير الأسئلة: انسخ JSON وحطه هنا واضغط "استيراد".
+      <br>ملاحظة: الاستيراد يستبدل البنك الحالي بالكامل.
+    </p>
+    <textarea id="bankText" placeholder='الصق JSON هنا...'></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="pill primary" id="btnImport">استيراد البنك</button>
+      <button class="pill" id="btnExport">تصدير البنك الحالي</button>
+      <button class="pill" id="btnResetScores">تصفير النقاط</button>
+    </div>
+
+    <div class="hr"></div>
+
+    <h3 style="margin:0 0 10px">خيارات</h3>
+    <div class="row">
+      <label class="pill small" style="cursor:default">
+        <input type="checkbox" id="chkShowAnswersFast" style="accent-color:var(--accent);margin-left:8px">
+        إظهار الإجابة مباشرة (اختياري)
+      </label>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODAL -->
+<div class="modalBack" id="modalBack">
+  <div class="modal">
+    <div class="modalHead">
+      <span class="tag" id="modalTag">—</span>
+      <span class="tag" id="modalPts">—</span>
+      <button class="close" id="btnClose">إغلاق</button>
     </div>
     <div class="modalBody">
-      <p class="qtext" id="mQ"></p>
-      <img id="mImg" class="qimg" style="display:none">
-      <div id="mAnsBox" class="ans">
-        <div class="lbl">الإجابة</div>
-        <div class="aval" id="mA"></div>
-      </div>
+      <h2 class="qText" id="modalQ">—</h2>
+      <div class="imgWrap" id="imgWrap"><img id="modalImg" alt=""></div>
+      <div class="answerBox" id="answerBox">—</div>
+    </div>
+    <div class="modalActions">
+      <button class="primary" id="btnReveal">إظهار الإجابة</button>
+      <button class="bad" id="btnWrong" style="display:none">إجابة غلط</button>
+      <button class="good" id="btnCorrect" style="display:none">إجابة صحيحة</button>
 
-      <div class="actions">
-        <button id="mShow" class="primary">إظهار الإجابة</button>
-        <button id="mCorrect" class="good">صح ✅</button>
-        <button id="mWrong" class="danger">غلط ❌</button>
-      </div>
-
-      <div id="panelWho" class="subpanel">
-        <div style="font-weight:900">من الفريق اللي جاوب صح؟</div>
-        <div class="teamBtns">
-          <button id="awardT1" class="good"></button>
-          <button id="awardT2" class="good"></button>
-          <button id="awardNone" class="danger">لا أحد</button>
-        </div>
-      </div>
-
-      <div id="panelSteal" class="subpanel">
-        <div style="font-weight:900">سرقة؟ (إذا فريق ثاني جاوب صح)</div>
-        <div class="teamBtns">
-          <button id="stealT1"></button>
-          <button id="stealT2"></button>
-          <button id="stealNone" class="danger">لا سرقة</button>
-        </div>
-      </div>
-
-      <div class="small" style="margin-top:10px">
-        200 وسط • 400 صعب • 600 شبه مستحيل — مضبوط عن طريق tier داخل بنك الأسئلة.
+      <div class="pickTeamRow" id="pickTeamRow" style="width:100%">
+        <!-- dynamically -->
       </div>
     </div>
   </div>
 </div>
 
-<script>
-/* ===========================
-   FINAL: محرك قوي ضد التكرار
-   + بلاغ + استيراد/تصدير
-=========================== */
+<div class="toast" id="toast"></div>
 
-// ====== مفاتيح التخزين
-const K = {
-  settings:"sj_final_settings_v9",
-  scores:"sj_final_scores_v9",
-  selection:"sj_final_selection_v9",
-  board:"sj_final_board_v9",
-  usedGlobal:"sj_final_used_global_v9",
-  usedCells:"sj_final_used_cells_v9",
-  reported:"sj_final_reported_v9",
-  bankUser:"sj_final_bank_user_v9"
+<script>
+/* =========================================
+   1) حط بنك أسئلتك هنا (أو استورده من الإعدادات)
+   - img اختياري (رابط صورة)
+   - pts 200/400/600 (حدد مستوى السؤال)
+   - q/a لازم تكون إجابة مباشرة (مو شرح)
+========================================= */
+const QUESTION_BANK = {
+  meta: { version: "old-style-v1" },
+  teams: [
+    { id:"T", name:"T", score:0 },
+    { id:"R", name:"R", score:0 },
+  ],
+  categories: [
+    {
+      id:"movies",
+      title:"أفلام",
+      thumb:null,
+      questions:[
+        { id:"mv-200-1", pts:200, q:"من الممثل الذي لعب دور Jack Sparrow؟", a:"جوني ديب", img:null },
+        { id:"mv-400-1", pts:400, q:"في أي سنة صدر فيلم Inception؟", a:"2010", img:null },
+        { id:"mv-600-1", pts:600, q:"ما اسم شخصية الشرير في The Dark Knight؟", a:"الجوكر", img:null },
+      ]
+    },
+    {
+      id:"games",
+      title:"ألعاب",
+      thumb:null,
+      questions:[
+        { id:"gm-200-1", pts:200, q:"ما اسم بطل GTA San Andreas؟", a:"CJ (Carl Johnson)", img:null },
+        { id:"gm-400-1", pts:400, q:"في أي سنة صدر Assassin's Creed 1؟", a:"2007", img:null },
+        { id:"gm-600-1", pts:600, q:"ما اسم الشركة المطوّرة لسلسلة The Legend of Zelda؟", a:"Nintendo", img:null },
+      ]
+    },
+  ]
 };
 
-function $(id){ return document.getElementById(id); }
-function loadJSON(key, fallback){
-  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-  catch(e){ return fallback; }
-}
-function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+/* =========================================
+   تخزين محلي (حفظ النقاط والأسئلة المستخدمة)
+========================================= */
+const LS_KEY = "seenjeem_oldstyle_state_v1";
 
-function getSettings(){
-  return loadJSON(K.settings, {team1:"الفريق الأول", team2:"الفريق الثاني", timer:30, noRepeat:false});
-}
-function setSettings(s){ saveJSON(K.settings, s); }
-function getScores(){ return loadJSON(K.scores, {t1:0,t2:0}); }
-function setScores(sc){ saveJSON(K.scores, sc); renderScore(); }
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 
-function clearAll(){
-  Object.values(K).forEach(k=>localStorage.removeItem(k));
-  location.reload();
+function loadState(){
+  const raw = localStorage.getItem(LS_KEY);
+  if(!raw) return null;
+  try { return JSON.parse(raw); } catch(e){ return null; }
 }
 
-// ====== بنك مثال (صغير) + البنك المستورد (الكبير)
-categories: [
-  // =========================
-  // 🎬 أفلام
-  // =========================
-  {
-    id: "movies",
-    title: "أفلام",
-    thumb: null,
-    questions: [
-      { id: "mv-200-1", difficulty: 200, q: "في أي سنة صدر فيلم Inception؟", a: "2010" },
-      { id: "mv-200-2", difficulty: 200, q: "من الممثل الذي جسّد شخصية Jack Sparrow؟", a: "جوني ديب" },
-      { id: "mv-200-3", difficulty: 200, q: "ما اسم الفيلم الذي يحتوي على شخصية Neo؟", a: "The Matrix" },
-
-      { id: "mv-400-1", difficulty: 400, q: "ما اسم الكوكب الذي يعيش عليه شعب الـNa'vi في Avatar؟", a: "Pandora" },
-      { id: "mv-400-2", difficulty: 400, q: "ما اسم عائلة في فيلم The Godfather؟", a: "Corleone" },
-      { id: "mv-400-3", difficulty: 400, q: "ما اسم الشرير الرئيسي في The Dark Knight؟", a: "Joker" },
-
-      { id: "mv-600-1", difficulty: 600, q: "ما اسم السيف في فيلم The Lord of the Rings الذي أعيد تشكيله لاحقًا؟", a: "Narsil" },
-      { id: "mv-600-2", difficulty: 600, q: "ما اسم كوكب Luke Skywalker الأصلي في Star Wars؟", a: "Tatooine" },
-      { id: "mv-600-3", difficulty: 600, q: "ما اسم المنظومة/المنظمة التي تراقب الأبطال في فيلم The Incredibles؟", a: "Syndrome" }
-    ]
-  },
-
-  // =========================
-  // 📺 مسلسلات
-  // =========================
-  {
-    id: "series",
-    title: "مسلسلات",
-    thumb: null,
-    questions: [
-      { id: "sr-200-1", difficulty: 200, q: "ما اسم المسلسل الذي تدور أحداثه حول مختبر مخدرات (Walter White)؟", a: "Breaking Bad" },
-      { id: "sr-200-2", difficulty: 200, q: "في أي مسلسل نرى شخصية Michael Scott؟", a: "The Office" },
-      { id: "sr-200-3", difficulty: 200, q: "ما اسم المسلسل الذي أبطاله ستة أصدقاء في نيويورك؟", a: "Friends" },
-
-      { id: "sr-400-1", difficulty: 400, q: "ما اسم المحامي في Better Call Saul؟", a: "Saul Goodman" },
-      { id: "sr-400-2", difficulty: 400, q: "ما اسم العائلة الحاكمة في House of the Dragon؟", a: "Targaryen" },
-      { id: "sr-400-3", difficulty: 400, q: "ما اسم القارة الرئيسية في Game of Thrones؟", a: "Westeros" },
-
-      { id: "sr-600-1", difficulty: 600, q: "في مسلسل Dark: ما اسم المدينة التي تدور فيها الأحداث؟", a: "Winden" },
-      { id: "sr-600-2", difficulty: 600, q: "في مسلسل Suits: ما اسم شركة المحاماة (الاسم الأشهر)؟", a: "Pearson Specter" },
-      { id: "sr-600-3", difficulty: 600, q: "في The Sopranos: ما اسم بطل المسلسل؟", a: "Tony Soprano" }
-    ]
-  },
-
-  // =========================
-  // 🎮 ألعاب (عام)
-  // =========================
-  {
-    id: "games",
-    title: "ألعاب",
-    thumb: null,
-    questions: [
-      { id: "gm-200-1", difficulty: 200, q: "ما اسم بطل سلسلة The Legend of Zelda؟", a: "Link" },
-      { id: "gm-200-2", difficulty: 200, q: "ما اسم شخصية Minecraft الافتراضية الشهيرة؟", a: "Steve" },
-      { id: "gm-200-3", difficulty: 200, q: "أي شركة تطوّر سلسلة FIFA/EA FC؟", a: "EA" },
-
-      { id: "gm-400-1", difficulty: 400, q: "في GTA San Andreas: ما اسم الشخصية الرئيسية؟", a: "CJ" },
-      { id: "gm-400-2", difficulty: 400, q: "في Assassin's Creed: ما اسم الشركة/المنظمة التي تمثل الخصم الأساسي غالبًا؟", a: "Templars" },
-      { id: "gm-400-3", difficulty: 400, q: "ما اسم عالم اللعب في Fortnite؟ (الطور الأشهر)", a: "Battle Royale" },
-
-      { id: "gm-600-1", difficulty: 600, q: "ما اسم محرك ألعاب Unreal الشهير (اسم الشركة/المحرك)؟", a: "Unreal Engine" },
-      { id: "gm-600-2", difficulty: 600, q: "ما اسم مدينة Rapture في أي لعبة؟", a: "BioShock" },
-      { id: "gm-600-3", difficulty: 600, q: "في Dark Souls: ما اسم أول منطقة رئيسية بعد البداية في الجزء الأول؟", a: "Undead Burg" }
-    ]
-  },
-
-  // =========================
-  // 🎯 Valorant
-  // =========================
-  {
-    id: "valorant",
-    title: "Valorant",
-    thumb: null,
-    questions: [
-      { id: "vl-200-1", difficulty: 200, q: "كم فريق يلعب في طور التنافسي الأساسي في Valorant؟", a: "5 ضد 5" },
-      { id: "vl-200-2", difficulty: 200, q: "ما اسم السلاح القناص الأشهر في Valorant؟", a: "Operator" },
-      { id: "vl-200-3", difficulty: 200, q: "ما اسم الشركة المطوّرة للعبة Valorant؟", a: "Riot Games" },
-
-      { id: "vl-400-1", difficulty: 400, q: "ما اسم طور اللعب السريع جدًا الذي يبدأ بجولات قصيرة؟", a: "Swiftplay" },
-      { id: "vl-400-2", difficulty: 400, q: "ما اسم العملة لشراء السكنات غالبًا داخل اللعبة؟", a: "VP" },
-      { id: "vl-400-3", difficulty: 400, q: "كم عدد الجولات المطلوبة للفوز بالمباراة عادةً؟", a: "13" },
-
-      { id: "vl-600-1", difficulty: 600, q: "ما اسم أول خريطة ظهرت تجريبيًا في Valorant (اسم مشهور جدًا)؟", a: "Bind" },
-      { id: "vl-600-2", difficulty: 600, q: "ما اسم القدرة التي تزرعها جهة الهجوم للفوز بالجولة؟", a: "Spike" },
-      { id: "vl-600-3", difficulty: 600, q: "ما اسم لقب البطولة العالمية الرسمية لڤالورانت؟", a: "Champions" }
-    ]
-  },
-
-  // =========================
-  // 🔫 Call of Duty
-  // =========================
-  {
-    id: "cod",
-    title: "Call of Duty",
-    thumb: null,
-    questions: [
-      { id: "cd-200-1", difficulty: 200, q: "اختصار COD يشير إلى ماذا؟", a: "Call of Duty" },
-      { id: "cd-200-2", difficulty: 200, q: "ما اسم طور اللعب الذي يبقى فيه آخر لاعب/فريق؟", a: "Battle Royale" },
-      { id: "cd-200-3", difficulty: 200, q: "ما اسم اللعبة الأشهر لطور Battle Royale في السلسلة؟", a: "Warzone" },
-
-      { id: "cd-400-1", difficulty: 400, q: "في Modern Warfare: ما الاسم الشهير للشخصية Captain Price؟", a: "Price" },
-      { id: "cd-400-2", difficulty: 400, q: "أي شركة تنشر Call of Duty عادةً؟", a: "Activision" },
-      { id: "cd-400-3", difficulty: 400, q: "اسم الطور الذي تلعب فيه فرق ضد بعض مع نقاط سيطرة؟ (اسم مشهور جدًا)", a: "Domination" },
-
-      { id: "cd-600-1", difficulty: 600, q: "في Warzone: اسم دائرة المنطقة القاتلة يشار لها عادةً بـ؟", a: "Gas" },
-      { id: "cd-600-2", difficulty: 600, q: "اسم السلسلة الفرعية التي تركّز على الحرب السوداء (اسمها الرسمي)؟", a: "Black Ops" },
-      { id: "cd-600-3", difficulty: 600, q: "في ألعاب COD: القتل المتتالي يسمى عادةً؟", a: "Killstreak" }
-    ]
-  },
-
-  // =========================
-  // 🧠 معلومات عامة
-  // =========================
-  {
-    id: "general_info",
-    title: "معلومات عامة",
-    thumb: null,
-    questions: [
-      { id: "gi-200-1", difficulty: 200, q: "كم عدد قارات العالم؟", a: "7" },
-      { id: "gi-200-2", difficulty: 200, q: "ما أكبر محيط في العالم؟", a: "المحيط الهادئ" },
-      { id: "gi-200-3", difficulty: 200, q: "كم عدد ألوان قوس قزح؟", a: "7" },
-
-      { id: "gi-400-1", difficulty: 400, q: "ما العنصر الكيميائي رمزه Fe؟", a: "الحديد" },
-      { id: "gi-400-2", difficulty: 400, q: "ما أصغر كوكب في المجموعة الشمسية؟", a: "عطارد" },
-      { id: "gi-400-3", difficulty: 400, q: "ما اسم الطبقة العليا من الغلاف الجوي التي تحوي الأوزون غالبًا؟", a: "الستراتوسفير" },
-
-      { id: "gi-600-1", difficulty: 600, q: "ما اسم الجهاز الذي يقيس شدة الزلازل؟ (اسم شائع)", a: "سيزموجراف" },
-      { id: "gi-600-2", difficulty: 600, q: "ما اسم أقرب نجم للشمس؟", a: "بروكسيما سنتوري" },
-      { id: "gi-600-3", difficulty: 600, q: "ما اسم الممر البحري الذي يربط البحر الأحمر بالمتوسط؟", a: "قناة السويس" }
-    ]
-  },
-
-  // =========================
-  // 🧭 جغرافيا
-  // =========================
-  {
-    id: "geography",
-    title: "جغرافيا",
-    thumb: null,
-    questions: [
-      { id: "gg-200-1", difficulty: 200, q: "ما أطول نهر في العالم (إجابة شائعة جدًا)؟", a: "النيل" },
-      { id: "gg-200-2", difficulty: 200, q: "ما أكبر صحراء حارة في العالم؟", a: "الصحراء الكبرى" },
-      { id: "gg-200-3", difficulty: 200, q: "في أي قارة تقع اليابان؟", a: "آسيا" },
-
-      { id: "gg-400-1", difficulty: 400, q: "ما المضيق الذي يفصل بين إيران وعُمان؟", a: "مضيق هرمز" },
-      { id: "gg-400-2", difficulty: 400, q: "ما العاصمة الإدارية لتركيا؟", a: "أنقرة" },
-      { id: "gg-400-3", difficulty: 400, q: "ما البحر الذي تقع عليه مدينة دبي؟", a: "الخليج العربي" },
-
-      { id: "gg-600-1", difficulty: 600, q: "ما أكبر جزيرة في العالم؟", a: "غرينلاند" },
-      { id: "gg-600-2", difficulty: 600, q: "ما اسم أعلى جبل في أفريقيا؟", a: "كليمنجارو" },
-      { id: "gg-600-3", difficulty: 600, q: "ما اسم عاصمة كازاخستان الحالية؟", a: "أستانا" }
-    ]
-  },
-
-  // =========================
-  // 🗺️ خرائط
-  // =========================
-  {
-    id: "maps",
-    title: "خرائط",
-    thumb: null,
-    questions: [
-      { id: "mp-200-1", difficulty: 200, q: "أي قارة تُعرف بأنها أصغر القارات مساحة؟", a: "أستراليا" },
-      { id: "mp-200-2", difficulty: 200, q: "ما اسم الخط الذي يقسم الأرض إلى نصفين شمالي وجنوبي؟", a: "خط الاستواء" },
-      { id: "mp-200-3", difficulty: 200, q: "ما اسم الخط الذي يفصل بين يوم وآخر على الخريطة؟", a: "خط التاريخ الدولي" },
-
-      { id: "mp-400-1", difficulty: 400, q: "ما اسم الدائرة القطبية في الشمال؟", a: "الدائرة القطبية الشمالية" },
-      { id: "mp-400-2", difficulty: 400, q: "ما اسم البحر بين السعودية ومصر؟", a: "البحر الأحمر" },
-      { id: "mp-400-3", difficulty: 400, q: "ما القارة التي تضم أكبر عدد دول؟", a: "أفريقيا" },
-
-      { id: "mp-600-1", difficulty: 600, q: "ما اسم السلسلة الجبلية الأطول في العالم؟", a: "الأنديز" },
-      { id: "mp-600-2", difficulty: 600, q: "ما اسم أعلى هضبة في العالم؟", a: "هضبة التبت" },
-      { id: "mp-600-3", difficulty: 600, q: "ما اسم الخليج الذي تقع عليه البصرة؟", a: "الخليج العربي" }
-    ]
-  },
-
-  // =========================
-  // 🏳️ أعلام
-  // =========================
-  {
-    id: "flags",
-    title: "أعلام",
-    thumb: null,
-    questions: [
-      { id: "fl-200-1", difficulty: 200, q: "علم اليابان يحتوي على ماذا في الوسط؟", a: "دائرة حمراء" },
-      { id: "fl-200-2", difficulty: 200, q: "علم كندا يحتوي على ورقة ماذا؟", a: "ورقة القيقب" },
-      { id: "fl-200-3", difficulty: 200, q: "ما لون الصليب في علم سويسرا؟", a: "أبيض" },
-
-      { id: "fl-400-1", difficulty: 400, q: "أي دولة علمها يحتوي على تنين؟", a: "بوتان" },
-      { id: "fl-400-2", difficulty: 400, q: "أي دولة علمها يحتوي على أرز في الوسط؟", a: "لبنان" },
-      { id: "fl-400-3", difficulty: 400, q: "علم الاتحاد الأوروبي يحتوي على كم نجمة؟", a: "12" },
-
-      { id: "fl-600-1", difficulty: 600, q: "أي دولة علمها مربع وغير مستطيل؟", a: "سويسرا" },
-      { id: "fl-600-2", difficulty: 600, q: "أي دولة علمها يحتوي على طائر الكيوي؟", a: "نيوزيلندا" },
-      { id: "fl-600-3", difficulty: 600, q: "أي دولة علمها يحتوي على شمس لها وجه؟", a: "الأرجنتين" }
-    ]
-  },
-
-  // =========================
-  // 🏳️ أعلام قديمة
-  // =========================
-  {
-    id: "old_flags",
-    title: "أعلام قديمة",
-    thumb: null,
-    questions: [
-      { id: "of-200-1", difficulty: 200, q: "أي دولة كان علمها سابقًا يحتوي على المطرقة والمنجل؟", a: "الاتحاد السوفيتي" },
-      { id: "of-200-2", difficulty: 200, q: "أي دولة كانت تُعرف باسم بلاد فارس؟", a: "إيران" },
-      { id: "of-200-3", difficulty: 200, q: "أي دولة كانت تُعرف باسم سيام؟", a: "تايلاند" },
-
-      { id: "of-400-1", difficulty: 400, q: "أي دولة كان اسمها روديسيا؟", a: "زيمبابوي" },
-      { id: "of-400-2", difficulty: 400, q: "أي دولة كانت تُعرف باسم سيلان؟", a: "سريلانكا" },
-      { id: "of-400-3", difficulty: 400, q: "أي دولة كانت تُعرف باسم داهومي؟", a: "بنين" },
-
-      { id: "of-600-1", difficulty: 600, q: "أي دولة كانت تُعرف باسم زائير؟", a: "جمهورية الكونغو الديمقراطية" },
-      { id: "of-600-2", difficulty: 600, q: "أي دولة كانت تُعرف باسم بورما؟", a: "ميانمار" },
-      { id: "of-600-3", difficulty: 600, q: "ما اسم الدولة التي كانت تُعرف باسم الشيشان-إنغوش سابقًا ضمن الاتحاد السوفيتي؟", a: "جمهورية روسية" }
-    ]
-  },
-
-  // =========================
-  // 🏛️ رؤساء الدول
-  // =========================
-  {
-    id: "leaders",
-    title: "رؤساء الدول",
-    thumb: null,
-    questions: [
-      { id: "ld-200-1", difficulty: 200, q: "من كان أول رئيس للولايات المتحدة؟", a: "جورج واشنطن" },
-      { id: "ld-200-2", difficulty: 200, q: "من كان أول رئيس لجنوب أفريقيا بعد نهاية الفصل العنصري؟", a: "نيلسون مانديلا" },
-      { id: "ld-200-3", difficulty: 200, q: "من كان أول رئيس لمصر بعد ثورة 1952؟ (الأشهر)", a: "محمد نجيب" },
-
-      { id: "ld-400-1", difficulty: 400, q: "من كان رئيس وزراء بريطانيا في الحرب العالمية الثانية (الأشهر)؟", a: "ونستون تشرشل" },
-      { id: "ld-400-2", difficulty: 400, q: "من كان أول مستشار لألمانيا بعد توحيدها 1990؟", a: "هيلموت كول" },
-      { id: "ld-400-3", difficulty: 400, q: "من كان زعيم الهند الذي قاد حركة الاستقلال سلمياً؟", a: "مهاتما غاندي" },
-
-      { id: "ld-600-1", difficulty: 600, q: "من كان أول أمين عام للأمم المتحدة؟", a: "تريغفي لي" },
-      { id: "ld-600-2", difficulty: 600, q: "من كان أول رئيس للاتحاد السوفيتي (الأشهر تاريخياً)؟", a: "فلاديمير لينين" },
-      { id: "ld-600-3", difficulty: 600, q: "من كان أول رئيس لجمهورية الصين الشعبية؟", a: "ماو تسي تونغ" }
-    ]
-  },
-
-  // =========================
-  // 💱 عملات
-  // =========================
-  {
-    id: "currencies",
-    title: "عملات",
-    thumb: null,
-    questions: [
-      { id: "cu-200-1", difficulty: 200, q: "ما عملة اليابان؟", a: "الين" },
-      { id: "cu-200-2", difficulty: 200, q: "ما عملة بريطانيا؟", a: "الجنيه الإسترليني" },
-      { id: "cu-200-3", difficulty: 200, q: "ما عملة السعودية؟", a: "الريال السعودي" },
-
-      { id: "cu-400-1", difficulty: 400, q: "ما عملة كوريا الجنوبية؟", a: "الوون" },
-      { id: "cu-400-2", difficulty: 400, q: "ما عملة جنوب أفريقيا؟", a: "الراند" },
-      { id: "cu-400-3", difficulty: 400, q: "ما عملة الهند؟", a: "الروبية" },
-
-      { id: "cu-600-1", difficulty: 600, q: "ما عملة فيتنام؟", a: "الدونغ" },
-      { id: "cu-600-2", difficulty: 600, q: "ما عملة بولندا؟", a: "الزلوتي" },
-      { id: "cu-600-3", difficulty: 600, q: "ما عملة المجر؟", a: "الفورنت" }
-    ]
-  },
-
-  // =========================
-  // 🗣️ لغات ولهجات
-  // =========================
-  {
-    id: "languages",
-    title: "لغات ولهجات",
-    thumb: null,
-    questions: [
-      { id: "lg-200-1", difficulty: 200, q: "ما اللغة الرسمية في البرازيل؟", a: "البرتغالية" },
-      { id: "lg-200-2", difficulty: 200, q: "ما اللغة الرسمية في إيران؟", a: "الفارسية" },
-      { id: "lg-200-3", difficulty: 200, q: "ما اللغة الرسمية في إسبانيا؟", a: "الإسبانية" },
-
-      { id: "lg-400-1", difficulty: 400, q: "ما اللغة الرسمية في سويسرا (اختر واحدة صحيحة من الأكثر انتشارًا)؟", a: "الألمانية" },
-      { id: "lg-400-2", difficulty: 400, q: "ما اللغة الرسمية في إثيوبيا؟", a: "الأمهرية" },
-      { id: "lg-400-3", difficulty: 400, q: "ما اسم اللغة التي تُكتب بحروف كيريلية في روسيا؟", a: "الروسية" },
-
-      { id: "lg-600-1", difficulty: 600, q: "ما اسم اللغة الرسمية في إندونيسيا؟", a: "الإندونيسية" },
-      { id: "lg-600-2", difficulty: 600, q: "ما اسم اللغة الرسمية في الفلبين (اسم رسمي)؟", a: "الفلبينية" },
-      { id: "lg-600-3", difficulty: 600, q: "ما اسم اللغة الرسمية في منغوليا؟", a: "المنغولية" }
-    ]
-  },
-
-  // =========================
-  // 🛫 عالم الطيران
-  // =========================
-  {
-    id: "aviation",
-    title: "عالم الطيران",
-    thumb: null,
-    questions: [
-      { id: "av-200-1", difficulty: 200, q: "ما اسم جهاز قياس الارتفاع في الطائرة؟", a: "Altimeter" },
-      { id: "av-200-2", difficulty: 200, q: "ما اسم المدرج الذي تقلع منه الطائرة؟", a: "Runway" },
-      { id: "av-200-3", difficulty: 200, q: "ما اسم مقصورة قيادة الطائرة؟", a: "Cockpit" },
-
-      { id: "av-400-1", difficulty: 400, q: "ما اسم الطائرة ذات الطابقين الأشهر عالميًا من Airbus؟", a: "A380" },
-      { id: "av-400-2", difficulty: 400, q: "ما معنى IATA؟", a: "International Air Transport Association" },
-      { id: "av-400-3", difficulty: 400, q: "ما اسم شركة بوينغ للطائرة المشهورة (طراز) 747 تُعرف بلقب؟", a: "Jumbo Jet" },
-
-      { id: "av-600-1", difficulty: 600, q: "ما اسم الاضطراب الهوائي الشهير بالقرب من الجبال؟", a: "Turbulence" },
-      { id: "av-600-2", difficulty: 600, q: "ما اسم نظام الهبوط الآلي الشائع اختصارًا؟", a: "ILS" },
-      { id: "av-600-3", difficulty: 600, q: "اختصار ATC يشير إلى ماذا؟", a: "Air Traffic Control" }
-    ]
-  },
-
-  // =========================
-  // 🧳 سياحة وسفر
-  // =========================
-  {
-    id: "travel",
-    title: "سياحة وسفر",
-    thumb: null,
-    questions: [
-      { id: "tr-200-1", difficulty: 200, q: "ما اسم البرج الشهير في باريس؟", a: "برج إيفل" },
-      { id: "tr-200-2", difficulty: 200, q: "في أي مدينة يوجد تمثال الحرية؟", a: "نيويورك" },
-      { id: "tr-200-3", difficulty: 200, q: "في أي دولة توجد أهرامات الجيزة؟", a: "مصر" },
-
-      { id: "tr-400-1", difficulty: 400, q: "في أي مدينة توجد دار الأوبرا الشهيرة ذات الشكل المميز في أستراليا؟", a: "سيدني" },
-      { id: "tr-400-2", difficulty: 400, q: "في أي دولة توجد مدينة ماتشو بيتشو؟", a: "بيرو" },
-      { id: "tr-400-3", difficulty: 400, q: "في أي دولة توجد مدينة البتراء؟", a: "الأردن" },
-
-      { id: "tr-600-1", difficulty: 600, q: "في أي دولة توجد جزيرة سانتوريني؟", a: "اليونان" },
-      { id: "tr-600-2", difficulty: 600, q: "ما اسم أشهر شارع تسوّق في طوكيو (اسم مشهور جدًا)؟", a: "Shibuya" },
-      { id: "tr-600-3", difficulty: 600, q: "في أي دولة توجد شلالات إجوازو؟", a: "الأرجنتين" }
-    ]
-  },
-
-  // =========================
-  // 🕰️ عالم الساعات
-  // =========================
-  {
-    id: "watches",
-    title: "عالم الساعات",
-    thumb: null,
-    questions: [
-      { id: "wt-200-1", difficulty: 200, q: "ما اسم العلامة التي شعارها التاج؟", a: "Rolex" },
-      { id: "wt-200-2", difficulty: 200, q: "ما اسم نظام الوقت الذي يُعرف بـ24 ساعة؟", a: "24-hour" },
-      { id: "wt-200-3", difficulty: 200, q: "ما اسم المادة الشائعة في الساعات الفاخرة اختصارًا؟", a: "SS (Stainless Steel)" },
-
-      { id: "wt-400-1", difficulty: 400, q: "ما اسم العلامة السويسرية المرتبطة غالبًا بسباقات الفورمولا 1؟", a: "TAG Heuer" },
-      { id: "wt-400-2", difficulty: 400, q: "ما اسم الزجاج الأكثر مقاومة للخدش في الساعات (مصطلح مشهور)؟", a: "Sapphire" },
-      { id: "wt-400-3", difficulty: 400, q: "ما اسم وظيفة إظهار التاريخ على الساعة؟", a: "Date" },
-
-      { id: "wt-600-1", difficulty: 600, q: "ما اسم وظيفة قياس الوقت بالثواني في الساعات؟", a: "Chronograph" },
-      { id: "wt-600-2", difficulty: 600, q: "ما اسم معيار مقاومة الماء المكتوب عادةً كـ100m يسمى؟", a: "Water Resistance" },
-      { id: "wt-600-3", difficulty: 600, q: "ما اسم نظام الحركة الأوتوماتيكي الذي يعمل بحركة اليد؟", a: "Automatic" }
-    ]
-  },
-
-  // =========================
-  // 🤖 AI
-  // =========================
-  {
-    id: "ai",
-    title: "AI",
-    thumb: null,
-    questions: [
-      { id: "ai-200-1", difficulty: 200, q: "اختصار AI يعني ماذا؟", a: "Artificial Intelligence" },
-      { id: "ai-200-2", difficulty: 200, q: "ما اسم النموذج الذي يُستخدم لتوليد نصوص مثل ChatGPT؟", a: "LLM" },
-      { id: "ai-200-3", difficulty: 200, q: "ما اسم البيانات التي يتعلم منها النموذج؟", a: "Training Data" },
-
-      { id: "ai-400-1", difficulty: 400, q: "ما اسم طريقة تحسين النموذج عبر التغذية الراجعة البشرية (اختصار مشهور)؟", a: "RLHF" },
-      { id: "ai-400-2", difficulty: 400, q: "ما اسم “الهلوسة” في نماذج الذكاء الاصطناعي؟", a: "Hallucination" },
-      { id: "ai-400-3", difficulty: 400, q: "ما اسم المهمة التي تعني تحويل الكلام إلى نص؟", a: "Speech-to-Text" },
-
-      { id: "ai-600-1", difficulty: 600, q: "ما اسم البنية الشهيرة لمعظم LLMs الحديثة؟", a: "Transformer" },
-      { id: "ai-600-2", difficulty: 600, q: "ما اسم عملية تقليل حجم النموذج مع الحفاظ على الأداء غالبًا؟", a: "Distillation" },
-      { id: "ai-600-3", difficulty: 600, q: "ما اسم الهجوم الذي يحاول استخراج بيانات حساسة من النموذج؟ (مصطلح مشهور)", a: "Prompt Injection" }
-    ]
-  },
-
-  // =========================
-  // 🧠 تكنولوجيا
-  // =========================
-  {
-    id: "tech",
-    title: "تكنولوجيا",
-    thumb: null,
-    questions: [
-      { id: "tc-200-1", difficulty: 200, q: "ما اسم نظام تشغيل أجهزة iPhone؟", a: "iOS" },
-      { id: "tc-200-2", difficulty: 200, q: "اختصار USB يعني ماذا؟", a: "Universal Serial Bus" },
-      { id: "tc-200-3", difficulty: 200, q: "ما اسم شبكة الإنترنت اللاسلكية في البيت؟", a: "Wi-Fi" },
-
-      { id: "tc-400-1", difficulty: 400, q: "ما اسم بروتوكول تصفح المواقع الذي يبدأ بـhttps؟", a: "HTTPS" },
-      { id: "tc-400-2", difficulty: 400, q: "ما اسم معالج الرسوميات اختصارًا؟", a: "GPU" },
-      { id: "tc-400-3", difficulty: 400, q: "ما اسم ذاكرة التخزين السريعة في الكمبيوتر اختصارًا؟", a: "RAM" },
-
-      { id: "tc-600-1", difficulty: 600, q: "ما اسم نظام أسماء النطاقات في الإنترنت؟", a: "DNS" },
-      { id: "tc-600-2", difficulty: 600, q: "ما اسم معيار نقل الصورة بجودة عالية من الأجهزة اختصارًا؟", a: "HDMI" },
-      { id: "tc-600-3", difficulty: 600, q: "ما اسم التقنية التي تسمح بتشغيل جهاز افتراضي داخل جهازك؟", a: "Virtualization" }
-    ]
-  },
-
-  // =========================
-  // 📜 تاريخ
-  // =========================
-  {
-    id: "history",
-    title: "تاريخ",
-    thumb: null,
-    questions: [
-      { id: "hs-200-1", difficulty: 200, q: "في أي قارة كانت الحضارة الفرعونية؟", a: "أفريقيا" },
-      { id: "hs-200-2", difficulty: 200, q: "ما اسم المدينة التي كانت عاصمة الخلافة العباسية؟", a: "بغداد" },
-      { id: "hs-200-3", difficulty: 200, q: "من هو قائد فتح القسطنطينية؟", a: "محمد الفاتح" },
-
-      { id: "hs-400-1", difficulty: 400, q: "أي حرب عُرفت باسم الحرب الكبرى قبل تسميتها لاحقاً؟", a: "الحرب العالمية الأولى" },
-      { id: "hs-400-2", difficulty: 400, q: "ما اسم السفينة الشهيرة التي غرقت عام 1912؟", a: "Titanic" },
-      { id: "hs-400-3", difficulty: 400, q: "ما اسم الطريق التجاري الشهير بين الشرق والغرب تاريخياً؟", a: "طريق الحرير" },
-
-      { id: "hs-600-1", difficulty: 600, q: "ما اسم السلالة التي حكمت الصين لفترة طويلة وارتبطت بالبورسلان؟", a: "أسرة مينغ" },
-      { id: "hs-600-2", difficulty: 600, q: "ما اسم المدينة التي دُمرت عام 79م بسبب بركان فيزوف؟", a: "بومبي" },
-      { id: "hs-600-3", difficulty: 600, q: "ما اسم المعركة التي أنهت توسع نابليون في روسيا (اشهر حدث مرتبط)؟", a: "حملة روسيا" }
-    ]
-  },
-
-  // =========================
-  // ✍️ لغة وأدب
-  // =========================
-  {
-    id: "arabic_lit",
-    title: "لغة وأدب",
-    thumb: null,
-    questions: [
-      { id: "ad-200-1", difficulty: 200, q: "ما جمع كلمة (كتاب)؟", a: "كتب" },
-      { id: "ad-200-2", difficulty: 200, q: "ما ضد كلمة (سعيد)؟", a: "حزين" },
-      { id: "ad-200-3", difficulty: 200, q: "ما معنى كلمة (مرادف)؟", a: "نفس المعنى" },
-
-      { id: "ad-400-1", difficulty: 400, q: "ما اسم البحر الشعري الذي تفعيلته (مستفعلن مستفعلن مستفعلن)؟", a: "الرجز" },
-      { id: "ad-400-2", difficulty: 400, q: "ما اسم علم ضبط أواخر الكلمات؟", a: "النحو" },
-      { id: "ad-400-3", difficulty: 400, q: "ما اسم الهمزة التي تُكتب على السطر في (شيء)؟", a: "همزة متطرفة" },
-
-      { id: "ad-600-1", difficulty: 600, q: "ما اسم الأسلوب الذي فيه سؤال لا يُراد به الجواب؟", a: "استفهام بلاغي" },
-      { id: "ad-600-2", difficulty: 600, q: "ما اسم الجناس في البلاغة؟", a: "تشابه لفظي واختلاف معنى" },
-      { id: "ad-600-3", difficulty: 600, q: "ما اسم نوع التشبيه دون ذكر أداة التشبيه؟", a: "تشبيه بليغ" }
-    ]
-  },
-
-  // =========================
-  // 🎤 صوت المشهور
-  // =========================
-  {
-    id: "voice",
-    title: "صوت المشهور",
-    thumb: null,
-    questions: [
-      { id: "vc-200-1", difficulty: 200, q: "من هو المغني المعروف بأغنية 'Shape of You'؟", a: "Ed Sheeran" },
-      { id: "vc-200-2", difficulty: 200, q: "من هو المغني المعروف بأغنية 'Blinding Lights'؟", a: "The Weeknd" },
-      { id: "vc-200-3", difficulty: 200, q: "من هي المغنية المعروفة بأغنية 'Hello'؟", a: "Adele" },
-
-      { id: "vc-400-1", difficulty: 400, q: "من هو الفنان المعروف بأغنية 'Billie Jean'؟", a: "Michael Jackson" },
-      { id: "vc-400-2", difficulty: 400, q: "من هو المغني المعروف بأغنية 'Someone Like You'؟", a: "Adele" },
-      { id: "vc-400-3", difficulty: 400, q: "من هو المغني المعروف بأغنية 'Bohemian Rhapsody' (الفرقة)؟", a: "Queen" },
-
-      { id: "vc-600-1", difficulty: 600, q: "من هو صاحب أغنية 'Numb' (الفرقة)؟", a: "Linkin Park" },
-      { id: "vc-600-2", difficulty: 600, q: "من هو صاحب أغنية 'Smells Like Teen Spirit' (الفرقة)؟", a: "Nirvana" },
-      { id: "vc-600-3", difficulty: 600, q: "من هو صاحب أغنية 'Wonderwall' (الفرقة)؟", a: "Oasis" }
-    ]
-  },
-
-  // =========================
-  // 🦷 طب الأسنان
-  // =========================
-  {
-    id: "dentistry",
-    title: "طب الأسنان",
-    thumb: null,
-    questions: [
-      { id: "dn-200-1", difficulty: 200, q: "ما اسم الطبقة الخارجية الصلبة للسن؟", a: "المينا" },
-      { id: "dn-200-2", difficulty: 200, q: "كم عدد أسنان الإنسان البالغ عادةً؟", a: "32" },
-      { id: "dn-200-3", difficulty: 200, q: "ما اسم السن الذي يُعرف بـ(ضرس العقل)؟", a: "الطاحن الثالث" },
-
-      { id: "dn-400-1", difficulty: 400, q: "ما اسم الجزء الداخلي الحساس للسن الذي يحوي الأعصاب؟", a: "اللب" },
-      { id: "dn-400-2", difficulty: 400, q: "ما اسم التهاب اللثة المزمن غالبًا؟", a: "Gingivitis" },
-      { id: "dn-400-3", difficulty: 400, q: "ما اسم الإجراء الذي يعالج عصب السن؟", a: "Root Canal" },
-
-      { id: "dn-600-1", difficulty: 600, q: "ما اسم الطبقة التي تقع تحت المينا مباشرة؟", a: "العاج" },
-      { id: "dn-600-2", difficulty: 600, q: "ما اسم البكتيريا الشائعة المرتبطة بتسوس الأسنان (اسم مشهور)؟", a: "Streptococcus mutans" },
-      { id: "dn-600-3", difficulty: 600, q: "ما اسم الجهاز الذي يحمي الأسنان ليلاً من صرير الأسنان؟", a: "Night Guard" }
-    ]
-  },
-
-  // =========================
-  // 🩺 طب عام
-  // =========================
-  {
-    id: "medicine",
-    title: "طب عام",
-    thumb: null,
-    questions: [
-      { id: "md-200-1", difficulty: 200, q: "ما العضو الذي يضخ الدم في الجسم؟", a: "القلب" },
-      { id: "md-200-2", difficulty: 200, q: "كم عدد غرف القلب؟", a: "4" },
-      { id: "md-200-3", difficulty: 200, q: "ما اسم أكبر عضو في جسم الإنسان؟", a: "الجلد" },
-
-      { id: "md-400-1", difficulty: 400, q: "ما اسم هرمون تنظيم السكر في الدم؟", a: "الإنسولين" },
-      { id: "md-400-2", difficulty: 400, q: "ما اسم ضغط الدم الطبيعي تقريبًا (قراءة شائعة)؟", a: "120/80" },
-      { id: "md-400-3", difficulty: 400, q: "ما اسم الفيتامين الذي يُنتج عبر الشمس؟", a: "Vitamin D" },
-
-      { id: "md-600-1", difficulty: 600, q: "ما اسم الخلايا التي تنقل الأكسجين؟", a: "كريات الدم الحمراء" },
-      { id: "md-600-2", difficulty: 600, q: "ما اسم الجزء المسؤول عن التوازن في الدماغ؟", a: "المخيخ" },
-      { id: "md-600-3", difficulty: 600, q: "ما اسم فصيلة الدم التي تُسمى (المعطي العام)؟", a: "O-" }
-    ]
-  },
-
-  // =========================
-  // 🌸 عطور عربية
-  // =========================
-  {
-    id: "arab_perfumes",
-    title: "عطور عربية",
-    thumb: null,
-    questions: [
-      { id: "ap-200-1", difficulty: 200, q: "ما المكوّن الأشهر في العطور العربية ويُحرق كبخور؟", a: "العود" },
-      { id: "ap-200-2", difficulty: 200, q: "ما اسم الرائحة الحلوة الداكنة المشهورة عربيًا؟", a: "العنبر" },
-      { id: "ap-200-3", difficulty: 200, q: "ما اسم الزيت العطري المستخرج من الورد؟", a: "ماء الورد" },
-
-      { id: "ap-400-1", difficulty: 400, q: "ما اسم المادة العطرية الحيوانية (مصطلح مشهور)؟", a: "المسك" },
-      { id: "ap-400-2", difficulty: 400, q: "ما نوع العطر الأكثر تركيزًا عادةً؟", a: "Parfum" },
-      { id: "ap-400-3", difficulty: 400, q: "ما اسم رائحة البخور المخلوط بالعطور غالبًا؟", a: "بخور" },
-
-      { id: "ap-600-1", difficulty: 600, q: "أي رائحة تُعد 'خشبية' بامتياز في الخليج؟", a: "العود" },
-      { id: "ap-600-2", difficulty: 600, q: "ما اسم العطر الزيتي العربي التقليدي (مصطلح)؟", a: "دهن" },
-      { id: "ap-600-3", difficulty: 600, q: "ما اسم العطر الذي يُستخدم كبصمة ثابتة (مصطلح)؟", a: "Fixative" }
-    ]
-  },
-
-  // =========================
-  // 🌍 عطور عالمية
-  // =========================
-  {
-    id: "global_perfumes",
-    title: "عطور عالمية",
-    thumb: null,
-    questions: [
-      { id: "gp-200-1", difficulty: 200, q: "ما اسم المكوّن الزهري الأشهر في العطور؟", a: "الياسمين" },
-      { id: "gp-200-2", difficulty: 200, q: "ما اسم الرائحة الحمضية الأشهر؟", a: "البرغموت" },
-      { id: "gp-200-3", difficulty: 200, q: "ما اسم نوع العطر الأخف من EDP غالبًا؟", a: "EDT" },
-
-      { id: "gp-400-1", difficulty: 400, q: "اختصار EDP يعني ماذا؟", a: "Eau de Parfum" },
-      { id: "gp-400-2", difficulty: 400, q: "ما اسم رائحة 'Vanilla' بالعربية؟", a: "فانيلا" },
-      { id: "gp-400-3", difficulty: 400, q: "ما اسم الرائحة الجلدية (مصطلح)؟", a: "Leather" },
-
-      { id: "gp-600-1", difficulty: 600, q: "ما اسم عائلة الروائح التي تضم الباتشولي والفيتيفر غالبًا؟", a: "Woody" },
-      { id: "gp-600-2", difficulty: 600, q: "ما اسم رائحة الــOud بالإنجليزية؟", a: "Oud" },
-      { id: "gp-600-3", difficulty: 600, q: "ما اسم الرائحة 'Iris' بالعربية؟", a: "السوسن" }
-    ]
-  },
-
-  // =========================
-  // 🦅 Falcons
-  // =========================
-  {
-    id: "falcons",
-    title: "Falcons",
-    thumb: null,
-    questions: [
-      { id: "fc-200-1", difficulty: 200, q: "ما اسم طائر الصيد الأشهر في الخليج؟", a: "الصقر" },
-      { id: "fc-200-2", difficulty: 200, q: "ما اسم عملية تدريب الصقر على الصيد؟", a: "التدريب" },
-      { id: "fc-200-3", difficulty: 200, q: "ما اسم أداة تغطية عين الصقر؟", a: "البرقع" },
-
-      { id: "fc-400-1", difficulty: 400, q: "ما اسم القفاز الذي يُستخدم لحمل الصقر؟", a: "المنقلة" },
-      { id: "fc-400-2", difficulty: 400, q: "ما اسم منطقة جلوس الصقر (المجثم)؟", a: "الوكر" },
-      { id: "fc-400-3", difficulty: 400, q: "ما اسم الطُعم الذي يُستخدم في التدريب غالباً؟", a: "الملواح" },
-
-      { id: "fc-600-1", difficulty: 600, q: "ما اسم الصقر الأسرع في العالم؟", a: "الشاهين" },
-      { id: "fc-600-2", difficulty: 600, q: "ما اسم الصقر المستخدم بكثرة للصيد (مصطلح مشهور خليجي)؟", a: "الحر" },
-      { id: "fc-600-3", difficulty: 600, q: "ما اسم فئة الطيور التي ينتمي لها الصقر؟", a: "الجارحة" }
-    ]
-  },
-
-  // =========================
-  // 👶 مشاهير صغار
-  // =========================
-  {
-    id: "young_stars",
-    title: "مشاهير صغار",
-    thumb: null,
-    questions: [
-      { id: "ys-200-1", difficulty: 200, q: "من هو الطفل الساحر في Harry Potter؟", a: "Harry" },
-      { id: "ys-200-2", difficulty: 200, q: "من هو بطل Home Alone؟", a: "Kevin" },
-      { id: "ys-200-3", difficulty: 200, q: "ما اسم البطلة الصغيرة في Matilda؟", a: "Matilda" },
-
-      { id: "ys-400-1", difficulty: 400, q: "في Stranger Things: ما اسم الفتاة ذات القدرات؟", a: "Eleven" },
-      { id: "ys-400-2", difficulty: 400, q: "في The Karate Kid: ما اسم الطالب؟ (الأشهر)", a: "Daniel" },
-      { id: "ys-400-3", difficulty: 400, q: "في The Lion King: ما اسم شبل الأسد؟", a: "Simba" },
-
-      { id: "ys-600-1", difficulty: 600, q: "في Spirited Away: ما اسم البطلة؟", a: "Chihiro" },
-      { id: "ys-600-2", difficulty: 600, q: "في Up: ما اسم الولد الكشاف؟", a: "Russell" },
-      { id: "ys-600-3", difficulty: 600, q: "في Coco: ما اسم الولد بطل الفيلم؟", a: "Miguel" }
-    ]
-  },
-
-  // =========================
-  // ⚽ كرة قدم عالمية
-  // =========================
-  {
-    id: "football_world",
-    title: "كرة قدم عالمية",
-    thumb: null,
-    questions: [
-      { id: "fw-200-1", difficulty: 200, q: "كم لاعب في الفريق داخل الملعب؟", a: "11" },
-      { id: "fw-200-2", difficulty: 200, q: "ما اسم البطولة الأوروبية للأندية (اختصار مشهور)؟", a: "UCL" },
-      { id: "fw-200-3", difficulty: 200, q: "ما اسم أعلى دوري إنجليزي؟", a: "Premier League" },
-
-      { id: "fw-400-1", difficulty: 400, q: "من الهداف التاريخي لدوري أبطال أوروبا؟", a: "Cristiano Ronaldo" },
-      { id: "fw-400-2", difficulty: 400, q: "أي نادي يُعرف بلقب The Reds؟ (الأشهر)", a: "Liverpool" },
-      { id: "fw-400-3", difficulty: 400, q: "ما اسم الجائزة الفردية الأهم عالميًا للاعب؟", a: "Ballon d'Or" },
-
-      { id: "fw-600-1", difficulty: 600, q: "أي منتخب فاز بكأس العالم 2014؟", a: "ألمانيا" },
-      { id: "fw-600-2", difficulty: 600, q: "أي نادي يُعرف بلقب The Old Lady؟", a: "Juventus" },
-      { id: "fw-600-3", difficulty: 600, q: "ما اسم المسابقة الأوروبية الثانية للأندية (اسم مشهور)؟", a: "Europa League" }
-    ]
-  },
-
-  // =========================
-  // 🇦🇪 كرة قدم إماراتية
-  // =========================
-  {
-    id: "football_uae",
-    title: "كرة قدم إماراتية",
-    thumb: null,
-    questions: [
-      { id: "fu-200-1", difficulty: 200, q: "ما اسم المنتخب الوطني لدولة الإمارات؟", a: "منتخب الإمارات" },
-      { id: "fu-200-2", difficulty: 200, q: "ما اسم أعلى مسابقة دوري في الإمارات؟ (اسم شائع)", a: "دوري أدنوك للمحترفين" },
-      { id: "fu-200-3", difficulty: 200, q: "ما اسم لون علم الإمارات؟ (اذكر لونًا واحدًا صحيحًا)", a: "الأحمر" },
-
-      { id: "fu-400-1", difficulty: 400, q: "ما اسم نادي إماراتي معروف بلقب (الزعيم)؟", a: "العين" },
-      { id: "fu-400-2", difficulty: 400, q: "ما اسم نادي إماراتي معروف بلقب (الملك)؟", a: "الشارقة" },
-      { id: "fu-400-3", difficulty: 400, q: "ما اسم مدينة نادي اتحاد كلباء؟", a: "كلباء" },
-
-      { id: "fu-600-1", difficulty: 600, q: "ما اسم البطولة الخليجية للمنتخبات؟", a: "كأس الخليج" },
-      { id: "fu-600-2", difficulty: 600, q: "ما اسم ملعب نادي العين (اسم مشهور)؟", a: "هزاع بن زايد" },
-      { id: "fu-600-3", difficulty: 600, q: "ما اسم قارة الإمارات؟", a: "آسيا" }
-    ]
-  },
-
-  // =========================
-  // 🏆 UCL 24/25 (عام)
-  // =========================
-  {
-    id: "ucl",
-    title: "UCL 24/25",
-    thumb: null,
-    questions: [
-      { id: "uc-200-1", difficulty: 200, q: "ما اسم البطولة؟ (اختصار)", a: "UCL" },
-      { id: "uc-200-2", difficulty: 200, q: "كم فريق في الملعب من كل جهة؟", a: "11" },
-      { id: "uc-200-3", difficulty: 200, q: "ما اسم الاتحاد المنظم؟", a: "UEFA" },
-
-      { id: "uc-400-1", difficulty: 400, q: "من أكثر لاعب سجل أهداف في UCL تاريخيًا؟", a: "Cristiano Ronaldo" },
-      { id: "uc-400-2", difficulty: 400, q: "ما اسم النشيد الشهير قبل مباريات UCL؟", a: "UEFA Champions League Anthem" },
-      { id: "uc-400-3", difficulty: 400, q: "ما اسم الدور قبل النهائي؟", a: "نصف النهائي" },
-
-      { id: "uc-600-1", difficulty: 600, q: "ما اسم الملعب الذي يُعرف بـ Wembley يقع في أي مدينة؟", a: "لندن" },
-      { id: "uc-600-2", difficulty: 600, q: "كم شوط في مباراة كرة القدم الرسمية؟", a: "2" },
-      { id: "uc-600-3", difficulty: 600, q: "ما اسم الركلة من علامة 11 متر؟", a: "ضربة جزاء" }
-    ]
-  },
-
-  // =========================
-  // 🏆 PL 24/25 (عام)
-  // =========================
-  {
-    id: "pl",
-    title: "PL 24/25",
-    thumb: null,
-    questions: [
-      { id: "pl-200-1", difficulty: 200, q: "اختصار PL يشير إلى ماذا؟", a: "Premier League" },
-      { id: "pl-200-2", difficulty: 200, q: "في أي دولة يُلعب الدوري الإنجليزي؟", a: "إنجلترا" },
-      { id: "pl-200-3", difficulty: 200, q: "كم فريق عادةً في PL؟", a: "20" },
-
-      { id: "pl-400-1", difficulty: 400, q: "ما اسم مدينة نادي Manchester United؟", a: "مانشستر" },
-      { id: "pl-400-2", difficulty: 400, q: "ما اسم ملعب Liverpool؟", a: "Anfield" },
-      { id: "pl-400-3", difficulty: 400, q: "ما اسم ملعب Arsenal؟", a: "Emirates" },
-
-      { id: "pl-600-1", difficulty: 600, q: "لقب نادي Newcastle United الشهير؟", a: "The Magpies" },
-      { id: "pl-600-2", difficulty: 600, q: "ما اسم ديربي مانشستر؟", a: "Manchester Derby" },
-      { id: "pl-600-3", difficulty: 600, q: "ما اسم الحكم المساعد بالفيديو اختصارًا؟", a: "VAR" }
-    ]
-  },
-
-  // =========================
-  // 🏟️ ملاعب
-  // =========================
-  {
-    id: "stadiums",
-    title: "ملاعب",
-    thumb: null,
-    questions: [
-      { id: "st-200-1", difficulty: 200, q: "ما اسم ملعب برشلونة؟", a: "Camp Nou" },
-      { id: "st-200-2", difficulty: 200, q: "ما اسم ملعب ريال مدريد؟", a: "Santiago Bernabéu" },
-      { id: "st-200-3", difficulty: 200, q: "ما اسم ملعب مانشستر يونايتد؟", a: "Old Trafford" },
-
-      { id: "st-400-1", difficulty: 400, q: "في أي مدينة يقع ملعب Wembley؟", a: "لندن" },
-      { id: "st-400-2", difficulty: 400, q: "في أي مدينة يقع ملعب San Siro؟", a: "ميلان" },
-      { id: "st-400-3", difficulty: 400, q: "في أي مدينة يقع ملعب Allianz Arena؟", a: "ميونخ" },
-
-      { id: "st-600-1", difficulty: 600, q: "ما اسم ملعب Borussia Dortmund؟", a: "Signal Iduna Park" },
-      { id: "st-600-2", difficulty: 600, q: "ما اسم ملعب Ajax؟", a: "Johan Cruyff Arena" },
-      { id: "st-600-3", difficulty: 600, q: "ما اسم ملعب Juventus الحالي؟", a: "Allianz Stadium" }
-    ]
-  },
-
-  // =========================
-  // 🎙️ صوت المعلق
-  // =========================
-  {
-    id: "commentator",
-    title: "صوت المعلق",
-    thumb: null,
-    questions: [
-      { id: "cm-200-1", difficulty: 200, q: "كيف يقول المعلق عادةً عند تسجيل هدف؟", a: "جوووول" },
-      { id: "cm-200-2", difficulty: 200, q: "ما اسم اللاعب الذي يُقال عنه 'القناص' غالبًا؟", a: "الهداف" },
-      { id: "cm-200-3", difficulty: 200, q: "ما اسم التسلل بالإنجليزية؟", a: "Offside" },
-
-      { id: "cm-400-1", difficulty: 400, q: "ما اسم الركنية بالإنجليزية؟", a: "Corner" },
-      { id: "cm-400-2", difficulty: 400, q: "ما اسم ضربة البداية بالإنجليزية؟", a: "Kick-off" },
-      { id: "cm-400-3", difficulty: 400, q: "ما اسم رمية التماس بالإنجليزية؟", a: "Throw-in" },
-
-      { id: "cm-600-1", difficulty: 600, q: "ما اسم 'هاتريك' يعني؟", a: "تسجيل 3 أهداف" },
-      { id: "cm-600-2", difficulty: 600, q: "ما اسم 'Clean Sheet' بالعربية؟", a: "شباك نظيفة" },
-      { id: "cm-600-3", difficulty: 600, q: "ما اسم 'Man of the Match' بالعربية؟", a: "رجل المباراة" }
-    ]
-  },
-
-  // =========================
-  // 👕 أطقم اللاعبين
-  // =========================
-  {
-    id: "kits",
-    title: "أطقم اللاعبين",
-    thumb: null,
-    questions: [
-      { id: "kt-200-1", difficulty: 200, q: "الطقم الأساسي لمنتخب البرازيل لونه؟", a: "أصفر" },
-      { id: "kt-200-2", difficulty: 200, q: "الطقم الأساسي لمنتخب إيطاليا لونه؟", a: "أزرق" },
-      { id: "kt-200-3", difficulty: 200, q: "طقم ريال مدريد الأساسي لونه؟", a: "أبيض" },
-
-      { id: "kt-400-1", difficulty: 400, q: "طقم برشلونة الأساسي غالبًا لونه؟", a: "أزرق وأحمر" },
-      { id: "kt-400-2", difficulty: 400, q: "طقم إنتر ميلان الأساسي غالبًا لونه؟", a: "أزرق وأسود" },
-      { id: "kt-400-3", difficulty: 400, q: "طقم ميلان الأساسي غالبًا لونه؟", a: "أحمر وأسود" },
-
-      { id: "kt-600-1", difficulty: 600, q: "طقم مانشستر سيتي الأساسي غالبًا لونه؟", a: "سماوي" },
-      { id: "kt-600-2", difficulty: 600, q: "طقم أتلتيكو مدريد الأساسي غالبًا لونه؟", a: "أحمر وأبيض" },
-      { id: "kt-600-3", difficulty: 600, q: "طقم يوفنتوس الأساسي غالبًا لونه؟", a: "أبيض وأسود" }
-    ]
-  },
-
-  // =========================
-  // 🏟️ الكلاسيكو
-  // =========================
-  {
-    id: "clasico",
-    title: "الكلاسيكو",
-    thumb: null,
-    questions: [
-      { id: "cl-200-1", difficulty: 200, q: "الكلاسيكو الأشهر يكون بين أي ناديين؟", a: "ريال مدريد وبرشلونة" },
-      { id: "cl-200-2", difficulty: 200, q: "في أي دولة يُلعب الكلاسيكو؟", a: "إسبانيا" },
-      { id: "cl-200-3", difficulty: 200, q: "ما اسم دوري إسبانيا؟", a: "La Liga" },
-
-      { id: "cl-400-1", difficulty: 400, q: "ما اسم ملعب برشلونة؟", a: "Camp Nou" },
-      { id: "cl-400-2", difficulty: 400, q: "ما اسم ملعب ريال مدريد؟", a: "Santiago Bernabéu" },
-      { id: "cl-400-3", difficulty: 400, q: "ما لون طقم برشلونة الأساسي؟", a: "أزرق وأحمر" },
-
-      { id: "cl-600-1", difficulty: 600, q: "ما اسم مدينة ريال مدريد؟", a: "مدريد" },
-      { id: "cl-600-2", difficulty: 600, q: "ما اسم مدينة برشلونة؟", a: "برشلونة" },
-      { id: "cl-600-3", difficulty: 600, q: "ما اسم الاتحاد المنظّم لكرة القدم في إسبانيا؟ (اختصار)", a: "RFEF" }
-    ]
-  },
-
-  // =========================
-  // 🏆 كأس الخليج
-  // =========================
-  {
-    id: "gulf_cup",
-    title: "كأس الخليج",
-    thumb: null,
-    questions: [
-      { id: "gc-200-1", difficulty: 200, q: "كأس الخليج بطولة تخص أي منطقة؟", a: "الخليج" },
-      { id: "gc-200-2", difficulty: 200, q: "كم شوط في مباراة رسمية؟", a: "2" },
-      { id: "gc-200-3", difficulty: 200, q: "هل تُحسم المباراة بركلات ترجيح إذا انتهى النهائي بالتعادل؟", a: "نعم" },
-
-      { id: "gc-400-1", difficulty: 400, q: "ما اسم كرة القدم الرسمية يُقاس قطرها تقريبًا بوحدة؟", a: "سم" },
-      { id: "gc-400-2", difficulty: 400, q: "ما اسم الاتحاد القاري للإمارات؟", a: "AFC" },
-      { id: "gc-400-3", difficulty: 400, q: "ما اسم دولة خليجية عاصمتها الدوحة؟", a: "قطر" },
-
-      { id: "gc-600-1", difficulty: 600, q: "ما اسم دولة خليجية عاصمتها المنامة؟", a: "البحرين" },
-      { id: "gc-600-2", difficulty: 600, q: "ما اسم دولة خليجية عاصمتها مسقط؟", a: "عُمان" },
-      { id: "gc-600-3", difficulty: 600, q: "ما اسم دولة خليجية عاصمتها الكويت؟", a: "الكويت" }
-    ]
-  },
-
-  // =========================
-  // 🏆 كوبا أمريكا
-  // =========================
-  {
-    id: "copa_america",
-    title: "كوبا أمريكا",
-    thumb: null,
-    questions: [
-      { id: "ca-200-1", difficulty: 200, q: "كوبا أمريكا بطولة تخص أي قارة؟", a: "أمريكا الجنوبية" },
-      { id: "ca-200-2", difficulty: 200, q: "منتخب الأرجنتين قارتُه؟", a: "أمريكا الجنوبية" },
-      { id: "ca-200-3", difficulty: 200, q: "منتخب البرازيل قارتُه؟", a: "أمريكا الجنوبية" },
-
-      { id: "ca-400-1", difficulty: 400, q: "ما عاصمة البرازيل؟", a: "برازيليا" },
-      { id: "ca-400-2", difficulty: 400, q: "ما عاصمة الأرجنتين؟", a: "بوينس آيرس" },
-      { id: "ca-400-3", difficulty: 400, q: "ما عاصمة تشيلي؟", a: "سانتياغو" },
-
-      { id: "ca-600-1", difficulty: 600, q: "ما عاصمة أوروغواي؟", a: "مونتيفيديو" },
-      { id: "ca-600-2", difficulty: 600, q: "ما عاصمة كولومبيا؟", a: "بوغوتا" },
-      { id: "ca-600-3", difficulty: 600, q: "ما عاصمة بيرو؟", a: "ليما" }
-    ]
-  },
-
-  // =========================
-  // 🏆 أهم أوروبا
-  // =========================
-  {
-    id: "euro_trophies",
-    title: "أهم أوروبا",
-    thumb: null,
-    questions: [
-      { id: "eu-200-1", difficulty: 200, q: "ما اسم البطولة الأوروبية للمنتخبات؟", a: "اليورو" },
-      { id: "eu-200-2", difficulty: 200, q: "ما اسم بطولة الأندية الأوروبية الأولى؟", a: "UCL" },
-      { id: "eu-200-3", difficulty: 200, q: "ما اسم الدوري الإسباني؟", a: "La Liga" },
-
-      { id: "eu-400-1", difficulty: 400, q: "ما اسم الدوري الإيطالي؟", a: "Serie A" },
-      { id: "eu-400-2", difficulty: 400, q: "ما اسم الدوري الألماني؟", a: "Bundesliga" },
-      { id: "eu-400-3", difficulty: 400, q: "ما اسم الدوري الفرنسي؟", a: "Ligue 1" },
-
-      { id: "eu-600-1", difficulty: 600, q: "ما اسم البطولة الأوروبية الثالثة للأندية؟", a: "Conference League" },
-      { id: "eu-600-2", difficulty: 600, q: "ما اسم كأس إسبانيا؟", a: "Copa del Rey" },
-      { id: "eu-600-3", difficulty: 600, q: "ما اسم كأس إنجلترا الأقدم؟", a: "FA Cup" }
-    ]
-  },
-
-  // =========================
-  // 🧒 لاعبين صغار
-  // =========================
-  {
-    id: "young_players",
-    title: "لاعبين صغار",
-    thumb: null,
-    questions: [
-      { id: "yp-200-1", difficulty: 200, q: "ما اسم الجائزة لأفضل لاعب شاب في كرة القدم (مصطلح عام)؟", a: "Golden Boy" },
-      { id: "yp-200-2", difficulty: 200, q: "ما معنى U-23 في كرة القدم؟", a: "تحت 23" },
-      { id: "yp-200-3", difficulty: 200, q: "ما معنى Academy في الأندية؟", a: "أكاديمية" },
-
-      { id: "yp-400-1", difficulty: 400, q: "ما اسم مركز اللاعب الذي يلعب خلف المهاجم؟", a: "صانع ألعاب" },
-      { id: "yp-400-2", difficulty: 400, q: "ما اسم مركز اللاعب الذي يحمي المرمى؟", a: "حارس" },
-      { id: "yp-400-3", difficulty: 400, q: "ما اسم مركز اللاعب على الطرف؟", a: "جناح" },
-
-      { id: "yp-600-1", difficulty: 600, q: "ما اسم المركز DM اختصارًا؟", a: "Defensive Midfielder" },
-      { id: "yp-600-2", difficulty: 600, q: "ما اسم المركز ST اختصارًا؟", a: "Striker" },
-      { id: "yp-600-3", difficulty: 600, q: "ما اسم المركز CB اختصارًا؟", a: "Center Back" }
-    ]
-  },
-
-  // =========================
-  // 🧩 تشكيلات
-  // =========================
-  {
-    id: "formations",
-    title: "تشكيلات",
-    thumb: null,
-    questions: [
-      { id: "fm-200-1", difficulty: 200, q: "في خطة 4-4-2 كم مدافع؟", a: "4" },
-      { id: "fm-200-2", difficulty: 200, q: "في خطة 4-3-3 كم مهاجم؟", a: "3" },
-      { id: "fm-200-3", difficulty: 200, q: "في خطة 3-5-2 كم لاعب وسط؟", a: "5" },
-
-      { id: "fm-400-1", difficulty: 400, q: "أي خطة تُعرف بالماس (Diamond) غالبًا؟", a: "4-4-2" },
-      { id: "fm-400-2", difficulty: 400, q: "في خطة 4-2-3-1 كم ارتكاز؟", a: "2" },
-      { id: "fm-400-3", difficulty: 400, q: "في خطة 5-3-2 كم ظهير/مدافع؟", a: "5" },
-
-      { id: "fm-600-1", difficulty: 600, q: "أي خطة تُستخدم كثيرًا للضغط العالي الحديثة؟ (إجابة شائعة)", a: "4-3-3" },
-      { id: "fm-600-2", difficulty: 600, q: "في خطة 3-4-3 كم لاعب على الأطراف (Wing-backs غالبًا)؟", a: "2" },
-      { id: "fm-600-3", difficulty: 600, q: "ما اسم اللاعب الذي يربط الدفاع بالهجوم كثيرًا (مصطلح)؟", a: "Box-to-Box" }
-    ]
-  },
-
-  // =========================
-  // 👑 شعارات كروية
-  // =========================
-  {
-    id: "football_logos",
-    title: "شعارات كروية",
-    thumb: null,
-    questions: [
-      { id: "flg-200-1", difficulty: 200, q: "شعار نادي برشلونة يحتوي على اختصار أي مدينة؟", a: "FCB" },
-      { id: "flg-200-2", difficulty: 200, q: "شعار ريال مدريد غالباً يحتوي على تاج: نعم أم لا؟", a: "نعم" },
-      { id: "flg-200-3", difficulty: 200, q: "شعار ميلان ألوانه الأساسية؟", a: "أحمر وأسود" },
-
-      { id: "flg-400-1", difficulty: 400, q: "شعار إنتر ميلان ألوانه الأساسية؟", a: "أزرق وأسود" },
-      { id: "flg-400-2", difficulty: 400, q: "شعار ليفربول غالبًا يحتوي على أي طائر؟", a: "Liver bird" },
-      { id: "flg-400-3", difficulty: 400, q: "شعار تشيلسي غالبًا يحتوي على؟", a: "أسد" },
-
-      { id: "flg-600-1", difficulty: 600, q: "شعار يوفنتوس الحديث عبارة عن حرف؟", a: "J" },
-      { id: "flg-600-2", difficulty: 600, q: "شعار بايرن ميونخ يحتوي على ألوان ولاية؟", a: "بافاريا" },
-      { id: "flg-600-3", difficulty: 600, q: "شعار PSG يرمز لأي مدينة؟", a: "باريس" }
-    ]
-  },
-
-  // =========================
-  // 🧾 مسيرة لاعب (مباشر)
-  // =========================
-  {
-    id: "career",
-    title: "مسيرة لاعب",
-    thumb: null,
-    questions: [
-      { id: "cr-200-1", difficulty: 200, q: "ما اسم اللاعب المعروف بلقب CR7؟", a: "Cristiano Ronaldo" },
-      { id: "cr-200-2", difficulty: 200, q: "ما اسم اللاعب المعروف بلقب Leo؟", a: "Lionel Messi" },
-      { id: "cr-200-3", difficulty: 200, q: "من هو اللاعب الذي يُعرف بلقب King في البرازيل تاريخيًا؟", a: "Pelé" },
-
-      { id: "cr-400-1", difficulty: 400, q: "في أي منتخب لعب زيدان؟", a: "فرنسا" },
-      { id: "cr-400-2", difficulty: 400, q: "في أي منتخب لعب مارادونا؟", a: "الأرجنتين" },
-      { id: "cr-400-3", difficulty: 400, q: "في أي منتخب لعب يوهان كرويف؟", a: "هولندا" },
-
-      { id: "cr-600-1", difficulty: 600, q: "من هو اللاعب المعروف بلقب Ibracadabra؟", a: "Zlatan Ibrahimović" },
-      { id: "cr-600-2", difficulty: 600, q: "من هو اللاعب المعروف بلقب The Pharaoh؟", a: "Mohamed Salah" },
-      { id: "cr-600-3", difficulty: 600, q: "من هو اللاعب المعروف بلقب El Niño؟", a: "Fernando Torres" }
-    ]
-  },
-
-  // =========================
-  // 🎭 أنمي (عام)
-  // =========================
-  {
-    id: "anime",
-    title: "أنمي",
-    thumb: null,
-    questions: [
-      { id: "an-200-1", difficulty: 200, q: "ما اسم البطل في Naruto؟", a: "Naruto Uzumaki" },
-      { id: "an-200-2", difficulty: 200, q: "ما اسم بطل One Piece؟", a: "Monkey D. Luffy" },
-      { id: "an-200-3", difficulty: 200, q: "ما اسم بطل Demon Slayer؟", a: "Tanjiro Kamado" },
-
-      { id: "an-400-1", difficulty: 400, q: "ما اسم القوة في Attack on Titan التي تمنح التحول؟", a: "Titan Power" },
-      { id: "an-400-2", difficulty: 400, q: "ما اسم منظمة الصيادين في Hunter x Hunter؟", a: "Hunter Association" },
-      { id: "an-400-3", difficulty: 400, q: "ما اسم المنظمة الشريرة الشهيرة في Naruto؟", a: "Akatsuki" },
-
-      { id: "an-600-1", difficulty: 600, q: "في One Piece: ما اسم فاكهة لوفي؟ (الاسم الشائع القديم)", a: "Gomu Gomu no Mi" },
-      { id: "an-600-2", difficulty: 600, q: "في Bleach: ما اسم سيف إيتشيغو الأساسي؟", a: "Zangetsu" },
-      { id: "an-600-3", difficulty: 600, q: "في Pokémon: ما اسم المدرب الأشهر في الأنمي؟", a: "Ash Ketchum" }
-    ]
-  },
-
-  // =========================
-  // 👤 شخصية أنمي
-  // =========================
-  {
-    id: "anime_character",
-    title: "شخصية أنمي",
-    thumb: null,
-    questions: [
-      { id: "ac-200-1", difficulty: 200, q: "من هو صاحب قبعة القش؟", a: "Luffy" },
-      { id: "ac-200-2", difficulty: 200, q: "من هو صاحب الشارينغان الأشهر في Naruto؟ (اسم واحد صحيح)", a: "Sasuke" },
-      { id: "ac-200-3", difficulty: 200, q: "من هو قائد فريق الاستطلاع الأشهر؟", a: "Erwin Smith" },
-
-      { id: "ac-400-1", difficulty: 400, q: "من هو خصم تانجيرو الرئيسي من الشياطين؟ (اسم عام)", a: "Muzan Kibutsuji" },
-      { id: "ac-400-2", difficulty: 400, q: "من هو قائد الغوتي 13 الأشهر في Bleach؟", a: "Yamamoto" },
-      { id: "ac-400-3", difficulty: 400, q: "من هو سياف الشياطين الذي يستخدم تنفس الماء في البداية؟", a: "Tanjiro" },
-
-      { id: "ac-600-1", difficulty: 600, q: "من هو نائب القائد في فريق الاستطلاع (اسم مشهور)؟", a: "Levi Ackerman" },
-      { id: "ac-600-2", difficulty: 600, q: "في One Piece: من هو حامل سيف 'Wado Ichimonji'؟", a: "Roronoa Zoro" },
-      { id: "ac-600-3", difficulty: 600, q: "في Naruto: من هو معلم ناروتو (السينسي الأشهر)؟", a: "Kakashi Hatake" }
-    ]
-  },
-
-  // =========================
-  // 🟦 Bleach
-  // =========================
-  {
-    id: "bleach",
-    title: "Bleach",
-    thumb: null,
-    questions: [
-      { id: "bl-200-1", difficulty: 200, q: "من هو بطل Bleach؟", a: "Ichigo Kurosaki" },
-      { id: "bl-200-2", difficulty: 200, q: "ما اسم عالم الأرواح في Bleach؟", a: "Soul Society" },
-      { id: "bl-200-3", difficulty: 200, q: "ما اسم سيف إيتشيغو؟", a: "Zangetsu" },
-
-      { id: "bl-400-1", difficulty: 400, q: "ما اسم منظمة الأعداء الرئيسية (كاسم عام)؟", a: "Arrancar" },
-      { id: "bl-400-2", difficulty: 400, q: "ما اسم التحول الذي يرتديه الهولو؟", a: "Hollow Mask" },
-      { id: "bl-400-3", difficulty: 400, q: "ما اسم رتبة قادة الشينيغامي؟", a: "Captains" },
-
-      { id: "bl-600-1", difficulty: 600, q: "ما اسم السلاح النهائي لسيف الشينيغامي؟", a: "Bankai" },
-      { id: "bl-600-2", difficulty: 600, q: "ما اسم السلاح الأولي لسيف الشينيغامي؟", a: "Shikai" },
-      { id: "bl-600-3", difficulty: 600, q: "ما اسم سيف Byakuya Kuchiki؟", a: "Senbonzakura" }
-    ]
-  },
-
-  // =========================
-  // 🟥 Naruto
-  // =========================
-  {
-    id: "naruto",
-    title: "Naruto",
-    thumb: null,
-    questions: [
-      { id: "nt-200-1", difficulty: 200, q: "ما اسم قرية ناروتو؟", a: "Konoha" },
-      { id: "nt-200-2", difficulty: 200, q: "ما اسم صديق/خصم ناروتو الأساسي؟", a: "Sasuke" },
-      { id: "nt-200-3", difficulty: 200, q: "ما اسم المعلم المباشر لفريق 7؟", a: "Kakashi" },
-
-      { id: "nt-400-1", difficulty: 400, q: "ما اسم منظمة الأكاتسكي؟", a: "Akatsuki" },
-      { id: "nt-400-2", difficulty: 400, q: "ما اسم تقنية دوران الشاكرا الشهيرة لناروتو؟", a: "Rasengan" },
-      { id: "nt-400-3", difficulty: 400, q: "ما اسم الوحش داخل ناروتو؟", a: "Kurama" },
-
-      { id: "nt-600-1", difficulty: 600, q: "ما اسم لقب هاشيراما؟", a: "إله الشينوبي" },
-      { id: "nt-600-2", difficulty: 600, q: "ما اسم عيون الإيتاتشي الأساسية؟", a: "Sharingan" },
-      { id: "nt-600-3", difficulty: 600, q: "ما اسم تقنية الانتقال الخاصة بـMinato؟", a: "Flying Raijin" }
-    ]
-  },
-
-  // =========================
-  // 🟩 One Piece
-  // =========================
-  {
-    id: "onepiece",
-    title: "One Piece",
-    thumb: null,
-    questions: [
-      { id: "op-200-1", difficulty: 200, q: "ما اسم بطل One Piece؟", a: "Luffy" },
-      { id: "op-200-2", difficulty: 200, q: "ما اسم سفينة قبعة القش الحالية (الأشهر)؟", a: "Thousand Sunny" },
-      { id: "op-200-3", difficulty: 200, q: "ما اسم السيف الأشهر لزورو (واحد صحيح)؟", a: "Wado Ichimonji" },
-
-      { id: "op-400-1", difficulty: 400, q: "ما اسم الطاهي في طاقم قبعة القش؟", a: "Sanji" },
-      { id: "op-400-2", difficulty: 400, q: "ما اسم الملاح/ة في الطاقم؟", a: "Nami" },
-      { id: "op-400-3", difficulty: 400, q: "ما اسم طبيب الطاقم؟", a: "Chopper" },
-
-      { id: "op-600-1", difficulty: 600, q: "بماذا تُلقب جزيرة هاتشينوسو؟", a: "جزيرة القراصنة" },
-      { id: "op-600-2", difficulty: 600, q: "ما اسم القوة العامة التي تُسمى 'روح/إرادة' (مصطلح)؟", a: "Haki" },
-      { id: "op-600-3", difficulty: 600, q: "ما اسم القائد/القرصان المعروف بلقب 'اللحية البيضاء'؟", a: "Whitebeard" }
-    ]
-  },
-
-  // =========================
-  // 🟩 Attack on Titan
-  // =========================
-  {
-    id: "aot",
-    title: "Attack on Titan",
-    thumb: null,
-    questions: [
-      { id: "at-200-1", difficulty: 200, q: "ما اسم بطل Attack on Titan؟", a: "Eren Yeager" },
-      { id: "at-200-2", difficulty: 200, q: "ما اسم أقوى جندي في الفيلق (المعروف)؟", a: "Levi" },
-      { id: "at-200-3", difficulty: 200, q: "ما اسم القائدة/الصديقة الرئيسية لإيرين؟", a: "Mikasa" },
-
-      { id: "at-400-1", difficulty: 400, q: "ما اسم قائد فيلق الاستطلاع الأشهر؟", a: "Erwin Smith" },
-      { id: "at-400-2", difficulty: 400, q: "ما اسم المدينة داخل السور التي عاش فيها إيرين بداية؟", a: "Shiganshina" },
-      { id: "at-400-3", difficulty: 400, q: "ما اسم الجهاز المستخدم للتنقل بالهواء؟", a: "ODM Gear" },
-
-      { id: "at-600-1", difficulty: 600, q: "ما اسم أكبر الأسوار الثلاثة؟", a: "Wall Maria" },
-      { id: "at-600-2", difficulty: 600, q: "ما اسم الكيان/المنطقة خارج الأسوار (اسم مشهور)؟", a: "Marley" },
-      { id: "at-600-3", difficulty: 600, q: "ما اسم لقب تيتان الأنثى؟", a: "Female Titan" }
-    ]
-  },
-
-  // =========================
-  // 🟩 Demon Slayer
-  // =========================
-  {
-    id: "demonslayer",
-    title: "Demon Slayer",
-    thumb: null,
-    questions: [
-      { id: "ds-200-1", difficulty: 200, q: "ما اسم بطل Demon Slayer؟", a: "Tanjiro" },
-      { id: "ds-200-2", difficulty: 200, q: "ما اسم أخت تانجيرو؟", a: "Nezuko" },
-      { id: "ds-200-3", difficulty: 200, q: "ما اسم الشرير الأعلى؟", a: "Muzan" },
-
-      { id: "ds-400-1", difficulty: 400, q: "ما اسم منظمة الصيادين؟", a: "Demon Slayer Corps" },
-      { id: "ds-400-2", difficulty: 400, q: "ما اسم تقنية التنفس الأساسية لتانجيرو بداية؟", a: "Water Breathing" },
-      { id: "ds-400-3", difficulty: 400, q: "ما اسم السيوف الخاصة بصيادي الشياطين (اسم عام)؟", a: "Nichirin" },
-
-      { id: "ds-600-1", difficulty: 600, q: "ما اسم عمود/هاشيرا اللهب؟", a: "Rengoku" },
-      { id: "ds-600-2", difficulty: 600, q: "ما اسم عمود/هاشيرا الماء؟", a: "Giyu Tomioka" },
-      { id: "ds-600-3", difficulty: 600, q: "ما اسم عمود/هاشيرا الحشرات؟", a: "Shinobu Kocho" }
-    ]
-  },
-
-  // =========================
-  // 🟩 Pokémon
-  // =========================
-  {
-    id: "pokemon",
-    title: "Pokémon",
-    thumb: null,
-    questions: [
-      { id: "pk-200-1", difficulty: 200, q: "ما اسم أشهر بوكيمون أصفر؟", a: "Pikachu" },
-      { id: "pk-200-2", difficulty: 200, q: "ما اسم المدرب الأشهر في الأنمي؟", a: "Ash" },
-      { id: "pk-200-3", difficulty: 200, q: "بوكيمون النار الشهير الذي يشبه التنين؟", a: "Charizard" },
-
-      { id: "pk-400-1", difficulty: 400, q: "ما اسم كرة الإمساك بالبوكيمون؟", a: "Poké Ball" },
-      { id: "pk-400-2", difficulty: 400, q: "ما نوع Pikachu؟", a: "Electric" },
-      { id: "pk-400-3", difficulty: 400, q: "ما نوع Squirtle؟", a: "Water" },
-
-      { id: "pk-600-1", difficulty: 600, q: "ما اسم التطور النهائي لـBulbasaur؟", a: "Venusaur" },
-      { id: "pk-600-2", difficulty: 600, q: "ما اسم التطور النهائي لـCharmander؟", a: "Charizard" },
-      { id: "pk-600-3", difficulty: 600, q: "ما اسم التطور النهائي لـSquirtle؟", a: "Blastoise" }
-    ]
-  },
-
-  // =========================
-  // 📿 إسلامي (عام)
-  // =========================
-  {
-    id: "islamic",
-    title: "إسلامي",
-    thumb: null,
-    questions: [
-      { id: "is-200-1", difficulty: 200, q: "كم عدد أركان الإسلام؟", a: "5" },
-      { id: "is-200-2", difficulty: 200, q: "كم عدد ركعات صلاة الفجر؟", a: "2" },
-      { id: "is-200-3", difficulty: 200, q: "ما اسم القبلة للمسلمين؟", a: "الكعبة" },
-
-      { id: "is-400-1", difficulty: 400, q: "ما اسم شهر الصيام؟", a: "رمضان" },
-      { id: "is-400-2", difficulty: 400, q: "ما اسم ليلة عظيمة في رمضان؟", a: "ليلة القدر" },
-      { id: "is-400-3", difficulty: 400, q: "ما اسم كتاب المسلمين المقدس؟", a: "القرآن" },
-
-      { id: "is-600-1", difficulty: 600, q: "كم عدد سور القرآن؟", a: "114" },
-      { id: "is-600-2", difficulty: 600, q: "ما اسم أطول سورة في القرآن؟", a: "البقرة" },
-      { id: "is-600-3", difficulty: 600, q: "ما اسم أقصر سورة في القرآن؟", a: "الكوثر" }
-    ]
-  },
-
-  // =========================
-  // 📖 القرآن
-  // =========================
-  {
-    id: "quran",
-    title: "القرآن",
-    thumb: null,
-    questions: [
-      { id: "qr-200-1", difficulty: 200, q: "كم جزء في القرآن؟", a: "30" },
-      { id: "qr-200-2", difficulty: 200, q: "كم سورة في القرآن؟", a: "114" },
-      { id: "qr-200-3", difficulty: 200, q: "ما أول سورة في المصحف؟", a: "الفاتحة" },
-
-      { id: "qr-400-1", difficulty: 400, q: "ما آخر سورة في المصحف؟", a: "الناس" },
-      { id: "qr-400-2", difficulty: 400, q: "ما أطول سورة؟", a: "البقرة" },
-      { id: "qr-400-3", difficulty: 400, q: "ما السورة التي تُسمى قلب القرآن؟ (شائع)", a: "يس" },
-
-      { id: "qr-600-1", difficulty: 600, q: "في أي سورة آية الكرسي؟", a: "البقرة" },
-      { id: "qr-600-2", difficulty: 600, q: "السورتان اللتان تُسمّيان المعوذتين؟", a: "الفلق والناس" },
-      { id: "qr-600-3", difficulty: 600, q: "ما السورة التي تبدأ بـ(تبارك الذي بيده الملك)؟", a: "الملك" }
-    ]
-  },
-
-  // =========================
-  // 📗 جزء عم
-  // =========================
-  {
-    id: "juz_amma",
-    title: "جزء عم",
-    thumb: null,
-    questions: [
-      { id: "ja-200-1", difficulty: 200, q: "جزء عم يبدأ بأي سورة؟", a: "النبأ" },
-      { id: "ja-200-2", difficulty: 200, q: "ما اسم أقصر سورة؟", a: "الكوثر" },
-      { id: "ja-200-3", difficulty: 200, q: "ما اسم سورة الإخلاص؟ (اسمها)", a: "الإخلاص" },
-
-      { id: "ja-400-1", difficulty: 400, q: "ما اسم السورة التي فيها (ويل للمطففين)؟", a: "المطففين" },
-      { id: "ja-400-2", difficulty: 400, q: "ما اسم السورة التي فيها (ألم نشرح لك صدرك)؟", a: "الشرح" },
-      { id: "ja-400-3", difficulty: 400, q: "ما اسم السورة التي فيها (لإيلاف قريش)؟", a: "قريش" },
-
-      { id: "ja-600-1", difficulty: 600, q: "ما اسم السورة التي فيها (إذا زلزلت الأرض زلزالها)؟", a: "الزلزلة" },
-      { id: "ja-600-2", difficulty: 600, q: "ما اسم السورة التي فيها (والضحى)؟", a: "الضحى" },
-      { id: "ja-600-3", difficulty: 600, q: "ما اسم السورة التي فيها (والعصر)؟", a: "العصر" }
-    ]
-  },
-
-  // =========================
-  // 📙 جزء تبارك
-  // =========================
-  {
-    id: "juz_tabarak",
-    title: "جزء تبارك",
-    thumb: null,
-    questions: [
-      { id: "jt-200-1", difficulty: 200, q: "السورة التي تبدأ بـ(تبارك الذي بيده الملك)؟", a: "الملك" },
-      { id: "jt-200-2", difficulty: 200, q: "هل سورة الملك في جزء تبارك؟", a: "نعم" },
-      { id: "jt-200-3", difficulty: 200, q: "هل جزء تبارك يأتي قبل جزء عم؟", a: "نعم" },
-
-      { id: "jt-400-1", difficulty: 400, q: "السورة التي تُعرف بسورة القلم اسمها؟", a: "القلم" },
-      { id: "jt-400-2", difficulty: 400, q: "السورة التي تبدأ بـ(ن والقلم)؟", a: "القلم" },
-      { id: "jt-400-3", difficulty: 400, q: "السورة التي تبدأ بـ(الحاقة) اسمها؟", a: "الحاقة" },
-
-      { id: "jt-600-1", difficulty: 600, q: "السورة التي تبدأ بـ(سأل سائل بعذاب واقع)؟", a: "المعارج" },
-      { id: "jt-600-2", difficulty: 600, q: "السورة التي تبدأ بـ(إنا أرسلنا نوحًا إلى قومه)؟", a: "نوح" },
-      { id: "jt-600-3", difficulty: 600, q: "السورة التي تبدأ بـ(قل أوحي إلي)؟", a: "الجن" }
-    ]
-  },
-
-  // =========================
-  // 📖 قصص الأنبياء
-  // =========================
-  {
-    id: "prophets",
-    title: "قصص الأنبياء",
-    thumb: null,
-    questions: [
-      { id: "pr-200-1", difficulty: 200, q: "من هو النبي الذي ابتلعه الحوت؟", a: "يونس" },
-      { id: "pr-200-2", difficulty: 200, q: "من هو خليل الله؟", a: "إبراهيم" },
-      { id: "pr-200-3", difficulty: 200, q: "من هو النبي الذي فلق البحر؟", a: "موسى" },
-
-      { id: "pr-400-1", difficulty: 400, q: "من هو النبي الذي أُرسل إلى عاد؟", a: "هود" },
-      { id: "pr-400-2", difficulty: 400, q: "من هو النبي الذي أُرسل إلى ثمود؟", a: "صالح" },
-      { id: "pr-400-3", difficulty: 400, q: "من هو النبي الذي بُنيت السفينة في قصته؟", a: "نوح" },
-
-      { id: "pr-600-1", difficulty: 600, q: "من هو النبي الذي أُلقي في النار فكانت بردًا وسلامًا؟", a: "إبراهيم" },
-      { id: "pr-600-2", difficulty: 600, q: "من هو النبي الذي كلمه الله؟ (لقب مشهور)", a: "موسى" },
-      { id: "pr-600-3", difficulty: 600, q: "من هو النبي الذي أُوتي الزبور؟", a: "داود" }
-    ]
-  },
-
-  // =========================
-  // 🕌 السيرة النبوية
-  // =========================
-  {
-    id: "seerah",
-    title: "السيرة النبوية",
-    thumb: null,
-    questions: [
-      { id: "sn-200-1", difficulty: 200, q: "ما اسم النبي محمد ﷺ (الاسم)؟", a: "محمد" },
-      { id: "sn-200-2", difficulty: 200, q: "ما اسم مدينة الهجرة؟", a: "المدينة المنورة" },
-      { id: "sn-200-3", difficulty: 200, q: "ما اسم مكة سابقًا في السيرة؟", a: "مكة" },
-
-      { id: "sn-400-1", difficulty: 400, q: "ما اسم الغار الذي اختبأ فيه النبي ﷺ وقت الهجرة؟", a: "غار ثور" },
-      { id: "sn-400-2", difficulty: 400, q: "ما اسم أول معركة في الإسلام؟ (مشهور)", a: "بدر" },
-      { id: "sn-400-3", difficulty: 400, q: "ما اسم القبيلة التي عذبت بلال؟ (مشهور)", a: "قريش" },
-
-      { id: "sn-600-1", difficulty: 600, q: "ما اسم صلح مشهور في السيرة؟", a: "صلح الحديبية" },
-      { id: "sn-600-2", difficulty: 600, q: "ما اسم عام الهجرة بالنسبة للتقويم؟", a: "1 هـ" },
-      { id: "sn-600-3", difficulty: 600, q: "ما اسم زوجة النبي ﷺ الأولى؟", a: "خديجة" }
-    ]
-  },
-
-  // =========================
-  // 📜 أحاديث
-  // =========================
-  {
-    id: "hadith",
-    title: "أحاديث",
-    thumb: null,
-    questions: [
-      { id: "hd-200-1", difficulty: 200, q: "من هو راوي حديث (إنما الأعمال بالنيات)؟", a: "عمر بن الخطاب" },
-      { id: "hd-200-2", difficulty: 200, q: "ما اسم أصح كتب الحديث؟ (المشهور)", a: "صحيح البخاري" },
-      { id: "hd-200-3", difficulty: 200, q: "ما اسم الكتاب الثاني الأشهر بعد البخاري؟", a: "صحيح مسلم" },
-
-      { id: "hd-400-1", difficulty: 400, q: "من هو مؤلف سنن أبي داود؟", a: "أبو داود" },
-      { id: "hd-400-2", difficulty: 400, q: "ما اسم جامع الترمذي؟", a: "سنن الترمذي" },
-      { id: "hd-400-3", difficulty: 400, q: "ما اسم كتاب حديث فيه 40 حديثاً شهيراً؟", a: "الأربعون النووية" },
-
-      { id: "hd-600-1", difficulty: 600, q: "من هو الإمام الذي جمع الأربعون النووية؟", a: "النووي" },
-      { id: "hd-600-2", difficulty: 600, q: "ما اسم الكتاب المعروف بـ(الموطأ)؟", a: "موطأ مالك" },
-      { id: "hd-600-3", difficulty: 600, q: "من هو مؤلف مسند أحمد؟", a: "أحمد بن حنبل" }
-    ]
-  },
-
-  // =========================
-  // 🎵 أناشيد
-  // =========================
-  {
-    id: "nasheeds",
-    title: "أناشيد",
-    thumb: null,
-    questions: [
-      { id: "ns-200-1", difficulty: 200, q: "هل النشيد عادةً يكون بدون موسيقى؟", a: "غالبًا نعم" },
-      { id: "ns-200-2", difficulty: 200, q: "ما اسم الإنشاد باللغة الإنجليزية؟", a: "Nasheed" },
-      { id: "ns-200-3", difficulty: 200, q: "ما اسم الأداء الجماعي في الإنشاد؟", a: "كورال" },
-
-      { id: "ns-400-1", difficulty: 400, q: "ما اسم الإيقاع اليدوي في الإنشاد؟", a: "دف" },
-      { id: "ns-400-2", difficulty: 400, q: "ما اسم مقدمة الإنشاد قبل الكلمات غالبًا؟", a: "لحن" },
-      { id: "ns-400-3", difficulty: 400, q: "ما اسم كلمة (Refrain) بالعربية في الإنشاد؟", a: "لازمة" },
-
-      { id: "ns-600-1", difficulty: 600, q: "ما اسم طبقة الصوت الأعلى للرجال؟ (مصطلح)", a: "Tenor" },
-      { id: "ns-600-2", difficulty: 600, q: "ما اسم طبقة الصوت الأعمق للرجال؟ (مصطلح)", a: "Bass" },
-      { id: "ns-600-3", difficulty: 600, q: "ما اسم الأداء الفردي؟", a: "Solo" }
-    ]
-  },
-
-  // =========================
-  // 🚗 سيارات
-  // =========================
-  {
-    id: "cars",
-    title: "سيارات",
-    thumb: null,
-    questions: [
-      { id: "crs-200-1", difficulty: 200, q: "ما اسم الشركة التي تصنع Corolla؟", a: "Toyota" },
-      { id: "crs-200-2", difficulty: 200, q: "ما اسم الشركة التي تصنع G-Class؟", a: "Mercedes" },
-      { id: "crs-200-3", difficulty: 200, q: "ما اسم الشركة التي تصنع Model S؟", a: "Tesla" },
-
-      { id: "crs-400-1", difficulty: 400, q: "ما اسم الشركة التي تصنع Civic؟", a: "Honda" },
-      { id: "crs-400-2", difficulty: 400, q: "ما اسم الشركة التي تصنع GT-R؟", a: "Nissan" },
-      { id: "crs-400-3", difficulty: 400, q: "ما اسم الشركة التي تصنع 911؟", a: "Porsche" },
-
-      { id: "crs-600-1", difficulty: 600, q: "ما اسم الشركة التي تصنع Aventador؟", a: "Lamborghini" },
-      { id: "crs-600-2", difficulty: 600, q: "ما اسم الشركة التي تصنع Chiron؟", a: "Bugatti" },
-      { id: "crs-600-3", difficulty: 600, q: "ما اسم الشركة التي تصنع Phantom؟", a: "Rolls-Royce" }
-    ]
-  },
-
-  // =========================
-  // 🌍 شعارات عالمية
-  // =========================
-  {
-    id: "global_logos",
-    title: "شعارات عالمية",
-    thumb: null,
-    questions: [
-      { id: "gl-200-1", difficulty: 200, q: "شعار التفاحة يخص أي شركة؟", a: "Apple" },
-      { id: "gl-200-2", difficulty: 200, q: "شعار الحرف M الأصفر يخص أي مطعم؟", a: "McDonald's" },
-      { id: "gl-200-3", difficulty: 200, q: "شعار حرف G الملون يخص أي شركة؟", a: "Google" },
-
-      { id: "gl-400-1", difficulty: 400, q: "شعار Swoosh يخص أي شركة؟", a: "Nike" },
-      { id: "gl-400-2", difficulty: 400, q: "شعار الأشرطة الثلاثة يخص أي شركة؟", a: "Adidas" },
-      { id: "gl-400-3", difficulty: 400, q: "شعار الطائر الأزرق سابقًا يخص أي منصة؟", a: "Twitter" },
-
-      { id: "gl-600-1", difficulty: 600, q: "شعار 'ring' الأزرق يخص أي شركة؟", a: "Intel" },
-      { id: "gl-600-2", difficulty: 600, q: "شعار 'N' الأحمر يخص أي منصة؟", a: "Netflix" },
-      { id: "gl-600-3", difficulty: 600, q: "شعار 'PS' يخص أي شركة/منصة؟", a: "PlayStation" }
-    ]
-  }
-]
-
-// ====== تحميل بنك المستخدم إن وُجد
-function loadBank(){
-  const user = loadJSON(K.bankUser, null);
-  const raw = Array.isArray(user) && user.length ? user : DEFAULT_BANK;
-
-  // تنظيف + توحيد + IDs + تحويل tier -> pts
-  const reported = new Set(loadJSON(K.reported, []));
-  const seen = new Set();
-  const out = [];
-
-  for (const it of raw){
-    if (!it || !it.cat || !it.q || !it.a) continue;
-    const tier = (it.tier||"medium").toLowerCase();
-    const pts = tier==="easy" ? 200 : tier==="hard" ? 600 : 400;
-
-    const cat = String(it.cat).trim();
-    const q = String(it.q).trim();
-    const a = String(it.a).trim();
-    const img = it.img ? String(it.img) : "";
-
-    const id = makeId({cat, q, a, img, tier});
-    if (reported.has(id)) continue;            // استبعاد المبلّغ عنها
-    if (seen.has(id)) continue;                // منع تكرار في البنك نفسه
-    seen.add(id);
-
-    out.push({id, cat, q, a, img, tier, pts});
-  }
-  return out;
+function saveState(){
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
 }
 
-function makeId(o){
-  // ID ثابت قوي (من نفس السؤال)
-  const s = `${o.cat}|${o.tier||""}|${o.q}|${o.a}|${o.img||""}`;
-  let h=0;
-  for (let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; }
-  return "q" + h.toString(16).padStart(8,"0");
-}
-
-let BANK = loadBank();
-
-// ====== تصنيف حسب الفئة + tiers
-function buildIndex(){
-  const byCat = new Map();
-  for (const q of BANK){
-    if (!byCat.has(q.cat)) byCat.set(q.cat, {easy:[], medium:[], hard:[]});
-    byCat.get(q.cat)[q.tier].push(q);
-  }
-  // ترتيب ثابت داخل كل tier (عشوائي خفيف حسب id)
-  for (const [cat, grp] of byCat.entries()){
-    for (const t of ["easy","medium","hard"]){
-      grp[t].sort((a,b)=>a.id.localeCompare(b.id));
-    }
-  }
-  return byCat;
-}
-
-let INDEX = buildIndex();
-
-// ====== صفحات
-function showPage(name){
-  ["Setup","Select","Game"].forEach(p=>$("page"+p).classList.remove("active"));
-  $("page"+name).classList.add("active");
-}
-
-// ====== إحصائيات
-function refreshStats(){
-  const cats = Array.from(INDEX.keys());
-  $("bankStats").textContent = `${cats.length} تصنيف • ${BANK.length} سؤال`;
-}
-
-// ====== الإعدادات
-function initSetup(){
-  const s = getSettings();
-  $("team1Name").value = s.team1;
-  $("team2Name").value = s.team2;
-  $("timerSec").value = s.timer;
-  $("noRepeatAcross").checked = !!s.noRepeat;
-
-  $("team1Name").addEventListener("input", ()=>{
-    const ns = getSettings(); ns.team1 = $("team1Name").value.trim() || "الفريق الأول";
-    setSettings(ns); renderScore();
-  });
-  $("team2Name").addEventListener("input", ()=>{
-    const ns = getSettings(); ns.team2 = $("team2Name").value.trim() || "الفريق الثاني";
-    setSettings(ns); renderScore();
-  });
-  $("timerSec").addEventListener("input", ()=>{
-    const ns = getSettings(); ns.timer = Math.max(5, parseInt($("timerSec").value||"30",10));
-    setSettings(ns);
-  });
-  $("noRepeatAcross").addEventListener("change", ()=>{
-    const ns = getSettings(); ns.noRepeat = $("noRepeatAcross").checked;
-    setSettings(ns);
-  });
-
-  $("resetScores").onclick = ()=> setScores({t1:0,t2:0});
-  $("newBoard").onclick = ()=> showPage("Select");
-
-  $("openIO").onclick = ()=> $("ioPanel").classList.toggle("show");
-
-  $("exportBank").onclick = ()=>{
-    $("ioText").value = JSON.stringify(loadJSON(K.bankUser, DEFAULT_BANK), null, 2);
-    $("ioText").focus(); $("ioText").select();
+function makeInitialState(){
+  const base = deepClone(QUESTION_BANK);
+  return {
+    bank: base,
+    used: {},          // used[questionId] = true
+    showAnswersFast: false,
   };
-
-  $("importBank").onclick = ()=>{
-    try{
-      const arr = JSON.parse($("ioText").value);
-      if (!Array.isArray(arr) || arr.length<10) return alert("البنك غير صالح أو صغير جدًا.");
-      saveJSON(K.bankUser, arr);
-      // rebuild
-      BANK = loadBank();
-      INDEX = buildIndex();
-      refreshStats();
-      renderCats();
-      alert("تم استيراد البنك بنجاح ✅");
-    }catch(e){
-      alert("JSON غير صحيح.");
-    }
-  };
-
-  $("clearReports").onclick = ()=>{
-    if (!confirm("أكيد تمسح كل الأسئلة المبلّغ عنها؟")) return;
-    localStorage.removeItem(K.reported);
-    BANK = loadBank();
-    INDEX = buildIndex();
-    refreshStats();
-    renderCats();
-    alert("تم ✅");
-  };
-
-  refreshStats();
 }
 
-// ====== اختيار التصنيفات
-function allCats(){
-  const cats = Array.from(INDEX.keys());
-  cats.sort((a,b)=>a.localeCompare(b));
-  return cats;
+let state = loadState() || makeInitialState();
+
+/* =========================================
+   UI refs
+========================================= */
+const el = (id)=>document.getElementById(id);
+const catsGrid = el("catsGrid");
+const catsCount = el("catsCount");
+const qsCount = el("qsCount");
+const homeSection = el("homeSection");
+const catSection = el("catSection");
+const settingsSection = el("settingsSection");
+const scoreboard = el("scoreboard");
+
+const catTitleChip = el("catTitleChip");
+const catProgressChip = el("catProgressChip");
+const qGrid = el("qGrid");
+
+const modalBack = el("modalBack");
+const modalTag = el("modalTag");
+const modalPts = el("modalPts");
+const modalQ = el("modalQ");
+const answerBox = el("answerBox");
+const imgWrap = el("imgWrap");
+const modalImg = el("modalImg");
+
+const btnReveal = el("btnReveal");
+const btnWrong = el("btnWrong");
+const btnCorrect = el("btnCorrect");
+const pickTeamRow = el("pickTeamRow");
+
+const toast = el("toast");
+
+/* =========================================
+   Router
+========================================= */
+let currentCategoryId = null;
+let currentQuestion = null;
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.style.display = "block";
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>toast.style.display="none", 1800);
 }
-let selected = new Set(loadJSON(K.selection, []));
 
-function renderCats(){
-  const grid = $("catsGrid");
-  grid.innerHTML = "";
-  for (const cat of allCats()){
-    const grp = INDEX.get(cat);
-    const n = grp.easy.length + grp.medium.length + grp.hard.length;
+function goHome(){
+  currentCategoryId = null;
+  homeSection.style.display = "";
+  catSection.style.display = "none";
+  settingsSection.style.display = "none";
+  renderAll();
+}
 
-    const div = document.createElement("div");
-    div.className = "card catCard " + (selected.has(cat) ? "on":"off");
-    div.innerHTML = `
-      <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-        <div style="font-weight:1000">${cat}</div>
-        <div class="pill">${n} سؤال</div>
+function goSettings(){
+  homeSection.style.display = "none";
+  catSection.style.display = "none";
+  settingsSection.style.display = "";
+  el("bankText").value = JSON.stringify(state.bank, null, 2);
+  el("chkShowAnswersFast").checked = !!state.showAnswersFast;
+}
+
+function goCategory(catId){
+  currentCategoryId = catId;
+  homeSection.style.display = "none";
+  settingsSection.style.display = "none";
+  catSection.style.display = "";
+  renderCategory();
+}
+
+/* =========================================
+   Render
+========================================= */
+function countAllQuestions(bank){
+  let n=0;
+  for(const c of bank.categories) n += (c.questions?.length||0);
+  return n;
+}
+function countUsedInCategory(cat){
+  let n=0;
+  for(const q of cat.questions) if(state.used[q.id]) n++;
+  return n;
+}
+function getCategory(catId){
+  return state.bank.categories.find(c=>c.id===catId);
+}
+
+function renderScoreboard(){
+  scoreboard.innerHTML = "";
+  for(const t of state.bank.teams){
+    const box = document.createElement("div");
+    box.className = "team";
+    box.innerHTML = `
+      <h3>الفريق</h3>
+      <div class="nameRow">
+        <input value="${escapeHtml(t.name)}" data-teamname="${t.id}" />
       </div>
-      <div class="small" style="margin-top:6px">200: ${grp.easy.length} • 400: ${grp.medium.length} • 600: ${grp.hard.length}</div>
+      <div class="score" data-score="${t.id}">${t.score}</div>
+      <div class="btns">
+        <button class="minus" data-minus="${t.id}">-100</button>
+        <button class="plus" data-plus="${t.id}">+100</button>
+      </div>
     `;
-    div.onclick = ()=>{
-      if (selected.has(cat)) selected.delete(cat);
-      else{
-        if (selected.size>=6) return alert("مسموح 6 تصنيفات فقط");
-        selected.add(cat);
-      }
-      saveJSON(K.selection, Array.from(selected));
-      $("selCount").textContent = `${selected.size} مختار`;
-      renderCats();
-    };
-    grid.appendChild(div);
-  }
-  $("selCount").textContent = `${selected.size} مختار`;
-}
-
-function randomCats(){
-  const pool = allCats();
-  selected = new Set();
-  while(selected.size<6 && pool.length){
-    selected.add(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
-  }
-  saveJSON(K.selection, Array.from(selected));
-  renderCats();
-}
-function clearCats(){
-  selected = new Set();
-  saveJSON(K.selection, []);
-  renderCats();
-}
-
-// ====== منع التكرار عبر الألعاب (اختياري)
-function usedGlobalSet(){
-  const s = getSettings();
-  if (!s.noRepeat) return new Set();
-  return new Set(loadJSON(K.usedGlobal, []));
-}
-function saveUsedGlobal(set){
-  const s = getSettings();
-  if (!s.noRepeat) return;
-  saveJSON(K.usedGlobal, Array.from(set));
-}
-
-// ====== اختيار بدون تكرار 100% داخل اللوحة
-function pickUnique(list, k, usedIds){
-  // list: array, usedIds: Set
-  const pool = list.filter(x=>!usedIds.has(x.id));
-  // لو ما يكفي، رجع من القائمة الأصلية بس لسه بدون تكرار داخل اللوحة
-  const source = pool.length>=k ? pool : list.filter(x=>!usedIds.has(x.id));
-  const out = [];
-  const tmp = source.slice();
-  while(out.length<k && tmp.length){
-    const i = Math.floor(Math.random()*tmp.length);
-    const q = tmp.splice(i,1)[0];
-    if (!usedIds.has(q.id)){
-      usedIds.add(q.id);
-      out.push(q);
-    }
-  }
-  return out;
-}
-
-const POINTS = [200,200,400,400,600,600];
-
-function buildBoard(){
-  if (selected.size < 3) return alert("اختر 3 تصنيفات على الأقل");
-  let cats = Array.from(selected);
-
-  if (cats.length < 6){
-    const pool = allCats().filter(c=>!selected.has(c));
-    while(cats.length < 6 && pool.length){
-      cats.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
-    }
-  }
-  cats = cats.slice(0,6);
-
-  const usedG = usedGlobalSet();
-  const usedInBoard = new Set(); // يمنع تكرار داخل اللوحة نهائيًا
-  // أضف usedG إذا تبي منع عبر الألعاب
-  for (const id of usedG) usedInBoard.add(id);
-
-  const board = {cats:[], cells:{}};
-
-  for (const cat of cats){
-    const grp = INDEX.get(cat);
-    // 2 easy, 2 medium, 2 hard — هذا اللي يثبت “المستوى”
-    const picked = []
-      .concat(pickUnique(grp.easy,   2, usedInBoard))
-      .concat(pickUnique(grp.medium, 2, usedInBoard))
-      .concat(pickUnique(grp.hard,   2, usedInBoard));
-
-    if (picked.length < 6){
-      // لو التصنيف ناقص tier معين: كمل من أي tier بس بدون تكرار
-      const all = grp.easy.concat(grp.medium, grp.hard);
-      picked.push(...pickUnique(all, 6-picked.length, usedInBoard));
-    }
-
-    board.cats.push(cat);
-    for (let r=0;r<6;r++){
-      board.cells[`${cat}|${r}`] = picked[r];
-    }
+    scoreboard.appendChild(box);
   }
 
-  saveJSON(K.board, board);
-  saveJSON(K.usedCells, {}); // لوحة جديدة
-  $("boardMeta").textContent = `آخر تحديث: ${new Date().toLocaleString('ar')}`;
-  renderBoard();
-  showPage("Game");
-}
-
-// ====== عرض اللوحة
-function renderBoard(){
-  const boardEl = $("board");
-  boardEl.innerHTML = "";
-  const board = loadJSON(K.board, null);
-  if (!board){
-    boardEl.innerHTML = `<div class="small">مافي لوحة بعد — روح "اختيار التصنيفات"</div>`;
-    return;
-  }
-  const usedCells = loadJSON(K.usedCells, {});
-  for (const cat of board.cats){
-    const col = document.createElement("div");
-    col.className = "col";
-    const head = document.createElement("div");
-    head.className = "colHead";
-    head.textContent = cat;
-    col.appendChild(head);
-
-    POINTS.forEach((pts,r)=>{
-      const key = `${cat}|${r}`;
-      const q = board.cells[key];
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const b = document.createElement("button");
-      b.textContent = pts;
-      b.className = (pts===200?"p200":pts===400?"p400":"p600") + (usedCells[key]?" used":"");
-      b.onclick = ()=>{
-        if (usedCells[key]) return;
-        openQuestion(cat, pts, r, q);
-      };
-      cell.appendChild(b);
-      col.appendChild(cell);
+  // name edits
+  scoreboard.querySelectorAll("input[data-teamname]").forEach(inp=>{
+    inp.addEventListener("input",(e)=>{
+      const id = e.target.getAttribute("data-teamname");
+      const team = state.bank.teams.find(x=>x.id===id);
+      team.name = e.target.value;
+      saveState();
     });
+  });
+  // quick +/- 100
+  scoreboard.querySelectorAll("button[data-plus]").forEach(b=>{
+    b.addEventListener("click",(e)=>{
+      const id = e.target.getAttribute("data-plus");
+      adjustTeamScore(id, +100);
+    });
+  });
+  scoreboard.querySelectorAll("button[data-minus]").forEach(b=>{
+    b.addEventListener("click",(e)=>{
+      const id = e.target.getAttribute("data-minus");
+      adjustTeamScore(id, -100);
+    });
+  });
+}
 
-    boardEl.appendChild(col);
+function renderHome(){
+  const bank = state.bank;
+  const cats = bank.categories || [];
+  catsCount.textContent = `التصنيفات: ${cats.length}`;
+  qsCount.textContent = `إجمالي الأسئلة: ${countAllQuestions(bank)}`;
+
+  catsGrid.innerHTML = "";
+  for(const c of cats){
+    const usedN = countUsedInCategory(c);
+    const total = c.questions.length;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.addEventListener("click", ()=>goCategory(c.id));
+    card.innerHTML = `
+      <div class="thumb">${c.title}</div>
+      <div class="info">
+        <div class="name">${escapeHtml(c.title)}</div>
+        <div class="meta">المتبقي: ${total-usedN} / ${total}</div>
+      </div>
+    `;
+    catsGrid.appendChild(card);
   }
 }
 
-// ====== المؤقت + المودال + النقاط
-let current=null;
-let timerInt=null;
-let timerLeft=0;
+function renderCategory(){
+  const cat = getCategory(currentCategoryId);
+  if(!cat){ goHome(); return; }
 
-function tickTimer(){
-  const m = String(Math.floor(timerLeft/60)).padStart(2,"0");
-  const s = String(timerLeft%60).padStart(2,"0");
-  $("timer").textContent = `${m}:${s}`;
+  catTitleChip.textContent = `التصنيف: ${cat.title}`;
+  const usedN = countUsedInCategory(cat);
+  catProgressChip.textContent = `المتبقي: ${cat.questions.length - usedN} / ${cat.questions.length}`;
+
+  // sort: 200 ثم 400 ثم 600
+  const qs = [...cat.questions].sort((a,b)=>(a.pts||0)-(b.pts||0));
+
+  qGrid.innerHTML = "";
+  for(const q of qs){
+    const used = !!state.used[q.id];
+    const btn = document.createElement("div");
+    btn.className = "qbtn" + (used ? " used" : "");
+    btn.innerHTML = `
+      <div>
+        <div class="label">${escapeHtml(shortLabel(q.q))}</div>
+        <div class="sub">${escapeHtml(cat.title)}</div>
+      </div>
+      <div class="pts">${q.pts || 0}</div>
+    `;
+    btn.addEventListener("click", ()=>{
+      if(used) return;
+      openQuestion(cat, q);
+    });
+    qGrid.appendChild(btn);
+  }
 }
-function startTimer(sec){
-  clearInterval(timerInt);
-  timerLeft = sec;
-  $("timerState").textContent = "يشتغل";
-  tickTimer();
-  timerInt = setInterval(()=>{
-    timerLeft--;
-    tickTimer();
-    if (timerLeft<=0){
-      clearInterval(timerInt);
-      $("timerState").textContent = "انتهى";
-    }
-  },1000);
-}
-function stopTimer(){
-  clearInterval(timerInt);
-  $("timerState").textContent = "جاهز";
+
+function renderAll(){
+  renderScoreboard();
+  renderHome();
+  if(currentCategoryId) renderCategory();
 }
 
-function openQuestion(cat, pts, row, q){
-  current = {cat, pts, row, q};
-  $("mCat").textContent = cat;
-  $("mPts").textContent = `${pts} نقطة`;
-  $("mQ").textContent = q.q;
-  $("mA").textContent = q.a;
+/* =========================================
+   Question modal
+========================================= */
+function openQuestion(cat, q){
+  currentQuestion = { catId: cat.id, catTitle: cat.title, ...q };
 
-  $("mAnsBox").classList.remove("show");
-  $("panelWho").classList.remove("show");
-  $("panelSteal").classList.remove("show");
+  modalTag.textContent = cat.title;
+  modalPts.textContent = `${q.pts||0} نقطة`;
+  modalQ.textContent = q.q;
 
-  if (q.img){
-    $("mImg").src = q.img;
-    $("mImg").style.display = "block";
+  // image
+  if(q.img){
+    imgWrap.style.display = "";
+    modalImg.src = q.img;
   } else {
-    $("mImg").style.display = "none";
+    imgWrap.style.display = "none";
+    modalImg.src = "";
   }
 
-  $("modal").classList.add("show");
-  startTimer(getSettings().timer || 30);
+  // answer hidden
+  answerBox.style.display = "none";
+  answerBox.textContent = q.a;
+
+  // buttons
+  pickTeamRow.style.display = "none";
+  pickTeamRow.innerHTML = "";
+
+  btnReveal.style.display = state.showAnswersFast ? "none" : "";
+  btnWrong.style.display = state.showAnswersFast ? "" : "none";
+  btnCorrect.style.display = state.showAnswersFast ? "" : "none";
+
+  modalBack.style.display = "flex";
+
+  if(state.showAnswersFast){
+    revealAnswer();
+  }
 }
 
-function markUsed(){
-  // خلية
-  const usedCells = loadJSON(K.usedCells, {});
-  usedCells[`${current.cat}|${current.row}`] = true;
-  saveJSON(K.usedCells, usedCells);
-
-  // سؤال عالمي (اختياري)
-  const s = getSettings();
-  if (s.noRepeat){
-    const usedG = usedGlobalSet();
-    usedG.add(current.q.id);
-    saveUsedGlobal(usedG);
-  }
-  renderBoard();
+function revealAnswer(){
+  answerBox.style.display = "";
+  btnReveal.style.display = "none";
+  btnWrong.style.display = "";
+  btnCorrect.style.display = "";
 }
 
 function closeModal(){
-  stopTimer();
-  $("modal").classList.remove("show");
-  $("mAnsBox").classList.remove("show");
-  $("panelWho").classList.remove("show");
-  $("panelSteal").classList.remove("show");
-  current=null;
+  modalBack.style.display = "none";
+  currentQuestion = null;
 }
 
-function renderScore(){
-  const s = getSettings();
-  const sc = getScores();
-  $("t1N").textContent = s.team1;
-  $("t2N").textContent = s.team2;
-  $("t1S").textContent = sc.t1;
-  $("t2S").textContent = sc.t2;
+btnReveal.addEventListener("click", ()=>{
+  revealAnswer();
+});
 
-  $("awardT1").textContent = s.team1;
-  $("awardT2").textContent = s.team2;
-  $("stealT1").textContent = s.team1;
-  $("stealT2").textContent = s.team2;
-}
-
-function award(team){
-  const sc = getScores();
-  if (team==="t1") sc.t1 += current.pts;
-  if (team==="t2") sc.t2 += current.pts;
-  setScores(sc);
-  markUsed();
+btnWrong.addEventListener("click", ()=>{
+  // mark used, no points
+  if(!currentQuestion) return;
+  markUsed(currentQuestion.id);
+  showToast("تم تسجيلها: إجابة غلط (بدون نقاط)");
   closeModal();
+  renderCategory();
+});
+
+btnCorrect.addEventListener("click", ()=>{
+  if(!currentQuestion) return;
+  // بعد ما يضغط صحيح: يطلع اختيار الفريق
+  pickTeamRow.style.display = "";
+  pickTeamRow.innerHTML = `<div class="muted" style="width:100%;padding:4px 2px 8px">اختر الفريق اللي جاوب:</div>`;
+
+  for(const t of state.bank.teams){
+    const b = document.createElement("button");
+    b.textContent = `✅ ${t.name}`;
+    b.addEventListener("click", ()=>{
+      adjustTeamScore(t.id, +(currentQuestion.pts||0));
+      markUsed(currentQuestion.id);
+      showToast(`تمت إضافة ${(currentQuestion.pts||0)} لـ ${t.name}`);
+      closeModal();
+      renderCategory();
+    });
+    pickTeamRow.appendChild(b);
+  }
+});
+
+el("btnClose").addEventListener("click", closeModal);
+modalBack.addEventListener("click",(e)=>{
+  if(e.target === modalBack) closeModal();
+});
+
+/* =========================================
+   Score + Used
+========================================= */
+function adjustTeamScore(teamId, delta){
+  const t = state.bank.teams.find(x=>x.id===teamId);
+  if(!t) return;
+  t.score = Math.max(0, (t.score||0) + delta);
+  saveState();
+  renderScoreboard();
 }
-function noAward(){
-  markUsed();
-  closeModal();
+
+function markUsed(qid){
+  state.used[qid] = true;
+  saveState();
 }
 
-// ====== بلاغ سؤال غلط/سيء
-function reportCurrent(){
-  if (!current) return;
-  if (!confirm("تبغي تسوي بلاغ؟ هذا السؤال بينشال من البنك على جهازك.")) return;
-  const arr = loadJSON(K.reported, []);
-  if (!arr.includes(current.q.id)) arr.push(current.q.id);
-  saveJSON(K.reported, arr);
+/* =========================================
+   Settings: import/export
+========================================= */
+el("btnImport").addEventListener("click", ()=>{
+  const txt = el("bankText").value.trim();
+  if(!txt) return showToast("الصق JSON أولاً");
+  try{
+    const obj = JSON.parse(txt);
 
-  // تحديث البنك والفهرس
-  BANK = loadBank();
-  INDEX = buildIndex();
-  refreshStats();
-  renderCats();
+    // validate minimal
+    if(!obj.categories || !Array.isArray(obj.categories)) throw new Error("categories مفقود");
+    for(const c of obj.categories){
+      if(!c.id || !c.title || !Array.isArray(c.questions)) throw new Error("category ناقص");
+      for(const q of c.questions){
+        if(!q.id || !q.q || !q.a) throw new Error("سؤال ناقص");
+        if(q.pts == null) q.pts = 200;
+      }
+    }
+    if(!obj.teams || !Array.isArray(obj.teams) || obj.teams.length<2){
+      obj.teams = deepClone(state.bank.teams); // حافظ على الفرق لو ما موجودة
+    }
 
-  // اعتبره مستخدم داخل اللعبة واغلق
-  markUsed();
-  closeModal();
-  alert("تم ✅ انشال السؤال.");
+    state.bank = obj;
+
+    // reset used because IDs might change
+    state.used = {};
+    saveState();
+    showToast("تم استيراد البنك ✅");
+    goHome();
+  }catch(e){
+    showToast("JSON غير صالح: " + e.message);
+  }
+});
+
+el("btnExport").addEventListener("click", ()=>{
+  el("bankText").value = JSON.stringify(state.bank, null, 2);
+  showToast("تم تصدير البنك في المربع ✅");
+});
+
+el("btnResetScores").addEventListener("click", ()=>{
+  for(const t of state.bank.teams) t.score = 0;
+  saveState();
+  showToast("تم تصفير النقاط ✅");
+  renderScoreboard();
+});
+
+el("chkShowAnswersFast").addEventListener("change",(e)=>{
+  state.showAnswersFast = !!e.target.checked;
+  saveState();
+});
+
+/* =========================================
+   Header buttons
+========================================= */
+el("btnHome").addEventListener("click", goHome);
+el("btnSettings").addEventListener("click", goSettings);
+el("btnBack").addEventListener("click", goHome);
+
+el("btnReset").addEventListener("click", ()=>{
+  if(!confirm("تبغى تصفّر الأسئلة المستخدمة؟")) return;
+  state.used = {};
+  saveState();
+  showToast("تمت إعادة تعيين الأسئلة ✅");
+  renderAll();
+});
+
+/* =========================================
+   Helpers
+========================================= */
+function shortLabel(q){
+  // يطلع سطر مختصر على زر السؤال
+  const s = (q||"").trim();
+  if(s.length <= 42) return s;
+  return s.slice(0, 42) + "…";
+}
+function escapeHtml(str){
+  return String(str||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-// ====== ربط الأزرار
-$("goSetup").onclick = ()=>showPage("Setup");
-$("goSelect").onclick = ()=>{ showPage("Select"); renderCats(); };
-$("goGame").onclick = ()=>{ showPage("Game"); renderBoard(); };
-$("wipe").onclick = ()=>{ if(confirm("أكيد تبغي تمسح كل شي؟")) clearAll(); };
-
-$("confirmCats").onclick = buildBoard;
-$("randomCats").onclick = randomCats;
-$("clearCats").onclick = clearCats;
-
-$("mClose").onclick = closeModal;
-$("mReport").onclick = reportCurrent;
-$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
-
-$("mShow").onclick = ()=> $("mAnsBox").classList.add("show");
-
-// مثل ما اتفقنا: اختيار الفريق بعد "صح"
-$("mCorrect").onclick = ()=>{
-  $("mAnsBox").classList.add("show");
-  $("panelSteal").classList.remove("show");
-  $("panelWho").classList.add("show");
-};
-$("mWrong").onclick = ()=>{
-  $("mAnsBox").classList.add("show");
-  $("panelWho").classList.remove("show");
-  $("panelSteal").classList.add("show");
-};
-
-$("awardT1").onclick = ()=>award("t1");
-$("awardT2").onclick = ()=>award("t2");
-$("awardNone").onclick = ()=>noAward();
-
-$("stealT1").onclick = ()=>award("t1");
-$("stealT2").onclick = ()=>award("t2");
-$("stealNone").onclick = ()=>noAward();
-
-// ====== تشغيل أولي
-initSetup();
-renderScore();
-renderCats();
-renderBoard();
-timerLeft = getSettings().timer || 30;
-tickTimer();
+/* =========================================
+   Init
+========================================= */
+renderAll();
 </script>
-
 </body>
 </html>
